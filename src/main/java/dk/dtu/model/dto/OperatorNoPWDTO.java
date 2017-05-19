@@ -19,6 +19,8 @@ public class OperatorNoPWDTO
 	private String cpr;
 	private boolean admin;
 	private String role;
+	
+	public OperatorNoPWDTO(){}
 
 	public OperatorNoPWDTO(int oprId, String oprName, String ini, String cpr, boolean admin, String role)
 	{

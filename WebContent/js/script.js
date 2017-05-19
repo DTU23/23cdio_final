@@ -10,7 +10,7 @@ $(document).ready(function () {
         }
     });
 
-    populate();
+    initDB();
     
     $(document).on("click", ".edit-user", function (e) {
         var row = $(this).parent().parent();
@@ -93,6 +93,7 @@ $(document).ready(function () {
             url: "./api/v1/login/",
             success: function( msg ) {
                 console.log("Response: " + msg);
+                populate();
                 $('#loginForm').hide();
                 $('main').removeClass('valign-wrapper');
                 $('#userAdministration').show();
@@ -202,7 +203,23 @@ function populate() {
         },
         error: function ( msg ) {
             console.log(msg);
-            Materialize.toast("Unable to delete user!", 4000);
+            Materialize.toast("Error in loading data!", 4000);
+        }
+    });
+}
+
+function initDB() {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        processData: false,
+        url: "./api/v1/database/init",
+        success: function( response ) {
+            console.log(response);
+        },
+        error: function ( msg ) {
+            console.log(msg);
+            Materialize.toast("Error initializing database!", 4000);
         }
     });
 }

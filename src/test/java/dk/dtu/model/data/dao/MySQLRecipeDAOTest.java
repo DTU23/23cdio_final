@@ -11,9 +11,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dk.dtu.model.dto.RecipeDTO;
 import main.java.dk.dtu.model.connector.Connector;
 import main.java.dk.dtu.model.dao.MySQLRecipeDAO;
-import main.java.dk.dtu.model.dto.RecipeDTO;
 import main.java.dk.dtu.model.interfaces.DALException;
 
 public class MySQLRecipeDAOTest {

@@ -13,10 +13,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dk.dtu.model.dto.OperatorNoPWDTO;
 import main.java.dk.dtu.model.connector.Connector;
 import main.java.dk.dtu.model.dao.MySQLOperatorDAO;
 import main.java.dk.dtu.model.dto.OperatorDTO;
-import main.java.dk.dtu.model.dto.OperatorNoPWDTO;
 import main.java.dk.dtu.model.interfaces.DALException;
 
 public class MySQLOperatorDAOTest {

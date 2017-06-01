@@ -77,26 +77,37 @@ $(document).ready(function () {
 
     $('#loginForm').on('submit', function (e) {
         e.preventDefault();
+        // get all the inputs into an array.
+        var $inputs = $('#loginForm :input');
+        var values = {};
+        $inputs.each(function() {
+            values[this.name] = $(this).val();
+        });
         $.ajax({
             type: "POST",
             data: JSON.stringify({
-                "oprId": 1,
-                "oprName": "Viktor Poulsen",
-                "ini": "vmp",
-                "cpr": "0101892077",
-                "password": "qweqwe",
-                "admin": 1,
-                "role": "pharmacist"
+                "oprId": values.oprId,
+                "oprName": "",
+                "ini": "",
+                "cpr": "",
+                "password": values.password,
+                "admin": "",
+                "role": ""
             }),
             processData: false,
             contentType: "application/json",
             url: "./api/v1/login/",
             success: function( msg ) {
                 console.log("Response: " + msg);
-                populate();
-                $('#loginForm').hide();
-                $('main').removeClass('valign-wrapper');
-                $('#userAdministration').show();
+                if(msg === true){
+                    populate();
+                    $('#loginForm').hide();
+                    $('main').removeClass('valign-wrapper');
+                    $('#userAdministration').show();
+                }else{
+                    Materialize.toast("Invalid login!", 4000);
+                    console.log(msg);
+                }
             },
             error: function ( msg ) {
                 Materialize.toast("Invalid login!", 4000);

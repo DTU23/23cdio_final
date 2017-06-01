@@ -1,4 +1,4 @@
-package main.java.dk.dtu.model.connector;
+package dk.dtu.model.connector;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import main.java.dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.interfaces.DALException;
 
 public class Connector
 {

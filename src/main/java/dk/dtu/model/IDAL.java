@@ -1,8 +1,8 @@
-package main.java.dk.dtu.model;
+package dk.dtu.model;
 
 import java.util.ArrayList;
 
-import main.java.dk.dtu.model.dto.OperatorDTO;
+import dk.dtu.model.dto.OperatorDTO;
 
 public interface IDAL {
 

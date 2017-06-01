@@ -1,4 +1,4 @@
-package main.java.dk.dtu;
+package dk.dtu;
 
 import javax.ws.rs.ApplicationPath;
 

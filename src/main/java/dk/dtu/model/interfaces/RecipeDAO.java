@@ -1,8 +1,8 @@
-package main.java.dk.dtu.model.interfaces;
+package dk.dtu.model.interfaces;
 
 import java.util.List;
 
-import main.java.dk.dtu.model.dto.RecipeDTO;
+import dk.dtu.model.dto.RecipeDTO;
 
 public interface RecipeDAO {
 	RecipeDTO getRecipe(int recipeId) throws DALException;

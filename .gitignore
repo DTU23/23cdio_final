@@ -6,3 +6,5 @@ bin/
 
 .idea/
 *.iml
+
+src/main/java/dk/dtu/model/connector/Constant.java

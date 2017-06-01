@@ -12,11 +12,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dk.dtu.model.dto.ProduceBatchDTO;
+import dk.dtu.model.dto.ProduceDTO;
 import main.java.dk.dtu.model.connector.Connector;
 import main.java.dk.dtu.model.dao.MySQLProduceBatchDAO;
 import main.java.dk.dtu.model.dao.MySQLProduceDAO;
-import main.java.dk.dtu.model.dto.ProduceBatchDTO;
-import main.java.dk.dtu.model.dto.ProduceDTO;
 import main.java.dk.dtu.model.interfaces.DALException;
 
 /**

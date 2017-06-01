@@ -15,13 +15,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dk.dtu.model.dto.ProductBatchCompDTO;
+import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
+import dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
+import dk.dtu.model.dto.ProductBatchDTO;
 import main.java.dk.dtu.model.connector.Connector;
 import main.java.dk.dtu.model.dao.MySQLProductBatchCompDAO;
 import main.java.dk.dtu.model.dao.MySQLProductBatchDAO;
-import main.java.dk.dtu.model.dto.ProductBatchCompDTO;
-import main.java.dk.dtu.model.dto.ProductBatchCompOverviewDTO;
-import main.java.dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
-import main.java.dk.dtu.model.dto.ProductBatchDTO;
 import main.java.dk.dtu.model.interfaces.DALException;
 
 public class MySQLProductBatchCompDAOTest {

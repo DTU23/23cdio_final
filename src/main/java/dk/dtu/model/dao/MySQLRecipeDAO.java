@@ -42,5 +42,11 @@ public class MySQLRecipeDAO implements RecipeDAO {
 	public void createRecipe(RecipeDTO recept) throws DALException {
 		Connector.doUpdate("CALL create_recipe(" + recept.getRecipeName() + ");");
 	}
+	
+	@Override
+	public void getRecipeDetailsByID(int recipeID) throws DALException {
+		Connector.doQuery("CALL get_recipe_details_by_id(" + recipeID + ");");
+		// TODO LAV RESTEN
+	}
 
 }

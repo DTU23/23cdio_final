@@ -8,4 +8,5 @@ public interface RecipeDAO {
 	RecipeDTO getRecipe(int recipeId) throws DALException;
 	List<RecipeDTO> getRecipeList() throws DALException;
 	void createRecipe(RecipeDTO recipe) throws DALException;
+	void getRecipeDetailsByID(int recipeID) throws DALException;
 }

@@ -63,4 +63,10 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 			return false;
 		}
 	}
+	
+	@Override
+	public void	get_product_batch_details_by_pb_id(int productBatchID) throws DALException {
+		Connector.doQuery("CALL get_product_batch_details_by_pb_id("+productBatchID+");");
+		// TODO LAV RESTEN!
+	}
 }

@@ -37,6 +37,7 @@ public class OperatorService {
 	}
 	
 	@GET
+	@Secured
 	public List<OperatorNoPWDTO> getOperatorList() throws DALException {
 		return dao.getOperatorList();
 	}

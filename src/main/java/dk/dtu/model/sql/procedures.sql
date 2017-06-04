@@ -232,15 +232,6 @@ BEGIN
 END //
 DELIMITER ;
 
-DELIMITER //
-CREATE PROCEDURE update_product_batch_status(IN input_pb_id INT, IN input_status INT)
-  BEGIN
-    UPDATE productbatch
-    SET status = input_status
-    WHERE productbatch.pb_id = input_pb_id;
-  END //
-DELIMITER ;
-
 /**
 Product_batch
 Task 7 - Finds which product batch has the largest quantity of a certain produce (by produce name

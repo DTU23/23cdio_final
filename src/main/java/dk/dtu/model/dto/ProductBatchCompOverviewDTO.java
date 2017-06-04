@@ -6,8 +6,8 @@ public class ProductBatchCompOverviewDTO
 	private String recipeName;
 	private int status;
 	private String produceName;
-	double netto;
-	int OprId;
+	private double netto;
+	private int oprId;
 
 
 	public ProductBatchCompOverviewDTO(int pbId, String recipeName, int status, String produceName, double netto, int operatorId){
@@ -16,7 +16,7 @@ public class ProductBatchCompOverviewDTO
 		this.status = status;
 		this.produceName = produceName;
 		this.netto = netto;
-		this.OprId = operatorId;
+		this.oprId = operatorId;
 	}
 	
 	public int getPbId() { return this.pbId; }
@@ -30,9 +30,9 @@ public class ProductBatchCompOverviewDTO
 
 	public double getNetto() { return netto; }
 	public void setNetto(double netto) { this.netto = netto; }
-	public int getOprId() { return this.OprId; }
-	public void setOprId(int oprId) { this.OprId = oprId; }
+	public int getOprId() { return this.oprId; }
+	public void setOprId(int oprId) { this.oprId = oprId; }
 	public String toString() { 
-		return pbId + "\t" + recipeName +"\t" + status +"\t" + produceName + "\t" + netto + "\t" + OprId; 
+		return pbId + "\t" + recipeName +"\t" + status +"\t" + produceName + "\t" + netto + "\t" + oprId; 
 	}
 }

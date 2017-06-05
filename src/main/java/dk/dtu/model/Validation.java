@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class Validation {
 
 	/**
-	 * 
+	 * Method to validate if an input is a positive integer.
 	 * @param input
 	 * @return true if the input i a positive integer
 	 */
@@ -24,16 +24,20 @@ public class Validation {
 		}
 	}
 
+	/**
+	 * Method to validate if an input contains only letters.
+	 * @param input
+	 * @throws ValidationException
+	 */
 	public static void isOnlyLetters(String input) throws ValidationException {
 		if(!input.matches("[a-zA-Z]+"))
 			throw new ValidationException("Input contains non-letter characters.");
 	}
 
 	/**
-	 * 
+	 * Method authenticate user login credentials.
 	 * @param ID
 	 * @param password
-	 * @return
 	 * @throws ValidationException
 	 */
 	public static void authenticateUser(String ID, String password) throws ValidationException {
@@ -43,7 +47,7 @@ public class Validation {
 	/**
 	 * Method to validate if an ID is a valid choice.
 	 * @param ID
-	 * @return true if the ID is valid
+	 * @throws ValidationException
 	 */
 	public static void isValidID(String ID) throws ValidationException {
 		isPositiveInteger(ID);
@@ -56,10 +60,11 @@ public class Validation {
 	/**
 	 * Method to validate if a user name is a valid choice.
 	 * @param userName
-	 * @return true if the user name is valid
+	 * @throws ValidationException
 	 */
 	public static void isValidUserName(String userName) throws ValidationException {
-		isOnlyLetters(userName);
+		if(!userName.matches("[a-zA-Z ]+"))
+			throw new ValidationException("Input contains non-letter characters.");
 		if(userName.length() < 2) {
 			throw new ValidationException("User name too short.");
 		} else if (userName.length() > 20) {
@@ -70,7 +75,7 @@ public class Validation {
 	/**
 	 * Method to validate if a set of initials is a valid choice.
 	 * @param initials
-	 * @return true if the initials are valid
+	 * @throws ValidationException
 	 */
 	public static void isValidInitials(String initials) throws ValidationException {
 		isOnlyLetters(initials);
@@ -84,7 +89,7 @@ public class Validation {
 	/**
 	 * Method to validate if a cpr is a valid.
 	 * @param cpr
-	 * @return true if the cpr is valid
+	 * @throws ValidationException
 	 */
 	public static void isValidCpr(String cpr) throws ValidationException {
 		isPositiveInteger(cpr);
@@ -106,8 +111,8 @@ public class Validation {
 			}
 			// checks if date is in the future
 			Calendar currentDate = new GregorianCalendar();
-			if (cprDate.compareTo(currentDate) < 0) {
-				throw new ValidationException("The given date is in the future.");
+			if (cprDate.compareTo(currentDate) > 0) {
+				throw new ValidationException("Invalid cpr number.");
 			}
 			// check if full cpr is valid
 			int CprProductSum = 0;
@@ -116,7 +121,11 @@ public class Validation {
 				CprProductSum += Integer.parseInt(cpr.substring(j, j+1)) * multiplyBy[j];
 			}
 			if (CprProductSum % 11 != 0) {
-				throw new ValidationException("Invalid cpr number.");
+				if(year == 2000) {
+					throw new ValidationException("Invalid cpr number.");
+				}
+			} else {
+				break;
 			}
 		}
 	}
@@ -126,21 +135,24 @@ public class Validation {
 	 * minimum 2 symbols
 	 * minimum 2 upper case characters
 	 * minimum 2 lower case characters
-	 * (username not present in password string)
+	 * (user name not present in password string)
 	 * @param password
-	 * @return true if the password is valid.
+	 * @throws ValidationException
 	 */
-	public static boolean isValidPassword(String password) throws ValidationException {
+	public static void isValidPassword(String password) throws ValidationException {
 		//(?!.*" + hashMap.get("userName").toString()+")
 		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
 		Matcher m = p.matcher(password);
-		return m.matches();
+		if(!m.matches()) {
+			throw new ValidationException("Not a valid password");
+		}
+		//TODO styr på denne matcher
 	}
 
 	/**
 	 * Method to validate if a role is a valid choice.
 	 * @param role
-	 * @return true if the role is valid
+	 * @throws ValidationException
 	 */
 	public static void isValidRole(String role) throws ValidationException {
 		ArrayList<String> validRoles = new ArrayList<>();

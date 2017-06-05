@@ -1,4 +1,4 @@
-package test.java.dk.dtu.model.data.dao;
+package dk.dtu.model.data.dao;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -12,12 +12,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dk.dtu.model.connector.Connector;
+import dk.dtu.model.dao.MySQLProduceBatchDAO;
+import dk.dtu.model.dao.MySQLProduceDAO;
 import dk.dtu.model.dto.ProduceBatchDTO;
 import dk.dtu.model.dto.ProduceDTO;
-import main.java.dk.dtu.model.connector.Connector;
-import main.java.dk.dtu.model.dao.MySQLProduceBatchDAO;
-import main.java.dk.dtu.model.dao.MySQLProduceDAO;
-import main.java.dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.interfaces.DALException;
 
 /**
  * This JUnit class tests the MySQLProduceBatchDAO class.

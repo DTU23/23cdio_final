@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dk.dtu.model.connector.Connector;
+import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.ProductBatchDAO;
@@ -62,5 +63,20 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 		catch (SQLException e) {
 			return false;
 		}
+	}
+	
+	@Override
+	public List<ProductBatchCompOverviewDTO> getProductBatchDetailsByPbId(int productBatchID) throws DALException {
+		List<ProductBatchCompOverviewDTO> list = new ArrayList<ProductBatchCompOverviewDTO>();
+		ResultSet rs = Connector.doQuery("CALL get_product_batch_details_by_pb_id("+productBatchID+");");
+		
+		try {
+			while (rs.next())
+			{
+				list.add(new ProductBatchCompOverviewDTO(rs.getInt("pb_id"), rs.getInt("rb_id"), rs.getInt("recipe_id"), rs.getString("recipe_name"), rs.getInt("status"), rs.getString("produce_name"), rs.getDouble("netto"), rs.getInt("opr_id")));
+			}
+		} catch (SQLException e) {	throw new DALException(e); }
+		
+		return list;
 	}
 }

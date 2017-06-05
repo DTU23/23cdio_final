@@ -11,6 +11,9 @@ DROP PROCEDURE IF EXISTS create_product_batch_from_recipe_id;
 DROP PROCEDURE IF EXISTS update_product_batch_status;
 DROP PROCEDURE IF EXISTS create_recipe;
 DROP PROCEDURE IF EXISTS create_recipe_component;
+DROP PROCEDURE IF EXISTS get_product_batch_details_by_pb_id;
+DROP PROCEDURE IF EXISTS get_recipe_details_by_id;
+
 # Tasks
 DROP PROCEDURE IF EXISTS produce_with_at_least_number_occurences_in_producebatch;
 DROP PROCEDURE IF EXISTS recipe_name_of_recipes_containing_one_of_two_ingredients;
@@ -222,6 +225,13 @@ CREATE PROCEDURE update_product_batch_status(IN input_pb_id INT, IN input_status
   END //
 DELIMITER ;
 
+DELIMITER //
+CREATE PROCEDURE get_product_batch_details_by_pb_id(pb_id_input INT)
+BEGIN
+  SELECT * FROM product_batch_component_overview WHERE pb_id = pb_id_input;
+END //
+DELIMITER ;
+
 /**
 Product_batch
 Task 7 - Finds which product batch has the largest quantity of a certain produce (by produce name
@@ -276,6 +286,13 @@ CREATE PROCEDURE create_recipe
 )
 BEGIN
   INSERT INTO recipe(recipe_name) VALUES(input_recipe_name);
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE get_recipe_details_by_id(recipe_id_input INT)
+BEGIN
+  SELECT * FROM recipe_list WHERE recipe_id = recipe_id_input;
 END //
 DELIMITER ;
 

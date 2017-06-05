@@ -3,8 +3,8 @@ package dk.dtu.control;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.dtu.control.api.v1.AdaptorException;
 import dk.dtu.control.api.v1.IWeightAdaptor;
-import dk.dtu.control.api.v1.IWeightAdaptor.AdaptorException;
 import dk.dtu.control.api.v1.WeightAdaptor;
 import dk.dtu.model.Validation;
 import dk.dtu.model.connector.Connector;
@@ -22,11 +22,22 @@ import dk.dtu.model.interfaces.RecipeDAO;
 
 public class WeightProcessController implements IWeightProcessController {
 
+	private String ipAddress;
+	private int portNumber;
 	private IWeightAdaptor weightAdaptor;
 	private OperatorDAO operatorDAO;
 	private ProductBatchDAO productBatchDAO;
 	private RecipeDAO recipeDAO;
 	private ProductBatchCompDAO productBatchCompDAO;
+
+	public WeightProcessController() {
+		this("localhost", 8000);
+	}
+	
+	public WeightProcessController(String ipAddress, int portNumber) {
+		this.ipAddress = ipAddress;
+		this.portNumber = portNumber;
+	}
 
 	@Override
 	public void run() {
@@ -38,13 +49,14 @@ public class WeightProcessController implements IWeightProcessController {
 			recipeDAO = new MySQLRecipeDAO();
 			productBatchCompDAO = new MySQLProductBatchCompDAO();
 		} catch (Exception e) {
+			System.out.println("Error trying to reach database!");
 			e.printStackTrace();
 		}
 		weightAdaptor = new WeightAdaptor();
 
 		//TODO Kan der laves et loop, hvis dette fejler??? Hvis der kan, hvor mange gange skal vi så køre det før vi terminerer
 		try {
-			weightAdaptor.establishConnection("localhost", 8000);
+			weightAdaptor.establishConnection(ipAddress, portNumber);
 			weightAdaptor.setupUnit();
 		} catch (AdaptorException e) {
 			System.out.println("Connection couldn't be established!");
@@ -73,8 +85,9 @@ public class WeightProcessController implements IWeightProcessController {
 				// Asks for the product batch (number), which will be weighed
 				do {
 					productBatchNumber = weightAdaptor.getProductBatchNumber();
-				} while(true); // TODO HVILKEN VALIDERING?
-			} catch (Exception e) { // TODO EXCEPTION SKAL HÅNDTERES
+				} while(true); // TODO HVILKEN VALIDERING? SKAL TJEKKES OM DEN FINDES?
+			} catch (Exception e) {
+				System.out.println("Problem with weight adaptor!");
 				e.printStackTrace();
 			}
 
@@ -82,11 +95,11 @@ public class WeightProcessController implements IWeightProcessController {
 			// TODO NEDENSTÅENDE MANGLER DO-WHILE/VALIDERING
 
 
-			List<RecipeListDTO> recipeList = null;
-			List<ProductBatchCompOverviewDTO> productBatchCompOverviewList = null;
+			List<RecipeListDTO> recipeList = null; // The theoretical recipe. List of the all the produces, which are supposed to be in the recipe. 
+			List<ProductBatchCompOverviewDTO> productBatchCompOverviewList = null; // The actual product batch. List of the actual already weighed produces. 
 			try {
 				// Saves list of ProductBatchCompOverviewDTO's specified by the product batch number
-				productBatchCompOverviewList = productBatchDAO.get_product_batch_details_by_pb_id(Integer.parseInt(productBatchNumber));
+				productBatchCompOverviewList = productBatchDAO.getProductBatchDetailsByPbId(Integer.parseInt(productBatchNumber));
 				// Saves list of RecipeListDTO's from the recipe that is used for the weighing.
 				recipeList = recipeDAO.getRecipeDetailsByID( 1 ); // TODO VI KENDER IKKE RECIPE ID, MEN KUN NAVNET
 			} catch (NumberFormatException e) {
@@ -133,13 +146,12 @@ public class WeightProcessController implements IWeightProcessController {
 						tara = Double.parseDouble(weightAdaptor.placeTara());
 						netto = Double.parseDouble(weightAdaptor.placeNetto());
 						gross = Double.parseDouble(weightAdaptor.removeGross());
-						weightAdaptor.grossCheck(tara + netto == Math.abs(gross));
-					} while (tara + netto == Math.abs(gross));
+						weightAdaptor.grossCheck(tara + netto == Math.abs(gross)); // TODO SKAL IMPL. MED TOLERANCE!
+					} while (tara + netto == Math.abs(gross)); // TODO SKAL IMPL. MED TOLERANCE!
 				} catch (AdaptorException e) {
 					e.printStackTrace(); // TODO MANGLER EXCEPTION HÅNDTERING
 				}
-				
-				
+					
 			}
 			
 		}

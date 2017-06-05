@@ -189,10 +189,12 @@ public class WeightAdaptor implements IWeightAdaptor {
 	public void grossCheck(boolean result) throws AdaptorException {
 		try {
 			if(result) {
-				sendCommand("P111 \"Weighing OK!");
+				sendCommand("P111 \"Weighing OK! [->");
+				waitResponse();
 				waitResponse();
 			} else {
-				sendCommand("P111 \"Weighing not OK!");
+				sendCommand("P111 \"Weighing not OK! [->");
+				waitResponse();
 				waitResponse();
 			}
 		} catch (Exception e) {

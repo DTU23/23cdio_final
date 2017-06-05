@@ -16,7 +16,7 @@ public class Validation {
 	public static void isPositiveInteger(String input) throws ValidationException {
 		try {
 			long i = Long.parseLong(input);
-			if (i >= 0) {
+			if (i <= 0) {
 				throw new ValidationException("Input is not a positive number");
 			}
 		} catch (NumberFormatException e) {

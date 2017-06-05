@@ -9,12 +9,14 @@ import dk.dtu.control.api.v1.WeightAdaptor;
 import dk.dtu.model.Validation;
 import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dao.MySQLOperatorDAO;
+import dk.dtu.model.dao.MySQLProductBatchCompDAO;
 import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dao.MySQLRecipeDAO;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.OperatorDAO;
+import dk.dtu.model.interfaces.ProductBatchCompDAO;
 import dk.dtu.model.interfaces.ProductBatchDAO;
 import dk.dtu.model.interfaces.RecipeDAO;
 
@@ -24,6 +26,7 @@ public class WeightProcessController implements IWeightProcessController {
 	private OperatorDAO operatorDAO;
 	private ProductBatchDAO productBatchDAO;
 	private RecipeDAO recipeDAO;
+	private ProductBatchCompDAO productBatchCompDAO;
 
 	@Override
 	public void run() {
@@ -33,6 +36,7 @@ public class WeightProcessController implements IWeightProcessController {
 			operatorDAO = new MySQLOperatorDAO();
 			productBatchDAO = new MySQLProductBatchDAO();
 			recipeDAO = new MySQLRecipeDAO();
+			productBatchCompDAO = new MySQLProductBatchCompDAO();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -101,7 +105,6 @@ public class WeightProcessController implements IWeightProcessController {
 				e.printStackTrace();
 			}
 
-
 			ArrayList<String> alreadyWeighedProducesInProductBatch = new ArrayList<String>();
 			ArrayList<String> producesNeededToBeWeighed = new ArrayList<String>();
 			// Put all produces in the recipe into ArrayList
@@ -118,13 +121,15 @@ public class WeightProcessController implements IWeightProcessController {
 			}
 
 			// Start the weighing process
+			String produce;
 			double tara;
 			double netto;
 			double gross;
 			for(int i = 0; i < producesNeededToBeWeighed.size(); i++) {
 				try {
 					do {
-						weightAdaptor.startWeighingProcess(producesNeededToBeWeighed.get(i));
+						produce = producesNeededToBeWeighed.get(i);
+						weightAdaptor.startWeighingProcess(produce);
 						tara = Double.parseDouble(weightAdaptor.placeTara());
 						netto = Double.parseDouble(weightAdaptor.placeNetto());
 						gross = Double.parseDouble(weightAdaptor.removeGross());
@@ -133,6 +138,8 @@ public class WeightProcessController implements IWeightProcessController {
 				} catch (AdaptorException e) {
 					e.printStackTrace(); // TODO MANGLER EXCEPTION HÅNDTERING
 				}
+				
+				
 			}
 			
 		}

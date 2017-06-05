@@ -7,6 +7,7 @@ import java.util.List;
 
 import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dto.RecipeDTO;
+import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.RecipeDAO;
 
@@ -44,9 +45,19 @@ public class MySQLRecipeDAO implements RecipeDAO {
 	}
 	
 	@Override
-	public void getRecipeDetailsByID(int recipeID) throws DALException {
-		Connector.doQuery("CALL get_recipe_details_by_id(" + recipeID + ");");
-		// TODO LAV RESTEN
+	public List<RecipeListDTO> getRecipeDetailsByID(int recipeID) throws DALException {
+		List<RecipeListDTO> list = new ArrayList<RecipeListDTO>();
+		ResultSet rs = Connector.doQuery("CALL get_recipe_details_by_id("+recipeID+");");
+		
+		try {
+			while(rs.next()) {
+				list.add(new RecipeListDTO(rs.getInt("recipe_id"),rs.getString("recipe_name"),rs.getInt("produce_id"),rs.getString("produce_name"),rs.getDouble("nom_netto"),rs.getDouble("tolerance")));
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		}
+		
+		return list;
 	}
 
 }

@@ -8,6 +8,7 @@ public class ProductBatchCompDTO
 	double netto;
 	int oprId;					// operatoer-nummer
 
+	public ProductBatchCompDTO() {}
 	
 	public ProductBatchCompDTO(int pbId, int rbId, double tara, double netto, int oprId)
 	{

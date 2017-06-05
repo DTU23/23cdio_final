@@ -13,9 +13,9 @@ public interface IWeightAdaptor {
 	public void confirmRecipeName(String recipeName) throws AdaptorException;
 	public void startWeighingProcess(String produceName) throws AdaptorException;
 	
+	public void tara() throws AdaptorException;
 	public String placeTara() throws AdaptorException;
 	public String placeNetto() throws AdaptorException;
 	public String removeGross() throws AdaptorException;
 	public void grossCheck(boolean result) throws AdaptorException;
-	
 }

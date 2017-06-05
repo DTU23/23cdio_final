@@ -23,6 +23,11 @@ public class Validation {
 			throw new ValidationException("Input is not an integer");
 		}
 	}
+	
+	public static void isOnlyLetters(String input) throws ValidationException {
+		if(!input.matches("[a-zA-Z]+"))
+			throw new ValidationException("Input contains non-letter characters");
+	}
 
 	/**
 	 * 
@@ -40,13 +45,12 @@ public class Validation {
 	 * @param ID
 	 * @return true if the ID is valid
 	 */
-	public static boolean isValidID(String ID) throws ValidationException {
+	public static void isValidID(String ID) throws ValidationException {
 		isPositiveInteger(ID);
 		int i = Integer.parseInt(ID);
 		if(i > 99999999) {
 			throw new ValidationException("ID out of bounds");
 		}
-		
 	}
 
 	/**
@@ -54,12 +58,12 @@ public class Validation {
 	 * @param userName
 	 * @return true if the user name is valid
 	 */
-	public static boolean isValidUserName(String userName) throws ValidationException {
-		//TODO kan valideres yderligere
-		if(userName.length() < 2 || userName.length() > 20) {
-			return false;
-		} else {
-			return true;
+	public static void isValidUserName(String userName) throws ValidationException {
+		isOnlyLetters(userName);
+		if(userName.length() < 2) {
+			throw new ValidationException("User name too short");
+		} else if (userName.length() > 20) {
+			throw new ValidationException("User name too long");
 		}
 	}
 
@@ -68,12 +72,12 @@ public class Validation {
 	 * @param initials
 	 * @return true if the initials are valid
 	 */
-	public static boolean isValidInitials(String initials) throws ValidationException {
-		//TODO kan valideres yderligere
-		if(initials.length() < 2 || initials.length() > 4) {
-			return false;
-		} else {
-			return true;
+	public static void isValidInitials(String initials) throws ValidationException {
+		isOnlyLetters(initials);
+		if(initials.length() < 2) {
+			throw new ValidationException("Too few initials");
+		} else if (initials.length() > 4) {
+			throw new ValidationException("Too many initials");
 		}
 	}
 
@@ -82,8 +86,20 @@ public class Validation {
 	 * @param cpr
 	 * @return true if the cpr is valid
 	 */
-	public static boolean isValidCpr(String cpr) throws ValidationException {
-		if (isPositiveInteger(cpr)) {
+	public static void isValidCpr(String cpr) throws ValidationException {
+		isPositiveInteger(cpr);
+		if(cpr.length() != 10) {
+			throw new ValidationException("Not ten digits");
+		}
+		Calendar cprDate = new GregorianCalendar(year, month-1, 1);
+		Calendar cal = Calendar.getInstance();
+		cal.setLenient(false);
+		cal.setTime(yourDate);
+		try {
+		    cal.getTime();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 			int month = Integer.parseInt(cpr.substring(2, 4));
 			// Checks if month is valid
 			if (month > 0 && month < 13) {
@@ -113,7 +129,6 @@ public class Validation {
 					}
 				}
 			}
-		}
 		return false;
 	}
 
@@ -138,18 +153,16 @@ public class Validation {
 	 * @param role
 	 * @return true if the role is valid
 	 */
-	public static boolean isValidRole(String role) throws ValidationException {
+	public static void isValidRole(String role) throws ValidationException {
 		ArrayList<String> validRoles = new ArrayList<>();
-		validRoles.add("admin");
 		validRoles.add("pharmacist");
 		validRoles.add("foreman");
 		validRoles.add("operator");
+		validRoles.add("none");
 		role = role.toLowerCase();
 		// if its a valid role
-		if (validRoles.contains(role)) {
-			return true;
-		} else {
-			return false;
+		if (!validRoles.contains(role)) {
+			throw new ValidationException("Not a valid role");
 		}
 	}
 }

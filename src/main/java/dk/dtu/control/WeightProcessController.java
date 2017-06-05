@@ -75,10 +75,10 @@ public class WeightProcessController implements IWeightProcessController {
 					try {
 						oprId = weightAdaptor.getOperatorId();
 						Validation.isPositiveInteger(oprId);
+						break oprIdLoop;
 					} catch (Exception e) {
 						continue oprIdLoop;
 					}
-					break oprIdLoop;
 				}	
 			// Get the specific operators password and validate password
 			try {
@@ -106,6 +106,7 @@ public class WeightProcessController implements IWeightProcessController {
 					productBatchCompOverviewList = productBatchDAO.getProductBatchDetailsByPbId(Integer.parseInt(productBatchNumber));
 					recipeList = recipeDAO.getRecipeDetailsByID(productBatchCompOverviewList.get(0).getRecipeId());
 				} catch (Exception e) {
+					e.printStackTrace();
 					continue;
 				}
 				// Shows the specific recipe name in secondary display, which will be weighed
@@ -136,7 +137,7 @@ public class WeightProcessController implements IWeightProcessController {
 
 			for(int i = 0; i < recipeList.size(); i++) {
 				try {
-					RecipeListDTO recipeDTO= recipeList.get(i);
+					RecipeListDTO recipeDTO = recipeList.get(i);
 					weightAdaptor.startWeighingProcess(recipeDTO.getProduceName());
 					weightAdaptor.tara();
 					tara = Double.parseDouble(weightAdaptor.placeTara());

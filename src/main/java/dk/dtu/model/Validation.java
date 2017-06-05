@@ -20,13 +20,13 @@ public class Validation {
 				throw new ValidationException("Input is not a positive number");
 			}
 		} catch (NumberFormatException e) {
-			throw new ValidationException("Input is not an integer");
+			throw new ValidationException("Input is not an integer.");
 		}
 	}
-	
+
 	public static void isOnlyLetters(String input) throws ValidationException {
 		if(!input.matches("[a-zA-Z]+"))
-			throw new ValidationException("Input contains non-letter characters");
+			throw new ValidationException("Input contains non-letter characters.");
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class Validation {
 		isPositiveInteger(ID);
 		int i = Integer.parseInt(ID);
 		if(i > 99999999) {
-			throw new ValidationException("ID out of bounds");
+			throw new ValidationException("ID out of bounds.");
 		}
 	}
 
@@ -61,9 +61,9 @@ public class Validation {
 	public static void isValidUserName(String userName) throws ValidationException {
 		isOnlyLetters(userName);
 		if(userName.length() < 2) {
-			throw new ValidationException("User name too short");
+			throw new ValidationException("User name too short.");
 		} else if (userName.length() > 20) {
-			throw new ValidationException("User name too long");
+			throw new ValidationException("User name too long.");
 		}
 	}
 
@@ -75,9 +75,9 @@ public class Validation {
 	public static void isValidInitials(String initials) throws ValidationException {
 		isOnlyLetters(initials);
 		if(initials.length() < 2) {
-			throw new ValidationException("Too few initials");
+			throw new ValidationException("Too few initials.");
 		} else if (initials.length() > 4) {
-			throw new ValidationException("Too many initials");
+			throw new ValidationException("Too many initials.");
 		}
 	}
 
@@ -88,48 +88,37 @@ public class Validation {
 	 */
 	public static void isValidCpr(String cpr) throws ValidationException {
 		isPositiveInteger(cpr);
+		// checks the length
 		if(cpr.length() != 10) {
-			throw new ValidationException("Not ten digits");
+			throw new ValidationException("Not ten digits.");
 		}
-		Calendar cprDate = new GregorianCalendar(year, month-1, 1);
-		Calendar cal = Calendar.getInstance();
-		cal.setLenient(false);
-		cal.setTime(yourDate);
-		try {
-		    cal.getTime();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		// checks for valid date
+		for (int i = 1900; i < 2100; i += 100) {
+			int year = i + Integer.parseInt(cpr.substring(4, 6));
 			int month = Integer.parseInt(cpr.substring(2, 4));
-			// Checks if month is valid
-			if (month > 0 && month < 13) {
-				for (int i = 1900; i < 2100; i += 100) {
-					int day = Integer.parseInt(cpr.substring(0, 2));
-					int year = i + Integer.parseInt(cpr.substring(4, 6));
-					// Creates a calendar object and sets year and month
-					Calendar cprDate = new GregorianCalendar(year, month-1, 1);
-					// Get the number of days in that month
-					int daysInMonth = cprDate.getActualMaximum(Calendar.DAY_OF_MONTH);
-					// Checks if day is valid
-					if (day > 0 && day <= daysInMonth) {
-						// check if the date later than todays date
-						cprDate.set(year, month-1, day);
-						Calendar currentDate = new GregorianCalendar();
-						if (cprDate.compareTo(currentDate) <= 0) {
-							// check if full cpr is valid
-							int CprProductSum = 0;
-							int[] multiplyBy = {4, 3, 2, 7, 6, 5, 4, 3, 2, 1};
-							for (int j = 0; j < cpr.length(); j++) {
-								CprProductSum += Integer.parseInt(cpr.substring(j, j+1)) * multiplyBy[j];
-							}
-							if (CprProductSum % 11 == 0) {
-								return true;
-							}
-						}
-					}
-				}
+			int day = Integer.parseInt(cpr.substring(0, 2));
+			Calendar cprDate = new GregorianCalendar(year, month-1, day);
+			cprDate.setLenient(false);
+			try {
+				cprDate.getTime();
+			} catch (Exception e) {
+				throw new ValidationException("Not valid date.");
 			}
-		return false;
+			// checks if date is in the future
+			Calendar currentDate = new GregorianCalendar();
+			if (cprDate.compareTo(currentDate) < 0) {
+				throw new ValidationException("The given date is in the future.");
+			}
+			// check if full cpr is valid
+			int CprProductSum = 0;
+			int[] multiplyBy = {4, 3, 2, 7, 6, 5, 4, 3, 2, 1};
+			for (int j = 0; j < cpr.length(); j++) {
+				CprProductSum += Integer.parseInt(cpr.substring(j, j+1)) * multiplyBy[j];
+			}
+			if (CprProductSum % 11 != 0) {
+				throw new ValidationException("Invalid cpr number.");
+			}
+		}
 	}
 
 	/**

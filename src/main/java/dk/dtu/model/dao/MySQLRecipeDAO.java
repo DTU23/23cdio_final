@@ -51,7 +51,7 @@ public class MySQLRecipeDAO implements RecipeDAO {
 		
 		try {
 			while(rs.next()) {
-				list.add(new RecipeListDTO(rs.getInt("recipe_id"),rs.getString("recipe_name"),rs.getString("produce_name"),rs.getDouble("nom_netto"),rs.getDouble("tolerance")));
+				list.add(new RecipeListDTO(rs.getInt("recipe_id"),rs.getString("recipe_name"),rs.getInt("produceId"),rs.getString("produce_name"),rs.getDouble("nom_netto"),rs.getDouble("tolerance")));
 			}
 		} catch (SQLException e) {
 			throw new DALException(e);

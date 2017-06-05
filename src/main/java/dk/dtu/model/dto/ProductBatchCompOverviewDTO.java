@@ -3,6 +3,7 @@ package dk.dtu.model.dto;
 public class ProductBatchCompOverviewDTO
 {
 	private int pbId;
+	private int recipeId;
 	private String recipeName;
 	private int status;
 	private String produceName;
@@ -10,8 +11,9 @@ public class ProductBatchCompOverviewDTO
 	private int oprId;
 
 
-	public ProductBatchCompOverviewDTO(int pbId, String recipeName, int status, String produceName, double netto, int operatorId){
+	public ProductBatchCompOverviewDTO(int pbId, int recipeId, String recipeName, int status, String produceName, double netto, int operatorId){
 		this.pbId = pbId;
+		this.recipeId = recipeId;
 		this.recipeName = recipeName;
 		this.status = status;
 		this.produceName = produceName;
@@ -21,18 +23,19 @@ public class ProductBatchCompOverviewDTO
 	
 	public int getPbId() { return this.pbId; }
 	public void setPbId(int pbId) { this.pbId = pbId; }
+	public int getRecipeId() { return recipeId; }
+	public void setRecipeId(int recipeId) { this.recipeId = recipeId; }
 	public String getRecipeName(){ return this.recipeName; }
 	public void setRecipeName(String recipeName){ this.recipeName = recipeName;}
 	public int getStatus(){ return this.status; }
 	public void setStatus(int status){ this.status = status; }
 	public String getProduceName(){ return this.produceName; }
 	public void setProduceName(String produceName){ this.produceName = produceName; }
-
 	public double getNetto() { return netto; }
 	public void setNetto(double netto) { this.netto = netto; }
 	public int getOprId() { return this.oprId; }
 	public void setOprId(int oprId) { this.oprId = oprId; }
 	public String toString() { 
-		return pbId + "\t" + recipeName +"\t" + status +"\t" + produceName + "\t" + netto + "\t" + oprId; 
+		return pbId + "\t" + recipeId + "\t" + recipeName +"\t" + status +"\t" + produceName + "\t" + netto + "\t" + oprId; 
 	}
 }

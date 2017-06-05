@@ -47,7 +47,7 @@ product_batch_component (Pharmacist)
 Task 9 - Creates a view to display various information across recipe, productbatch, productbatchcomponent and producebatch + produce
 */
 CREATE OR REPLACE VIEW product_batch_component_overview AS
-  SELECT pb_id, recipe_name, productbatch.status, produce_name, netto, opr_id
+  SELECT pb_id, recipe.recipe_id, recipe_name, productbatch.status, produce_name, netto, opr_id
   FROM recipe NATURAL JOIN productbatch NATURAL JOIN productbatchcomponent
   NATURAL JOIN producebatch NATURAL JOIN produce
   ORDER BY pb_id;
@@ -56,7 +56,7 @@ CREATE OR REPLACE VIEW product_batch_component_overview AS
 recipe (Pharmacist)
 */
 CREATE OR REPLACE VIEW recipe_list AS
-  SELECT recipe_id, recipe_name, produce_name, nom_netto, tolerance
+  SELECT recipe_id, recipe_name, produce_id, produce_name, nom_netto, tolerance
   FROM recipe NATURAL JOIN recipecomponent NATURAL JOIN produce
   ORDER BY recipe_id;
 

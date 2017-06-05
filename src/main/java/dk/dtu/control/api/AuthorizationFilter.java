@@ -33,6 +33,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         // Extract the roles declared by it
         Class<?> resourceClass = resourceInfo.getResourceClass();
         List<Role> classRoles = extractRoles(resourceClass);
+        boolean classAdmin = extractAdmin(resourceClass);
 
         SecurityContext sc = requestContext.getSecurityContext();
 
@@ -40,21 +41,28 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         // Extract the roles declared by it
         Method resourceMethod = resourceInfo.getResourceMethod();
         List<Role> methodRoles = extractRoles(resourceMethod);
+        boolean methodAdmin = extractAdmin(resourceMethod);
 
         try {
 
             // Check if the user is allowed to execute the method
             // The method annotations override the class annotations
             if (methodRoles.isEmpty()) {
-                checkPermissions(classRoles, sc);
+                checkPermissions(classRoles, classAdmin, sc);
             } else {
-                checkPermissions(methodRoles, sc);
+                checkPermissions(methodRoles, methodAdmin, sc);
             }
 
         } catch (Exception e) {
             requestContext.abortWith(
                     Response.status(Response.Status.FORBIDDEN).build());
         }
+    }
+
+    // Extract the roles from the annotated element
+    private boolean extractAdmin(AnnotatedElement annotatedElement) {
+        Secured secured = annotatedElement.getAnnotation(Secured.class);
+        return secured.admin();
     }
 
     // Extract the roles from the annotated element
@@ -66,22 +74,27 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             if (secured == null) {
                 return new ArrayList<Role>();
             } else {
-                Role[] allowedRoles = secured.value();
+                Role[] allowedRoles = secured.roles();
                 return Arrays.asList(allowedRoles);
             }
         }
     }
 
-    private void checkPermissions(List<Role> allowedRoles, SecurityContext sc) throws Exception {
+    private void checkPermissions(List<Role> allowedRoles, boolean requiredAdmin, SecurityContext sc) throws Exception {
+        boolean satisfied = false;
         if(allowedRoles.size() == 0){
-            return;
+            satisfied = true;
         }else{
             for (Role role: allowedRoles) {
                 if(sc.isUserInRole(String.valueOf(role))){
-                    return;
+                    satisfied = true;
                 }
             }
         }
+        if(requiredAdmin){
+
+        }
+
         throw new DALException("User not in role!");
     }
 }

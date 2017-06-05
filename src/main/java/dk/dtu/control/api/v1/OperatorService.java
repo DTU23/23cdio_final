@@ -40,7 +40,7 @@ public class OperatorService {
 	}
 
 	@GET
-	@Secured({Role.Pharmacist, Role.Operator})
+	@Secured(roles = {Role.Pharmacist, Role.Operator}, admin = false)
 	public List<OperatorNoPWDTO> getOperatorList(@Context SecurityContext securityContext) throws DALException {
 		return dao.getOperatorList();
 	}

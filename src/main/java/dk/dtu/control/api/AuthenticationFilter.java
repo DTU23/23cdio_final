@@ -3,6 +3,7 @@ package dk.dtu.control.api;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import javax.annotation.Priority;
@@ -49,18 +50,19 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             public Principal getUserPrincipal() {
 
                 return new Principal() {
-
+                    DecodedJWT decodedToken = JWT.decode(token);
                     @Override
                     public String getName() {
-
-                        return "test";
+                        return decodedToken.getClaim("name").asString();
                     }
                 };
             }
 
             @Override
             public boolean isUserInRole(String role) {
-                return true;
+                DecodedJWT decodedToken = JWT.decode(token);
+                String tokenRole = decodedToken.getClaim("role").asString();
+                return tokenRole.equals(role);
             }
 
             @Override
@@ -76,12 +78,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     }
 
-    private void validateToken(String token) throws Exception {
+    private DecodedJWT validateToken(String token) throws Exception {
         Algorithm algorithm = Algorithm.HMAC256("secret");
         JWTVerifier verifier = JWT.require(algorithm)
                 .withIssuer("auth0")
                 .build(); //Reusable verifier instance
-        DecodedJWT jwt = verifier.verify(token);
+        return verifier.verify(token);
     }
 
 }

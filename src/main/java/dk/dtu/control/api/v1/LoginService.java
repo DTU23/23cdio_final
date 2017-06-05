@@ -46,7 +46,8 @@ public class LoginService {
 		}
 	}
 
-	private String issueToken(int oprId) {
+	private String issueToken(int oprId) throws DALException {
+		OperatorDAO oprDAO = new MySQLOperatorDAO();
 		try {
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.DATE, 7);
@@ -54,12 +55,13 @@ public class LoginService {
 			return JWT.create()
 					.withIssuer("auth0")
 					.withClaim("oprId", oprId)
+					.withClaim("name", oprDAO.getOperator(oprId).getOprName())
+					.withClaim("role", oprDAO.getOperator(oprId).getRole())
+					.withClaim("admin", oprDAO.getOperator(oprId).getAdmin())
 					.withExpiresAt(cal.getTime())
 					.sign(algorithm);
-		} catch (UnsupportedEncodingException exception){
-			//UTF-8 encoding not supported
-		} catch (JWTCreationException exception){
-			//Invalid Signing configuration / Couldn't convert Claims.
+		} catch (UnsupportedEncodingException | JWTCreationException ignored){
+
 		}
 		return null;
 	}

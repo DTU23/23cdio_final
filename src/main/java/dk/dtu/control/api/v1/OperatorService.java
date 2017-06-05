@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
+import dk.dtu.control.api.Role;
 
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
@@ -39,10 +40,8 @@ public class OperatorService {
 	}
 
 	@GET
-	@Secured
+	@Secured({Role.Pharmacist, Role.Operator})
 	public List<OperatorNoPWDTO> getOperatorList(@Context SecurityContext securityContext) throws DALException {
-		Principal principal = securityContext.getUserPrincipal();
-		String username = principal.getName();
 		return dao.getOperatorList();
 	}
 

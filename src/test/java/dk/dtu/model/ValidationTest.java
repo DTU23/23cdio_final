@@ -71,7 +71,7 @@ public class ValidationTest {
 
 	@Test
 	public void testIsValidPassword() throws ValidationException {
-		Validation.isValidPassword("dfgERET");
+		Validation.isValidPassword("dfgE*%34RET");
 	}
 
 	@Test

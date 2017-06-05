@@ -66,7 +66,7 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 	}
 	
 	@Override
-	public List<ProductBatchCompOverviewDTO> get_product_batch_details_by_pb_id(int productBatchID) throws DALException {
+	public List<ProductBatchCompOverviewDTO> getProductBatchDetailsByPbId(int productBatchID) throws DALException {
 		List<ProductBatchCompOverviewDTO> list = new ArrayList<ProductBatchCompOverviewDTO>();
 		ResultSet rs = Connector.doQuery("CALL get_product_batch_details_by_pb_id("+productBatchID+");");
 		

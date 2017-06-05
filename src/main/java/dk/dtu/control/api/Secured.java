@@ -1,4 +1,4 @@
-package dk.dtu.control.api.v1;
+package dk.dtu.control.api;
 
 import javax.ws.rs.NameBinding;
 import java.lang.annotation.Retention;
@@ -12,4 +12,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target({TYPE, METHOD})
 public @interface Secured {
+
 }

@@ -1,5 +1,6 @@
 package dk.dtu.control.api.v1;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -9,8 +10,11 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 
+import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dto.OperatorDTO;
@@ -38,7 +42,9 @@ public class OperatorService {
 	
 	@GET
 	@Secured
-	public List<OperatorNoPWDTO> getOperatorList() throws DALException {
+	public List<OperatorNoPWDTO> getOperatorList(@Context SecurityContext securityContext) throws DALException {
+		Principal principal = securityContext.getUserPrincipal();
+		String username = principal.getName();
 		return dao.getOperatorList();
 	}
 

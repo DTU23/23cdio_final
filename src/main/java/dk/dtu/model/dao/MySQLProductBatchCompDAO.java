@@ -74,6 +74,7 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 			{
 				list.add(new ProductBatchCompOverviewDTO(
 						rs.getInt("pb_id"),
+						rs.getInt("recipe_id"),
 						rs.getString("recipe_name"),
 						rs.getInt("status"),
 						rs.getString("produce_name"),

@@ -8,14 +8,13 @@ import dk.dtu.control.api.v1.IWeightAdaptor;
 import dk.dtu.control.api.v1.WeightAdaptor;
 import dk.dtu.model.Validation;
 import dk.dtu.model.connector.Connector;
-import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dao.MySQLProductBatchCompDAO;
 import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dao.MySQLRecipeDAO;
+import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.interfaces.DALException;
-import dk.dtu.model.interfaces.OperatorDAO;
 import dk.dtu.model.interfaces.ProductBatchCompDAO;
 import dk.dtu.model.interfaces.ProductBatchDAO;
 import dk.dtu.model.interfaces.RecipeDAO;
@@ -25,7 +24,6 @@ public class WeightProcessController implements IWeightProcessController {
 	private String ipAddress;
 	private int portNumber;
 	private IWeightAdaptor weightAdaptor;
-	private OperatorDAO operatorDAO;
 	private ProductBatchDAO productBatchDAO;
 	private RecipeDAO recipeDAO;
 	private ProductBatchCompDAO productBatchCompDAO;
@@ -33,7 +31,7 @@ public class WeightProcessController implements IWeightProcessController {
 	public WeightProcessController() {
 		this("localhost", 8000);
 	}
-	
+
 	public WeightProcessController(String ipAddress, int portNumber) {
 		this.ipAddress = ipAddress;
 		this.portNumber = portNumber;
@@ -44,7 +42,6 @@ public class WeightProcessController implements IWeightProcessController {
 		try {
 			// TODO Kig på database forbindelse!!!
 			new Connector();
-			operatorDAO = new MySQLOperatorDAO();
 			productBatchDAO = new MySQLProductBatchDAO();
 			recipeDAO = new MySQLRecipeDAO();
 			productBatchCompDAO = new MySQLProductBatchCompDAO();
@@ -69,92 +66,107 @@ public class WeightProcessController implements IWeightProcessController {
 			String oprId = null;
 			String oprPW = null;
 			String productBatchNumber = null;
-
-			try {
-				// Get operator identification number and validate it
-				do {
-					oprId = weightAdaptor.getOperatorId();
-				} while(!Validation.isPositiveInteger(oprId));
-
-				// Get the specific operators password and validate password
-				do {
-					oprPW = weightAdaptor.getOperatorPassword();
-					weightAdaptor.loginResult(!Validation.isValidPassword(oprPW));
-				} while (!Validation.isValidPassword(oprPW));
-
-				// Asks for the product batch (number), which will be weighed
-				do {
-					productBatchNumber = weightAdaptor.getProductBatchNumber();
-				} while(true); // TODO HVILKEN VALIDERING? SKAL TJEKKES OM DEN FINDES?
-			} catch (Exception e) {
-				System.out.println("Problem with weight adaptor!");
-				e.printStackTrace();
-			}
-
-
-			// TODO NEDENSTÅENDE MANGLER DO-WHILE/VALIDERING
-
-
 			List<RecipeListDTO> recipeList = null; // The theoretical recipe. List of the all the produces, which are supposed to be in the recipe. 
 			List<ProductBatchCompOverviewDTO> productBatchCompOverviewList = null; // The actual product batch. List of the actual already weighed produces. 
+
+			loginLoop: while(true) {
+				// Get operator identification number and validate it
+				oprIdLoop: while(true) {
+					try {
+						oprId = weightAdaptor.getOperatorId();
+						Validation.isPositiveInteger(oprId);
+					} catch (Exception e) {
+						continue oprIdLoop;
+					}
+					break oprIdLoop;
+				}	
+			// Get the specific operators password and validate password
 			try {
-				// Saves list of ProductBatchCompOverviewDTO's specified by the product batch number
-				productBatchCompOverviewList = productBatchDAO.getProductBatchDetailsByPbId(Integer.parseInt(productBatchNumber));
-				// Saves list of RecipeListDTO's from the recipe that is used for the weighing.
-				recipeList = recipeDAO.getRecipeDetailsByID( 1 ); // TODO VI KENDER IKKE RECIPE ID, MEN KUN NAVNET
-			} catch (NumberFormatException e) {
-				System.out.println("Couldn't parse the product batch number to an integer!");
-				e.printStackTrace();
-			} catch (DALException e) {
-				System.out.println("Couldn't get the recipe details by ID!");
-				e.printStackTrace();
+				oprPW = weightAdaptor.getOperatorPassword();
+				Validation.authenticateUser(oprId, oprPW);
+			} catch (Exception e) {
+				try {
+					weightAdaptor.loginResult(false);
+				} catch (AdaptorException e1) {}
+				continue loginLoop;
+			}
+			try {
+				weightAdaptor.loginResult(true);
+			} catch (AdaptorException e) {}
+			break loginLoop;
+
 			}
 
-
-			try {
+			// Asks for the product batch (number), which will be weighed
+			while(true) {
+				try {
+					productBatchNumber = weightAdaptor.getProductBatchNumber();
+					Validation.isPositiveInteger(productBatchNumber);
+					// Saves list of ProductBatchCompOverviewDTO's specified by the product batch number
+					productBatchCompOverviewList = productBatchDAO.getProductBatchDetailsByPbId(Integer.parseInt(productBatchNumber));
+					recipeList = recipeDAO.getRecipeDetailsByID(productBatchCompOverviewList.get(0).getRecipeId());
+				} catch (Exception e) {
+					continue;
+				}
 				// Shows the specific recipe name in secondary display, which will be weighed
-				weightAdaptor.confirmRecipeName( productBatchCompOverviewList.get(0).getRecipeName() );
-			} catch (AdaptorException e) { // TODO EXCEPTION SKAL HÅNDTERES
-				e.printStackTrace();
+				try {
+					weightAdaptor.confirmRecipeName(recipeList.get(0).getRecipeName());
+				} catch (AdaptorException e) {}
+				break;
 			}
 
-			ArrayList<String> alreadyWeighedProducesInProductBatch = new ArrayList<String>();
-			ArrayList<String> producesNeededToBeWeighed = new ArrayList<String>();
+			ArrayList<String> producesAlreadyWeighed = new ArrayList<String>();
 			// Put all produces in the recipe into ArrayList
-			for(RecipeListDTO dto : recipeList ) {
-				producesNeededToBeWeighed.add(dto.getProduceName());
+			for(ProductBatchCompOverviewDTO dto : productBatchCompOverviewList ) {
+				producesAlreadyWeighed.add(dto.getProduceName());
 			}
-			// Put all produces that has been weighed in the specific product batch into ArrayList
-			for(ProductBatchCompOverviewDTO dto : productBatchCompOverviewList) {
-				alreadyWeighedProducesInProductBatch.add(dto.getProduceName());
-			}
+
 			// Removes all the produces that has been weighed. Produces that needs to be weighed is left in the ArrayList
-			for(int i = 0; i < alreadyWeighedProducesInProductBatch.size(); i++) {
-				producesNeededToBeWeighed.remove(alreadyWeighedProducesInProductBatch.get(i));
+			for(int i = 0; i < recipeList.size(); i++) {
+				if (producesAlreadyWeighed.contains(recipeList.get(i).getProduceName())) {
+					recipeList.remove(i);
+				}
 			}
 
 			// Start the weighing process
-			String produce;
 			double tara;
 			double netto;
 			double gross;
-			for(int i = 0; i < producesNeededToBeWeighed.size(); i++) {
+			ProductBatchCompDTO productBatchCompDTO;
+
+			for(int i = 0; i < recipeList.size(); i++) {
 				try {
+					RecipeListDTO recipeDTO= recipeList.get(i);
+					weightAdaptor.startWeighingProcess(recipeDTO.getProduceName());
+					weightAdaptor.tara();
+					tara = Double.parseDouble(weightAdaptor.placeTara());
+					weightAdaptor.tara();
+					double tolerance = recipeDTO.getTolerance();
 					do {
-						produce = producesNeededToBeWeighed.get(i);
-						weightAdaptor.startWeighingProcess(produce);
-						tara = Double.parseDouble(weightAdaptor.placeTara());
 						netto = Double.parseDouble(weightAdaptor.placeNetto());
-						gross = Double.parseDouble(weightAdaptor.removeGross());
-						weightAdaptor.grossCheck(tara + netto == Math.abs(gross)); // TODO SKAL IMPL. MED TOLERANCE!
-					} while (tara + netto == Math.abs(gross)); // TODO SKAL IMPL. MED TOLERANCE!
+					} while (Math.abs(recipeDTO.getNomNetto() - netto) > tolerance);
+					weightAdaptor.tara();
+					gross = Double.parseDouble(weightAdaptor.removeGross());
+					if(tara + netto == Math.abs(gross)) {
+						productBatchCompDTO = new ProductBatchCompDTO(productBatchCompOverviewList.get(0).getPbId(), recipeDTO.getProduceId(), tara, netto, Integer.parseInt(oprId));
+						try {
+							productBatchCompDAO.createProductBatchComp(productBatchCompDTO);
+						} catch (DALException e) {
+							//TODO
+						}
+						weightAdaptor.grossCheck(true);
+					} else {
+						i--;
+						weightAdaptor.grossCheck(false);
+					}
 				} catch (AdaptorException e) {
 					e.printStackTrace(); // TODO MANGLER EXCEPTION HÅNDTERING
 				}
-					
+
 			}
-			
+
 		}
 
 	}
 }
+

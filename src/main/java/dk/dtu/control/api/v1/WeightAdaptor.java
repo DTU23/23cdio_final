@@ -137,10 +137,18 @@ public class WeightAdaptor implements IWeightAdaptor {
 	}
 
 	@Override
-	public String placeTara() throws AdaptorException {
+	public void tara() throws AdaptorException {
 		try {
 			sendCommand("T");
 			waitResponse();
+		} catch (Exception e) {
+			throw new AdaptorException(e);
+		}
+	}
+	
+	@Override
+	public String placeTara() throws AdaptorException {
+		try {
 			sendCommand("P111 \"Place tara [->\"");
 			waitResponse();
 			waitResponse();
@@ -154,8 +162,6 @@ public class WeightAdaptor implements IWeightAdaptor {
 	@Override
 	public String placeNetto() throws AdaptorException {
 		try {
-			sendCommand("T");
-			waitResponse();
 			sendCommand("P111 \"Place netto [->\"");
 			waitResponse();
 			waitResponse();
@@ -169,8 +175,6 @@ public class WeightAdaptor implements IWeightAdaptor {
 	@Override
 	public String removeGross() throws AdaptorException {
 		try {
-			sendCommand("T");
-			waitResponse();
 			sendCommand("P111 \"Remove gross [->\"");
 			waitResponse();
 			waitResponse();

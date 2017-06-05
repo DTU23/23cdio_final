@@ -4,13 +4,15 @@ public class RecipeListDTO {
 
 	private int recipeId;
 	private String recipeName;
+	private int produceId;
 	private String produceName;
 	private double nomNetto;
 	private double tolerance;
 	
-	public RecipeListDTO(int recipeId, String recipeName, String produceName, double nomNetto, double tolerance) {
+	public RecipeListDTO(int recipeId, String recipeName, int produceId, String produceName, double nomNetto, double tolerance) {
 		this.recipeId = recipeId;
 		this.recipeName = recipeName;
+		this.produceId = produceId;
 		this.produceName = produceName;
 		this.nomNetto = nomNetto;
 		this.tolerance = tolerance;
@@ -27,6 +29,13 @@ public class RecipeListDTO {
 	}
 	public void setRecipeName(String recipeName) {
 		this.recipeName = recipeName;
+	}
+	public int getProduceId() {
+		return produceId;
+	}
+
+	public void setProduceId(int produceId) {
+		this.produceId = produceId;
 	}
 	public String getProduceName() {
 		return produceName;
@@ -49,7 +58,7 @@ public class RecipeListDTO {
 
 	@Override
 	public String toString() {
-		return "RecipeListDTO [recipeId=" + recipeId + ", recipeName=" + recipeName + ", produceName=" + produceName
+		return "RecipeListDTO [recipeId=" + recipeId + ", recipeName=" + recipeName + ", produceId=" + produceId + ", produceName=" + produceName
 				+ ", nomNetto=" + nomNetto + ", tolerance=" + tolerance + "]";
 	}
 	

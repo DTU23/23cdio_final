@@ -13,17 +13,26 @@ public class Validation {
 	 * @param input
 	 * @return true if the input i a positive integer
 	 */
-	public static boolean isPositiveInteger(String input) {
+	public static void isPositiveInteger(String input) throws ValidationException {
 		try {
 			long i = Long.parseLong(input);
 			if (i >= 0) {
-				return true;
-			} else {
-				return false;
+				throw new ValidationException("Input is not a positive number");
 			}
-		} catch (Exception e) {
-			return false;
+		} catch (NumberFormatException e) {
+			throw new ValidationException("Input is not an integer");
 		}
+	}
+
+	/**
+	 * 
+	 * @param ID
+	 * @param password
+	 * @return
+	 * @throws ValidationException
+	 */
+	public static void authenticateUser(String ID, String password) throws ValidationException {
+		//TODO
 	}
 
 	/**
@@ -31,17 +40,13 @@ public class Validation {
 	 * @param ID
 	 * @return true if the ID is valid
 	 */
-	public static boolean isValidID(String ID) {
-		if (isPositiveInteger(ID)) {
-			int i = Integer.parseInt(ID);
-			if(i < 11 || i > 99) {
-				return false;
-			} else {
-				return true;
-			}
-		} else {
-			return false;
+	public static boolean isValidID(String ID) throws ValidationException {
+		isPositiveInteger(ID);
+		int i = Integer.parseInt(ID);
+		if(i > 99999999) {
+			throw new ValidationException("ID out of bounds");
 		}
+		
 	}
 
 	/**
@@ -49,7 +54,7 @@ public class Validation {
 	 * @param userName
 	 * @return true if the user name is valid
 	 */
-	public static boolean isValidUserName(String userName) {
+	public static boolean isValidUserName(String userName) throws ValidationException {
 		//TODO kan valideres yderligere
 		if(userName.length() < 2 || userName.length() > 20) {
 			return false;
@@ -63,7 +68,7 @@ public class Validation {
 	 * @param initials
 	 * @return true if the initials are valid
 	 */
-	public static boolean isValidInitials(String initials) {
+	public static boolean isValidInitials(String initials) throws ValidationException {
 		//TODO kan valideres yderligere
 		if(initials.length() < 2 || initials.length() > 4) {
 			return false;
@@ -77,7 +82,7 @@ public class Validation {
 	 * @param cpr
 	 * @return true if the cpr is valid
 	 */
-	public static boolean isValidCpr(String cpr) {
+	public static boolean isValidCpr(String cpr) throws ValidationException {
 		if (isPositiveInteger(cpr)) {
 			int month = Integer.parseInt(cpr.substring(2, 4));
 			// Checks if month is valid
@@ -121,7 +126,7 @@ public class Validation {
 	 * @param password
 	 * @return true if the password is valid.
 	 */
-	public static boolean isValidPassword(String password) {
+	public static boolean isValidPassword(String password) throws ValidationException {
 		//(?!.*" + hashMap.get("userName").toString()+")
 		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
 		Matcher m = p.matcher(password);
@@ -133,7 +138,7 @@ public class Validation {
 	 * @param role
 	 * @return true if the role is valid
 	 */
-	public static boolean isValidRole(String role) {
+	public static boolean isValidRole(String role) throws ValidationException {
 		ArrayList<String> validRoles = new ArrayList<>();
 		validRoles.add("admin");
 		validRoles.add("pharmacist");

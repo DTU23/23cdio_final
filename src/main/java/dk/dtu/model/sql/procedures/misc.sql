@@ -17,7 +17,7 @@ CREATE PROCEDURE reset_data()
       (1, 'Angelo A', 'AA', '070770-7007', 'lKje4fa', FALSE, 'Foreman'),
       (2, 'Antonella B', 'AB', '080880-8008', 'atoJ21v', FALSE, 'Pharmacist'),
       (3, 'Luigi C', 'LC', '090990-9009', 'jEfm5aQ', FALSE, 'Operator'),
-      (4, 'Super Admin', 'SA', '000000-0000', 'admin', TRUE, 'Pharmacist');
+      (4, 'Admin', 'ADM', '000000-0000', 'root', TRUE, 'Pharmacist');
 
     INSERT INTO produce(produce_id, produce_name, supplier) VALUES
       (1, 'dej', 'Wawelka'),

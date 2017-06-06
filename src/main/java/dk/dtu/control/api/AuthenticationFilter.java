@@ -35,12 +35,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         if (authorizationHeader == null) {
             throw new NotAuthorizedException("Authorization header must be provided");
         }
-        // Extract the token from the HTTP Authorization header
-        String token = authorizationHeader;
 
         try {
             // Validate the token
-            validateToken(token);
+            validateToken(authorizationHeader);
         } catch (Exception e) {
             requestContext.abortWith(
                     Response.status(Response.Status.UNAUTHORIZED).build());
@@ -48,13 +46,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         final SecurityContext currentSecurityContext = requestContext.getSecurityContext();
         requestContext.setSecurityContext(new ExtendedSecurityContext() {
-            DecodedJWT decodedToken = JWT.decode(token);
+            DecodedJWT decodedToken = JWT.decode(authorizationHeader);
             MySQLOperatorDAO oprDAO = new MySQLOperatorDAO();
 
             @Override
             public boolean isAdmin() {
-                boolean isAdmin = decodedToken.getClaim("admin").asBoolean();
-                return isAdmin;
+                return decodedToken.getClaim("admin").asBoolean();
             }
 
             @Override
@@ -64,13 +61,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
             @Override
             public Principal getUserPrincipal() {
-
-                return new Principal() {
-                    @Override
-                    public String getName() {
-                        return decodedToken.getClaim("name").asString();
-                    }
-                };
+                return () -> decodedToken.getClaim("name").asString();
             }
 
             @Override
@@ -91,12 +82,11 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     }
 
-    private DecodedJWT validateToken(String token) throws Exception {
+    private void validateToken(String token) throws Exception {
         Algorithm algorithm = Algorithm.HMAC256("secret");
         JWTVerifier verifier = JWT.require(algorithm)
                 .withIssuer("auth0")
                 .build(); //Reusable verifier instance
-        return verifier.verify(token);
+        verifier.verify(token);
     }
-
 }

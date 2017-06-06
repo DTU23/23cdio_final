@@ -11,9 +11,7 @@ import dk.dtu.model.interfaces.OperatorDAO;
 import dk.dtu.control.api.Role;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 
 
@@ -33,7 +31,7 @@ public class OperatorService {
 	}
 
 	@GET
-	public List<OperatorNoPWDTO> getOperatorList(@Context SecurityContext securityContext) throws DALException {
+	public List<OperatorNoPWDTO> getOperatorList() throws DALException {
 		return dao.getOperatorList();
 	}
 

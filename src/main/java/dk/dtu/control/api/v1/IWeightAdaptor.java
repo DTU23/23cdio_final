@@ -17,9 +17,13 @@ public interface IWeightAdaptor {
 	public void tara() throws AdaptorException;
 	public String placeTara() throws AdaptorException;
 	public String placeNetto() throws AdaptorException;
+	public void clearSecondaryDisplay() throws AdaptorException;
 	public String getProduceBatchNumber() throws AdaptorException;
 	public String removeGross() throws AdaptorException;
 	public void grossCheck(boolean result) throws AdaptorException;
+	void clearBothDisplays() throws AdaptorException;
+	void writeInSecondaryDisplay(String msg) throws AdaptorException;
+
 	
 	
 }

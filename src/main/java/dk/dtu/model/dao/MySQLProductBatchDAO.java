@@ -79,4 +79,13 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 		
 		return list;
 	}
+	
+	@Override
+	public ProductBatchCompOverviewDTO getProductBatchListDetailsByPbId(int productBatchID) throws DALException {
+		ResultSet rs = Connector.doQuery("CALL get_product_batch_list_details_by_pb_id("+productBatchID+");");
+		try {
+			if(!rs.first()) throw new DALException("Product batch with id " + productBatchID + " does not exist");
+			else return new ProductBatchCompOverviewDTO(rs.getInt("pb_id"), 0, rs.getInt("recipe_id"), rs.getString("recipe_name"), rs.getInt("status"), null, 0, 0);
+		} catch (SQLException e) {	throw new DALException(e); }
+	}
 }

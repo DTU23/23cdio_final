@@ -1,6 +1,7 @@
 package dk.dtu.control;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import dk.dtu.control.api.v1.AdaptorException;
@@ -126,11 +127,13 @@ public class WeightProcessController implements IWeightProcessController {
 			for(ProductBatchCompOverviewDTO dto : productBatchCompOverviewList ) {
 				producesAlreadyWeighed.add(dto.getProduceName());
 			}
-
+			
 			// Removes all the produces that has been weighed. Produces that needs to be weighed is left in the ArrayList
-			for(int i = 0; i < recipeList.size(); i++) {
-				if (producesAlreadyWeighed.contains(recipeList.get(i).getProduceName())) {
-					recipeList.remove(i);
+			Iterator<RecipeListDTO> iterator = recipeList.iterator();
+			while(iterator.hasNext()) {
+				RecipeListDTO dto = iterator.next();
+				if( producesAlreadyWeighed.contains( dto.getProduceName()) ) {
+					iterator.remove();
 				}
 			}
 
@@ -152,11 +155,12 @@ public class WeightProcessController implements IWeightProcessController {
 					do {
 						netto = Double.parseDouble(weightAdaptor.placeNetto());
 					} while (Math.abs(recipeDTO.getNomNetto() - netto) > tolerance);
+					weightAdaptor.clearSecondaryDisplay();
 					rbId = weightAdaptor.getProduceBatchNumber();
 					weightAdaptor.tara();
 					gross = Double.parseDouble(weightAdaptor.removeGross());
 					if(tara + netto == Math.abs(gross)) {
-						productBatchCompDTO = new ProductBatchCompDTO(productBatchCompOverviewList.get(0).getPbId(), recipeDTO.getProduceId(), tara, netto, Integer.parseInt(oprId));
+						productBatchCompDTO = new ProductBatchCompDTO(productBatchCompOverviewList.get(0).getPbId(), Integer.parseInt(rbId), tara, netto, Integer.parseInt(oprId));
 						try {
 							productBatchCompDAO.createProductBatchComp(productBatchCompDTO);
 						} catch (DALException e) {
@@ -170,7 +174,12 @@ public class WeightProcessController implements IWeightProcessController {
 				} catch (AdaptorException e) {
 					e.printStackTrace(); // TODO MANGLER EXCEPTION HÅNDTERING
 				}
-
+			}
+			
+			try {
+				weightAdaptor.clearBothDisplays();
+			} catch (AdaptorException e) {
+				e.printStackTrace();
 			}
 
 		}

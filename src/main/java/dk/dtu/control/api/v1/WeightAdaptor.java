@@ -81,6 +81,8 @@ public class WeightAdaptor implements IWeightAdaptor {
 			sendCommand("P111 \""+operatorName+" [->\"");
 			waitResponse();
 			waitResponse();
+			sendCommand("P111 \"\"");
+			waitResponse();
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}	
@@ -104,9 +106,13 @@ public class WeightAdaptor implements IWeightAdaptor {
 				sendCommand("P111 \"Login OK! [->\"");
 				waitResponse();
 				waitResponse();
+				sendCommand("P111 \"\"");
+				waitResponse();
 			} else {
 				sendCommand("P111 \"Login failed [->\"");
 				waitResponse();
+				waitResponse();
+				sendCommand("P111 \"\"");
 				waitResponse();
 			}
 		} catch (Exception e) {
@@ -184,6 +190,16 @@ public class WeightAdaptor implements IWeightAdaptor {
 	}
 	
 	@Override
+	public void clearSecondaryDisplay() throws AdaptorException {
+		try {
+			sendCommand("P111 \"\"");
+			waitResponse();
+		} catch (Exception e) {
+			throw new AdaptorException(e);
+		}
+	}
+	
+	@Override
 	public String getProduceBatchNumber() throws AdaptorException {
 		try {
 			sendCommand("RM20 8 \"RB ID?\" \"\" \"&3\"");
@@ -214,11 +230,27 @@ public class WeightAdaptor implements IWeightAdaptor {
 				sendCommand("P111 \"Weighing OK! [->");
 				waitResponse();
 				waitResponse();
+				sendCommand("T");
+				waitResponse();
 			} else {
 				sendCommand("P111 \"Weighing not OK! [->");
 				waitResponse();
 				waitResponse();
+				sendCommand("T");
+				waitResponse();
 			}
+		} catch (Exception e) {
+			throw new AdaptorException(e);
+		}
+	}
+	
+	@Override
+	public void clearBothDisplays() throws AdaptorException {
+		try {
+			sendCommand("T");
+			waitResponse();
+			sendCommand("P111 \"\"");
+			waitResponse();
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}

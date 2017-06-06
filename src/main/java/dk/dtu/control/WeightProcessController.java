@@ -10,6 +10,7 @@ import dk.dtu.control.api.v1.WeightAdaptor;
 import dk.dtu.model.Validation;
 import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dao.MySQLOperatorDAO;
+import dk.dtu.model.dao.MySQLProduceBatchDAO;
 import dk.dtu.model.dao.MySQLProductBatchCompDAO;
 import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dao.MySQLRecipeDAO;
@@ -18,6 +19,7 @@ import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.OperatorDAO;
+import dk.dtu.model.interfaces.ProduceBatchDAO;
 import dk.dtu.model.interfaces.ProductBatchCompDAO;
 import dk.dtu.model.interfaces.ProductBatchDAO;
 import dk.dtu.model.interfaces.RecipeDAO;
@@ -29,6 +31,7 @@ public class WeightProcessController implements IWeightProcessController {
 	private IWeightAdaptor weightAdaptor;
 	private OperatorDAO operatorDAO;
 	private ProductBatchDAO productBatchDAO;
+	private ProduceBatchDAO produceBatchDAO;
 	private RecipeDAO recipeDAO;
 	private ProductBatchCompDAO productBatchCompDAO;
 
@@ -48,6 +51,7 @@ public class WeightProcessController implements IWeightProcessController {
 			new Connector();
 			operatorDAO = new MySQLOperatorDAO();
 			productBatchDAO = new MySQLProductBatchDAO();
+			produceBatchDAO = new MySQLProduceBatchDAO();
 			recipeDAO = new MySQLRecipeDAO();
 			productBatchCompDAO = new MySQLProductBatchCompDAO();
 		} catch (Exception e) {
@@ -131,7 +135,7 @@ public class WeightProcessController implements IWeightProcessController {
 				// Shows the specific recipe name in secondary display, which will be weighed
 				try {
 					if(productBatchCompOverviewList.get(0).getStatus() == 2) {
-						weightAdaptor.writeInSecondaryDisplay("All produces in this product batch is already weighed!");
+						weightAdaptor.writeInSecondaryDisplay("All produces in this product batch is already weighed! Status 2");
 						weightAdaptor.clearSecondaryDisplay();
 						continue pbLoop;
 					}
@@ -174,7 +178,19 @@ public class WeightProcessController implements IWeightProcessController {
 						netto = Double.parseDouble(weightAdaptor.placeNetto());
 					} while (Math.abs(recipeDTO.getNomNetto() - netto) > tolerance);
 					weightAdaptor.clearSecondaryDisplay();
-					rbId = weightAdaptor.getProduceBatchNumber();
+					
+					do {
+						rbId = weightAdaptor.getProduceBatchNumber();
+						try {
+							produceBatchDAO.getProduceBatch(Integer.parseInt(rbId));
+						} catch (Exception e) {
+							weightAdaptor.writeInSecondaryDisplay("Wrong produce batch id!");
+							weightAdaptor.clearSecondaryDisplay();
+							continue;
+						}
+						break;
+					} while(true);
+					
 					weightAdaptor.tara();
 					gross = Double.parseDouble(weightAdaptor.removeGross());
 					if(tara + netto == Math.abs(gross)) {

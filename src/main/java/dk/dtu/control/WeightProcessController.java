@@ -182,7 +182,7 @@ public class WeightProcessController implements IWeightProcessController {
 					do {
 						rbId = weightAdaptor.getProduceBatchNumber();
 						try {
-							produceBatchDAO.getProduceBatch(Integer.parseInt(rbId));
+							produceBatchDAO.readProduceBatch(Integer.parseInt(rbId));
 						} catch (Exception e) {
 							weightAdaptor.writeInSecondaryDisplay("Wrong produce batch id!");
 							weightAdaptor.clearSecondaryDisplay();

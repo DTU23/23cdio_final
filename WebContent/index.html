@@ -236,11 +236,11 @@
         <div class="row">
             <form class="col s12 m10 offset-m1 l8 offset-l2 xl-6 offset-xl2">
                 <div class="input-field col s12 m6">
-                    <input name="oprId" id="oprId" type="number" size="3" class="validate">
+                    <input value="4" name="oprId" id="oprId" type="number" size="3" class="validate">
                     <label for="oprId">Operator ID</label>
                 </div>
                 <div class="input-field col s12 m6">
-                    <input name="password" id="password" type="password" class="validate">
+                    <input value="admin" name="password" id="password" type="password" class="validate">
                     <label for="password">Password</label>
                 </div>
                 <div class="right-align">
@@ -251,23 +251,38 @@
     </div>
     <div id="userAdministration" class="container">
         <br>
-        <table class="striped centered responsive-table" id="userlist">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Initials</th>
-            <th>CPR</th>
-            <th>Admin</th>
-            <th>Role</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody id="userListRows">
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s3"><a href="#ProductAdminTab" class="blue-grey-text text-darken-3">Product Administration</a></li>
+                    <li class="tab col s3"><a href="#ProduceAdminTab" class="blue-grey-text text-darken-3">Produce Administration</a></li>
+                    <li class="tab col s3"><a href="#RecipeAdminTab" class="blue-grey-text text-darken-3">Recipe Administration</a></li>
+                    <li class="tab col s3"><a href="#UserAdminTab" class="active blue-grey-text text-darken-3">User Administration</a></li>
+                </ul>
+            </div>
+            <div id="ProductAdminTab" class="col s12"></div>
+            <div id="ProduceAdminTab" class="col s12"></div>
+            <div id="RecipeAdminTab" class="col s12"></div>
+            <div id="UserAdminTab" class="col s12">
+                <table class="striped centered responsive-table" id="userlist">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Initials</th>
+                        <th>CPR</th>
+                        <th>Admin</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="userListRows">
 
-        </tbody>
-    </table>
-        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-user"><i class="material-icons">add</i></a>
+                    </tbody>
+                </table>
+                <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-user"><i class="material-icons">add</i></a>
+            </div>
+        </div>
     </div>
 </main>
 
@@ -293,7 +308,7 @@
 <script src="js/materialize.min.js"></script>
 
 <!-- jQuery Cookie plugin -->
-<script src="js/jquery.cookie.js"></script>
+<script src="js/js.cookie.js"></script>
 
 <!-- User scripts and styles -->
 <link rel="stylesheet" href="css/style.css">

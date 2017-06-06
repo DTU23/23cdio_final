@@ -10,6 +10,8 @@ $(document).ready(function () {
         }
     });
 
+    $('ul.tabs').tabs();
+
     initDB();
     
     $(document).on("click", ".edit-user", function (e) {
@@ -99,7 +101,7 @@ $(document).ready(function () {
             url: "./api/v1/login/",
             success: function( msg ) {
                 console.log("Response: " + msg);
-                $.cookie("auth", msg, { expires : 7 });
+                Cookies.set("auth", msg, { expires : 7 });
                 populate();
                 $('#loginForm').hide();
                 $('main').removeClass('valign-wrapper');
@@ -185,10 +187,10 @@ $(document).ready(function () {
         $('#userAdministration').hide();
         $('#loginForm').show();
         $('main').addClass('valign-wrapper');
-        $.cookie.remove('auth');
+        Cookies.remove('auth');
     });
 
-    if(typeof $.cookie('auth') !== 'undefined'){
+    if(typeof Cookies.get('auth') !== 'undefined'){
         populate();
         $('#loginForm').hide();
         $('main').removeClass('valign-wrapper');
@@ -204,7 +206,7 @@ function populate() {
         crossDomain: true,
         url: "./api/v1/operator/",
         headers : {
-            Authorization: $.cookie("auth")
+            Authorization: Cookies.get("auth")
         },
         success: function( response ) {
             console.log(response);

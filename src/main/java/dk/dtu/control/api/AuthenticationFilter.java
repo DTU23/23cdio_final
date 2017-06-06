@@ -50,7 +50,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             MySQLOperatorDAO oprDAO = new MySQLOperatorDAO();
 
             @Override
-            public boolean isAdmin() {
+            public boolean isAdmin() throws DALException {
                 return decodedToken.getClaim("admin").asBoolean();
             }
 

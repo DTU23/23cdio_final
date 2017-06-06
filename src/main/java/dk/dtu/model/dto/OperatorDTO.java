@@ -1,7 +1,5 @@
 package dk.dtu.model.dto;
 
-import dk.dtu.control.api.Role;
-
 public class OperatorDTO
 {
 	/** Operatoer-identifikationsnummer (opr_id) i omraadet 1-99999999. Vaelges af brugerne */
@@ -16,7 +14,6 @@ public class OperatorDTO
 	private String password;
 	private boolean admin;
 	private String role;
-	private Role enumRole;
 	
 	public OperatorDTO(){}
 
@@ -57,15 +54,6 @@ public class OperatorDTO
     public String getRole() {return this.role; }
     public void setRole(String role) {
 		this.role = role;
-		this.setEnumRole(role);
 	}
 	public String toString() { return oprId + "\t" + oprName + "\t" + ini + "\t" + cpr + "\t" + password + "\t" + admin + "\t" + role; }
-
-	public Role getEnumRole() {
-		return enumRole;
-	}
-
-	private void setEnumRole(String role) {
-		this.enumRole = Role.valueOf(role);
-	}
 }

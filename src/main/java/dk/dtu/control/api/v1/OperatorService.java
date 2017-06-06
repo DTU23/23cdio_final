@@ -8,6 +8,7 @@ import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
 import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.OperatorDAO;
+import dk.dtu.control.api.Role;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;

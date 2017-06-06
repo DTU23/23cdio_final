@@ -1,5 +1,6 @@
 package dk.dtu.control.api;
 
+import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.interfaces.DALException;
 
 import javax.annotation.Priority;
@@ -48,9 +49,9 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             // Check if the user is allowed to execute the method
             // The method annotations override the class annotations
             if (methodRoles.isEmpty()) {
-                checkPermissions(classRoles, classAdmin, sc);
+                checkPermissions(classRoles, classAdmin, (ExtendedSecurityContext) sc);
             } else {
-                checkPermissions(methodRoles, methodAdmin, sc);
+                checkPermissions(methodRoles, methodAdmin, (ExtendedSecurityContext) sc);
             }
 
         } catch (Exception e) {
@@ -61,8 +62,16 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
     // Extract the roles from the annotated element
     private boolean extractAdmin(AnnotatedElement annotatedElement) {
-        Secured secured = annotatedElement.getAnnotation(Secured.class);
-        return secured.admin();
+        if (annotatedElement == null) {
+            return false;
+        } else {
+            Secured secured = annotatedElement.getAnnotation(Secured.class);
+            if (secured == null) {
+                return false;
+            } else {
+                return secured.admin();
+            }
+        }
     }
 
     // Extract the roles from the annotated element
@@ -80,21 +89,21 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         }
     }
 
-    private void checkPermissions(List<Role> allowedRoles, boolean requiredAdmin, SecurityContext sc) throws Exception {
-        boolean satisfied = false;
-        if(allowedRoles.size() == 0){
-            satisfied = true;
-        }else{
-            for (Role role: allowedRoles) {
-                if(sc.isUserInRole(String.valueOf(role))){
-                    satisfied = true;
+    private void checkPermissions(List<Role> allowedRoles, boolean requiredAdmin, ExtendedSecurityContext sc) throws Exception {
+        boolean roleSatisfied = false;
+        boolean adminSatisfied;
+        if (allowedRoles.size() == 0) {
+            roleSatisfied = true;
+        } else {
+            for (Role role : allowedRoles) {
+                if (sc.isUserInRole(String.valueOf(role))) {
+                    roleSatisfied = true;
                 }
             }
         }
-        if(requiredAdmin){
-
+        adminSatisfied = !requiredAdmin || sc.isAdmin();
+        if (!(roleSatisfied && adminSatisfied)) {
+            throw new DALException("Permission denied!");
         }
-
-        throw new DALException("User not in role!");
     }
 }

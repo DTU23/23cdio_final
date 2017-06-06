@@ -5,6 +5,9 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import dk.dtu.model.dao.MySQLOperatorDAO;
+import dk.dtu.model.dto.OperatorDTO;
+import dk.dtu.model.interfaces.DALException;
 
 import javax.annotation.Priority;
 import javax.ws.rs.NotAuthorizedException;
@@ -29,11 +32,11 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 
         // Check if the HTTP Authorization header is present and formatted correctly
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+        if (authorizationHeader == null) {
             throw new NotAuthorizedException("Authorization header must be provided");
         }
         // Extract the token from the HTTP Authorization header
-        String token = authorizationHeader.substring("Bearer".length()).trim();
+        String token = authorizationHeader;
 
         try {
             // Validate the token
@@ -44,13 +47,25 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         }
 
         final SecurityContext currentSecurityContext = requestContext.getSecurityContext();
-        requestContext.setSecurityContext(new SecurityContext() {
+        requestContext.setSecurityContext(new ExtendedSecurityContext() {
+            DecodedJWT decodedToken = JWT.decode(token);
+            MySQLOperatorDAO oprDAO = new MySQLOperatorDAO();
+
+            @Override
+            public boolean isAdmin() {
+                boolean isAdmin = decodedToken.getClaim("admin").asBoolean();
+                return isAdmin;
+            }
+
+            @Override
+            public OperatorDTO getUser() throws DALException {
+                return oprDAO.getOperator(decodedToken.getClaim("oprId").asInt());
+            }
 
             @Override
             public Principal getUserPrincipal() {
 
                 return new Principal() {
-                    DecodedJWT decodedToken = JWT.decode(token);
                     @Override
                     public String getName() {
                         return decodedToken.getClaim("name").asString();
@@ -59,10 +74,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             }
 
             @Override
-            public boolean isUserInRole(String role) {
-                DecodedJWT decodedToken = JWT.decode(token);
-                String tokenRole = decodedToken.getClaim("role").asString();
-                return tokenRole.equals(role);
+            public boolean isUserInRole(String role){
+                return Role.valueOf(decodedToken.getClaim("role").asString()).hasPermissions(role);
             }
 
             @Override
@@ -72,7 +85,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
             @Override
             public String getAuthenticationScheme() {
-                return "Bearer";
+                return "Token";
             }
         });
 

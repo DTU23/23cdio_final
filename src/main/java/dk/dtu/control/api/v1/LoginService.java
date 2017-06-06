@@ -42,7 +42,7 @@ public class LoginService {
 
 	private void authenticate(int oprId, String password) throws Exception {
 		OperatorDAO oprDao = new MySQLOperatorDAO();
-		OperatorDTO sysOpr = oprDao.getOperator(oprId);
+		OperatorDTO sysOpr = oprDao.readOperator(oprId);
 		if (!sysOpr.getPassword().equals(password)) {
 			throw new DALException("Wrong Password!");
 		}
@@ -57,9 +57,9 @@ public class LoginService {
 			return JWT.create()
 					.withIssuer("auth0")
 					.withClaim("oprId", oprId)
-					.withClaim("name", oprDAO.getOperator(oprId).getOprName())
-					.withClaim("role", oprDAO.getOperator(oprId).getRole())
-					.withClaim("admin", oprDAO.getOperator(oprId).getAdmin())
+					.withClaim("name", oprDAO.readOperator(oprId).getOprName())
+					.withClaim("role", oprDAO.readOperator(oprId).getRole())
+					.withClaim("admin", oprDAO.readOperator(oprId).getAdmin())
 					.withExpiresAt(cal.getTime())
 					.sign(algorithm);
 		} catch (UnsupportedEncodingException | JWTCreationException ignored){

@@ -84,7 +84,7 @@ public class WeightProcessController implements IWeightProcessController {
 					try {
 						oprId = weightAdaptor.getOperatorId();
 						Validation.isPositiveInteger(oprId);
-						weightAdaptor.confirmOperatorName( operatorDAO.getOperator(Integer.parseInt(oprId)).getOprName() );
+						weightAdaptor.confirmOperatorName( operatorDAO.readOperator(Integer.parseInt(oprId)).getOprName() );
 						break oprIdLoop;
 					} catch (Exception e) {
 						try {

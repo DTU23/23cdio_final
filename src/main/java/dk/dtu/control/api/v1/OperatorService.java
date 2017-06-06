@@ -33,7 +33,7 @@ public class OperatorService {
 	@Path("/{id}")
 	public OperatorDTO getOperator(@PathParam("id") String oprID) throws ValidationException, DALException {
 		Validation.isPositiveInteger(oprID);
-		return dao.getOperator(Integer.parseInt(oprID));
+		return dao.readOperator(Integer.parseInt(oprID));
 	}
 
 	@GET

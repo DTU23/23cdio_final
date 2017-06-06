@@ -57,7 +57,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
             @Override
             public OperatorDTO getUser() throws DALException {
-                return oprDAO.getOperator(decodedToken.getClaim("oprId").asInt());
+                return oprDAO.readOperator(decodedToken.getClaim("oprId").asInt());
             }
 
             @Override

@@ -28,7 +28,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 	public List<RecipeCompDTO> getRecipeCompList(int recipeId) throws DALException {
 		List<RecipeCompDTO> list = new ArrayList<RecipeCompDTO>();
 		ResultSet rs = Connector.doQuery("SELECT * FROM recipecomponent WHERE recipe_id=" + recipeId + ";");
-		
+
 		try {
 			while (rs.next()) {
 				list.add(new RecipeCompDTO(
@@ -40,7 +40,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		}
-		
+
 		return list;
 	}
 
@@ -48,7 +48,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 	public List<RecipeCompDTO> getRecipeCompList() throws DALException {
 		List<RecipeCompDTO> list = new ArrayList<RecipeCompDTO>();
 		ResultSet rs = Connector.doQuery("SELECT * FROM recipecomponent;");
-		
+
 		try {
 			while (rs.next()) {
 				list.add(new RecipeCompDTO(
@@ -60,12 +60,21 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		}
-		
+
 		return list;
 	}
 
 	@Override
 	public void createRecipeComp(RecipeCompDTO recipecomponent) throws DALException {
 		Connector.doQuery("CALL create_recipe_component(" + recipecomponent.getRecipeId() + ", " + recipecomponent.getProduceId() + ", " + recipecomponent.getNomNetto() + ", " + recipecomponent.getTolerance() + ");");
+	}
+
+
+	@Override
+	public void deleteRecipeComp(int recipeId, int produceId) throws DALException {
+		Connector.doUpdate("CALL delete_recipe_component(" + recipeId + "," + produceId + ";");
+		{
+			throw new DALException("No rows affected");
+		}
 	}
 }

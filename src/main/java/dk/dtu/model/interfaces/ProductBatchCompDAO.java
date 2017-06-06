@@ -12,4 +12,5 @@ public interface ProductBatchCompDAO {
 	void createProductBatchComp(ProductBatchCompDTO productbatchcomponent) throws DALException;
 	List<ProductBatchCompOverviewDTO> getProductBatchCompOverview() throws DALException;
 	List<ProductBatchCompSupplierDetailsDTO> getSupplierDetailById(int pbId) throws DALException;
+	void deleteProductBatchComp(int pbId, int rbId) throws DALException;
 }

@@ -70,6 +70,13 @@ public class MySQLProduceBatchDAO implements ProduceBatchDAO {
 		Connector.doQuery("CALL create_produce_batch_from_produce_id("+produce_id+", "+amount+");");
 	}
 
+	@Override
+	public void deleteProduceBatch(int rbId) throws DALException {
+		Connector.doUpdate("CALL delete_produce_batch(" + rbId + ";");
+		{
+			throw new DALException("No rows affected");
+		}
+	}
 	/**
 	 * Updates a produce batch in the relation 'producebatch'.
 	 * The update will ONLY update the amount in the tuple, where the producebatch ID is specified.

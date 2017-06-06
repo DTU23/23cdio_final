@@ -9,4 +9,6 @@ public interface RecipeCompDAO {
 	List<RecipeCompDTO> getRecipeCompList(int recipeId) throws DALException;
 	List<RecipeCompDTO> getRecipeCompList() throws DALException;
 	void createRecipeComp(RecipeCompDTO recipecomponent) throws DALException;
+	void deleteRecipeComp(int recipeId, int produceId) throws DALException;
+
 }

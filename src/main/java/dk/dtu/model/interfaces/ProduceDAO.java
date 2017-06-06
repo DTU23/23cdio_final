@@ -10,5 +10,6 @@ public interface ProduceDAO {
 	List<ProduceDTO> getProduceList() throws DALException;
 	void createProduce(ProduceDTO raavare) throws DALException;
 	void updateProduce(ProduceDTO raavare) throws DALException;
+	void deleteProduce(int raavareId) throws DALException;
 	List<ProduceOverviewDTO> getProduceOverview() throws DALException;
 }

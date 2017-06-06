@@ -70,6 +70,14 @@ public class MySQLProduceDAO implements ProduceDAO {
 	public void createProduce(ProduceDTO produce) throws DALException {
 		Connector.doQuery("CALL create_produce('" + produce.getProduceName() + "', '" + produce.getSupplier() + "');");
 	}
+	
+	@Override
+	public void deleteProduce(int raavareId) throws DALException {
+		Connector.doUpdate("CALL delete_produce(" + raavareId + ";");
+		{
+			throw new DALException("No rows affected");
+		}
+	}
 
 	/**
 	 * Updates the produce, which is found by the id, in the relation 'produce' in our database.

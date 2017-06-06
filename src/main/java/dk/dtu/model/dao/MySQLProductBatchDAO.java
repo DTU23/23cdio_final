@@ -45,6 +45,14 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 		}
 		Connector.doUpdate("CALL create_product_batch_from_recipe_id(" + recipe_id + ");");
 	}
+	
+	@Override
+	public void deleteProductBatch(int pbId) throws DALException {
+		Connector.doUpdate("CALL delete_product_batch(" + pbId + ";");
+		{
+			throw new DALException("No rows affected");
+		}
+	}
 
 	@Override
 	public void updateProductBatchStatus(ProductBatchDTO productbatch) throws DALException {

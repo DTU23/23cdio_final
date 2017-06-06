@@ -32,6 +32,14 @@ public class MySQLOperatorDAO implements OperatorDAO {
 			throw new DALException("No rows affected");
 		}
 	}
+	
+	@Override
+	public void deleteOperator(int oprId) throws DALException {
+		Connector.doUpdate("CALL delete_operator(" + oprId + ";");
+		{
+			throw new DALException("No rows affected");
+		}
+	}
 
 	@Override
 	public void updateOperator(OperatorDTO opr) throws DALException {

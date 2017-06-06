@@ -45,6 +45,14 @@ public class MySQLRecipeDAO implements RecipeDAO {
 	}
 	
 	@Override
+	public void deleteRecipe(int receptId) throws DALException {
+		Connector.doUpdate("CALL delete_recipe(" + receptId + ";");
+		{
+			throw new DALException("No rows affected");
+		}
+	}
+	
+	@Override
 	public List<RecipeListDTO> getRecipeDetailsByID(int recipeID) throws DALException {
 		List<RecipeListDTO> list = new ArrayList<RecipeListDTO>();
 		ResultSet rs = Connector.doQuery("CALL get_recipe_details_by_id("+recipeID+");");
@@ -59,5 +67,7 @@ public class MySQLRecipeDAO implements RecipeDAO {
 		
 		return list;
 	}
+	
+	
 
 }

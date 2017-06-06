@@ -40,6 +40,14 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 			throw new DALException("Invalid ProductBatch ID");
 		}
 	}
+	
+	@Override
+	public void deleteProductBatchComp(int pbId, int rbId) throws DALException {
+		Connector.doUpdate("CALL delete_product_batch_component(" + pbId + "," + rbId + ";");
+		{
+			throw new DALException("No rows affected");
+		}
+	}
 
 	@Override
 	public List<ProductBatchCompDTO> getProductBatchCompList() throws DALException {

@@ -1,16 +1,6 @@
 package dk.dtu.control.api.v1;
 
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
+import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
 import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLOperatorDAO;
@@ -18,11 +8,19 @@ import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
 import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.OperatorDAO;
+import dk.dtu.control.api.Role;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
+import java.util.List;
 
 
 @Path("v1/operator")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Secured( admin = true )
 public class OperatorService {
 
 	private OperatorDAO dao = new MySQLOperatorDAO();
@@ -35,7 +33,7 @@ public class OperatorService {
 	}
 
 	@GET
-	public List<OperatorNoPWDTO> getOperatorList() throws DALException {
+	public List<OperatorNoPWDTO> getOperatorList(@Context SecurityContext securityContext) throws DALException {
 		return dao.getOperatorList();
 	}
 

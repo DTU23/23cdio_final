@@ -99,15 +99,11 @@ $(document).ready(function () {
             url: "./api/v1/login/",
             success: function( msg ) {
                 console.log("Response: " + msg);
-                if(msg === true){
-                    populate();
-                    $('#loginForm').hide();
-                    $('main').removeClass('valign-wrapper');
-                    $('#userAdministration').show();
-                }else{
-                    Materialize.toast("Invalid login!", 4000);
-                    console.log(msg);
-                }
+                $.cookie("auth", msg, { expires : 7 });
+                populate();
+                $('#loginForm').hide();
+                $('main').removeClass('valign-wrapper');
+                $('#userAdministration').show();
             },
             error: function ( msg ) {
                 Materialize.toast("Invalid login!", 4000);
@@ -189,7 +185,15 @@ $(document).ready(function () {
         $('#userAdministration').hide();
         $('#loginForm').show();
         $('main').addClass('valign-wrapper');
-    })
+        $.cookie.remove('auth');
+    });
+
+    if(typeof $.cookie('auth') !== 'undefined'){
+        populate();
+        $('#loginForm').hide();
+        $('main').removeClass('valign-wrapper');
+        $('#userAdministration').show();
+    }
 });
 
 function populate() {
@@ -197,7 +201,11 @@ function populate() {
         type: "GET",
         contentType: "application/json",
         processData: false,
+        crossDomain: true,
         url: "./api/v1/operator/",
+        headers : {
+            Authorization: $.cookie("auth")
+        },
         success: function( response ) {
             console.log(response);
             var template = $('#userTableRow').html();

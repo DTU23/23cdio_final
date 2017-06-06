@@ -31,7 +31,7 @@ CREATE OR REPLACE VIEW produce_batch_list AS
 product_batch (Foreman)
 */
 CREATE OR REPLACE VIEW product_batch_list AS
-  SELECT productbatch.recipe_id, productbatch.status, recipe.recipe_name
+  SELECT productbatch.pb_id, productbatch.recipe_id, productbatch.status, recipe.recipe_name
   FROM productbatch NATURAL JOIN recipe;
 
 /**

@@ -47,7 +47,7 @@ public class MySQLProduceDAOTest {
 		ProduceDTO actual = null;
 		ProduceDTO expected = new ProduceDTO(2, "tomat", "Knoor");
 		// Get produce by ID from DB
-		actual = produce.getProduce(2);
+		actual = produce.readProduce(2);
 		assertThat(actual.toString(), is(expected.toString()));
 	}
 	
@@ -62,7 +62,7 @@ public class MySQLProduceDAOTest {
 		// We expect this won't work and therefore throw a DALException
 		try {
 		// Get produce by non-existing ID from DB
-		actual = produce.getProduce(10);
+		actual = produce.readProduce(10);
 		} catch (DALException e) {
 			// e.printStackTrace();
 			error = e.getMessage();
@@ -103,7 +103,7 @@ public class MySQLProduceDAOTest {
 		ProduceDTO actual = null;
 
 		produce.createProduce(expected);
-		actual = produce.getProduce(8);
+		actual = produce.readProduce(8);
 
 		assertThat(actual.toString(), is(expected.toString()));
 	}
@@ -117,7 +117,7 @@ public class MySQLProduceDAOTest {
 		ProduceDTO actual = null;
 
 		produce.updateProduce(expected);
-		actual = produce.getProduce(4);
+		actual = produce.readProduce(4);
 		
 		assertThat(actual.toString(), is(expected.toString()));
 	}

@@ -11,37 +11,42 @@ import main.java.dk.dtu.model.dto.ProduceOverviewDTO;
 import main.java.dk.dtu.model.interfaces.DALException;
 import main.java.dk.dtu.model.interfaces.ProduceDAO;
 
-/**
- * 
- * This class is the implementation of ProduceDAO.
- * This class (data access object) accesses the data in the relation 'produce' from the database.
- * We are using the relation 'produce', the view 'produce_overview', the routine 'create_produce(TEXT, TEXT)' and 'update_produce_by_id(INT, TEXT, TEXT)'.
- * 
- */
-
 public class MySQLProduceDAO implements ProduceDAO {
 
-
-	/**
-	 * Returns a specific produce as ProduceDTO (produce data transfer object) by the input-id from the database.
-	 * Uses the relation 'produce' in the database.
-	 * @param raavareId - the specific id of the produce in the database
-	 * @return produce - returns the produce that was specified
-	 */
 	@Override
-	public ProduceDTO getProduce(int raavareId) throws DALException {
-		ResultSet rs = Connector.doQuery("SELECT * FROM produce WHERE "+raavareId+"=produce_id;");
-		try{
-			rs.next();
+	public void createProduce(ProduceDTO produce) throws DALException {
+		if(Connector.doUpdate("CALL create_produce('" + produce.getProduceName() + "', '" + produce.getSupplier() + "');") == 0) 
+		{
+			throw new DALException("No rows affected!");
+		}
+	}
+	
+	@Override
+	public ProduceDTO readProduce(int raavareId) throws DALException {
+		ResultSet rs = Connector.doQuery("CALL read_produce('" + raavareId + "');");
+		try
+		{
+			if (!rs.first()) throw new DALException("Produce with id " + raavareId + " does not exist");
 			return new ProduceDTO(rs.getInt("produce_id"), rs.getString("produce_name"), rs.getString("supplier"));
-		} catch (SQLException e){ throw new DALException(e); }
+		} catch (SQLException e) { throw new DALException(e); }
+	}
+	
+	@Override
+	public void updateProduce(ProduceDTO produce) throws DALException {
+		if(Connector.doUpdate("CALL update_produce('" + produce.getProduceId() + "', '" + produce.getProduceName() + "', '" + produce.getSupplier() + "');") == 0) 
+		{
+			throw new DALException("No rows affected!");
+		}
+	}
+	
+	@Override
+	public void deleteProduce(int raavareId) throws DALException {
+		if(Connector.doUpdate("CALL delete_produce(" + raavareId + ";") == 0)
+		{
+			throw new DALException("No rows affected");
+		}
 	}
 
-	/**
-	 * Returns the relation 'produce' as a list of ProduceDTO's.
-	 * Uses the relation 'produce' in the database.
-	 * @return list - a list of ProduceDTO's
-	 */
 	@Override
 	public List<ProduceDTO> getProduceList() throws DALException {
 		List<ProduceDTO> list = new ArrayList<ProduceDTO>();
@@ -61,40 +66,6 @@ public class MySQLProduceDAO implements ProduceDAO {
 		return list;
 	}
 
-	/**
-	 * Creates a produce in the relation 'produce' in our database.
-	 * Uses the routine 'create_produce(TEXT, TEXT)'.
-	 * @param produce - a single produce wrapped as a ProduceDTO
-	 */
-	@Override
-	public void createProduce(ProduceDTO produce) throws DALException {
-		Connector.doQuery("CALL create_produce('" + produce.getProduceName() + "', '" + produce.getSupplier() + "');");
-	}
-	
-	@Override
-	public void deleteProduce(int raavareId) throws DALException {
-		Connector.doUpdate("CALL delete_produce(" + raavareId + ";");
-		{
-			throw new DALException("No rows affected");
-		}
-	}
-
-	/**
-	 * Updates the produce, which is found by the id, in the relation 'produce' in our database.
-	 * The produceId will determine which produce is being overwritten/updated in the database. Produce name and supplier will be put in as the new values.
-	 * Uses the routine 'update_produce_by_id(INT, TEXT, TEXT)'.
-	 * @param produce - a single produce wrapped as a ProduceDTO
-	 */
-	@Override
-	public void updateProduce(ProduceDTO produce) throws DALException {
-		Connector.doQuery("CALL update_produce_by_id('"+produce.getProduceId()+"', '" + produce.getProduceName() + "', '" + produce.getSupplier() + "');");
-	}
-
-	/**
-	 * Returns the view 'produce_overview' as a list of ProduceOverviewDTO's. 
-	 * Uses the view 'produce_overview' in the database.
-	 * @return list - a list of ProduceDTO's
-	 */
 	@Override
 	public List<ProduceOverviewDTO> getProduceOverview() throws DALException{
 		List<ProduceOverviewDTO> list = new ArrayList<ProduceOverviewDTO>();

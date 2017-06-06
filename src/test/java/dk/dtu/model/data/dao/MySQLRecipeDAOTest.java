@@ -42,7 +42,7 @@ public class MySQLRecipeDAOTest {
 		RecipeDTO actual = null;
 		RecipeDTO expected = new RecipeDTO(3, "capricciosa");
 		try {
-			actual = recipe.getRecipe(3);	
+			actual = recipe.readRecipe(3);	
 		} catch (DALException e) {	System.out.println(e.getMessage());  }
 		assertThat(expected.toString(), is(equalTo(actual.toString())));
 	}
@@ -55,7 +55,7 @@ public class MySQLRecipeDAOTest {
 	public void getRecipeByIDThatDoesntExist() {
 		String errorMsg = null;
 		try {
-			recipe.getRecipe(5);
+			recipe.readRecipe(5);
 		} catch (DALException e) {	errorMsg = e.getMessage();	}
 		assertThat(errorMsg, is(equalTo("Recipe with id 5 does not exist")));
 
@@ -85,7 +85,7 @@ public class MySQLRecipeDAOTest {
 		RecipeDTO actual = null;
 		try {
 			recipe.createRecipe(expected);
-			actual = recipe.getRecipe(4);
+			actual = recipe.readRecipe(4);
 		} catch (DALException e) {	System.out.println(e.getMessage());}
 		assertThat(expected.toString(), is(equalTo(actual.toString())));
 	}
@@ -100,7 +100,7 @@ public class MySQLRecipeDAOTest {
 		RecipeDTO expected = new RecipeDTO(3, "capricciosa");
 		try {
 			recipe.createRecipe(new RecipeDTO(3, "parmaskinke"));
-			actual = recipe.getRecipe(3);	
+			actual = recipe.readRecipe(3);	
 		} catch (DALException e) {	System.out.println(e.getMessage());  }
 		assertThat(expected.toString(), is(equalTo(actual.toString())));
 	}
@@ -113,7 +113,7 @@ public class MySQLRecipeDAOTest {
 	public void getRecipeWithInvalidID() {
 		String errorMsg = null;
 		try {
-			recipe.getRecipe(0);
+			recipe.readRecipe(0);
 		} catch (DALException e) { errorMsg = e.getMessage(); }
 		assertThat(errorMsg, is(equalTo("Recipe with id 0 does not exist")));
 	}

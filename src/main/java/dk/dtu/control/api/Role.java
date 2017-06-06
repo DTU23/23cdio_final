@@ -13,6 +13,6 @@ public enum Role {
     }
 
     public boolean hasPermissions(String roleToCheck){
-        return this.level > Role.valueOf(roleToCheck).level;
+        return this.level >= Role.valueOf(roleToCheck).level;
     }
 }

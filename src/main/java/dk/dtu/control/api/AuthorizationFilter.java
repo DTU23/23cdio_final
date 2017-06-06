@@ -1,6 +1,5 @@
 package dk.dtu.control.api;
 
-import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.interfaces.DALException;
 
 import javax.annotation.Priority;
@@ -66,22 +65,18 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             return false;
         } else {
             Secured secured = annotatedElement.getAnnotation(Secured.class);
-            if (secured == null) {
-                return false;
-            } else {
-                return secured.admin();
-            }
+            return secured != null && secured.admin();
         }
     }
 
     // Extract the roles from the annotated element
     private List<Role> extractRoles(AnnotatedElement annotatedElement) {
         if (annotatedElement == null) {
-            return new ArrayList<Role>();
+            return new ArrayList<>();
         } else {
             Secured secured = annotatedElement.getAnnotation(Secured.class);
             if (secured == null) {
-                return new ArrayList<Role>();
+                return new ArrayList<>();
             } else {
                 Role[] allowedRoles = secured.roles();
                 return Arrays.asList(allowedRoles);

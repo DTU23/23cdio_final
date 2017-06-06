@@ -21,7 +21,7 @@ CREATE PROCEDURE read_produce_batch(IN input_rb_id INT)
 BEGIN
   SELECT *
   FROM producebatch
-  WHERE producebatch.rb = input_rb_id;
+  WHERE producebatch.rb_id = input_rb_id;
 END //
 DELIMITER ;
 

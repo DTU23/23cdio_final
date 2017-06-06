@@ -23,8 +23,8 @@ DELIMITER //
 CREATE PROCEDURE read_product_batch_component(IN input_pb_id INT, IN input_rb_id INT)
 BEGIN
   SELECT *
-  FROM producebatchcomponent
-  WHERE producebatchcomponent.pb_id = input_pb_id AND producebatchcomponent.rb_id = input_rb_id;
+  FROM productbatchcomponent
+  WHERE productbatchcomponent.pb_id = input_pb_id AND productbatchcomponent.rb_id = input_rb_id;
 END //
 DELIMITER ;
 
@@ -32,17 +32,17 @@ DELIMITER //
 CREATE PROCEDURE update_product_batch_component(IN input_pb_id INT, IN input_rb_id INT, IN input_tara DOUBLE,
   IN input_netto DOUBLE, IN input_opr_id INT)
 BEGIN
-  UPDATE producebatchcomponent
+  UPDATE productbatchcomponent
   SET tara = input_tara, netto = input_netto, opr_id = input_opr_id
-  WHERE producebatchcomponent.pb_id = input_pb_id AND producebatchcomponent.rb_id = input_rb_id;
+  WHERE productbatchcomponent.pb_id = input_pb_id AND productbatchcomponent.rb_id = input_rb_id;
 END //
 DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE delete_product_batch_component(IN input_pb_id INT, IN input_rb_id INT)
 BEGIN
-  DELETE FROM producebatchcomponent
-  WHERE producebatchcomponent.pb_id = input_pb_id AND producebatchcomponent.rb_id = input_rb_id;
+  DELETE FROM productbatchcomponent
+  WHERE productbatchcomponent.pb_id = input_pb_id AND productbatchcomponent.rb_id = input_rb_id;
 END //
 DELIMITER ;
 

@@ -7,7 +7,7 @@ CREATE OR REPLACE VIEW recipe_list AS
   ORDER BY recipe_id;
 
 /**
-Task 2 - Creates a view from recipecomponent that shows the recipe id, the recipe name
+Task 2 - Creates a view from recipe component that shows the recipe id, the recipe name
 and the produce name. (Pharmacist)
  */
 CREATE OR REPLACE VIEW recipe_overview AS

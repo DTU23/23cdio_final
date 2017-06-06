@@ -24,8 +24,8 @@ DELIMITER //
 CREATE PROCEDURE read_product_batch(IN input_pb_id INT)
 BEGIN
   SELECT *
-  FROM producebatch
-  WHERE producebatch.pb = input_pb_id;
+  FROM productbatch
+  WHERE productbatch.pb_id = input_pb_id;
 END //
 DELIMITER ;
 
@@ -41,8 +41,8 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE delete_product_batch(IN input_pb_id INT)
 BEGIN
-  DELETE FROM producebatch
-  WHERE producebatch.pb = input_pb_id;
+  DELETE FROM productbatch
+  WHERE productbatch.pb_id = input_pb_id;
 END //
 DELIMITER ;
 

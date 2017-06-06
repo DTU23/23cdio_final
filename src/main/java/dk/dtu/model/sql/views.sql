@@ -9,16 +9,32 @@ CREATE OR REPLACE VIEW operator_list AS
 produce (Foreman)
  */
 CREATE OR REPLACE VIEW produce_overview AS
-  SELECT produce.produce_id, produce.produce_name, producebatch.amount
+  SELECT produce.produce_id, produce.produce_name, produce.supplier, producebatch.amount
   FROM produce NATURAL JOIN producebatch;
 
 /**
 Q3 - Shows an overview of how much os each produce type is in stock.
  */
-CREATE OR REPLACE VIEW produce_overview_sum AS
-  SELECT produce.produce_name, SUM(producebatch.amount) AS "amount"
-  FROM produce NATURAL JOIN producebatch
+CREATE OR REPLACE VIEW produce_overview_sum_T3 AS
+  SELECT produce_name, total
+  FROM produce_overview_sum_T2;
+
+CREATE OR REPLACE VIEW produce_overview_sum_T2 AS
+  SELECT produce.produce_name, SUM(producebatch.amount) AS total
+  FROM producebatch NATURAL JOIN produce
   GROUP BY produce.produce_name;
+
+CREATE OR REPLACE VIEW produce_overview_sum_T AS
+  SELECT produce.produce_name, SUM(productbatchcomponent.netto) AS used
+  FROM productbatchcomponent NATURAL JOIN producebatch NATURAL JOIN produce
+  GROUP BY produce.produce_name;
+
+
+CREATE OR REPLACE VIEW produce_overview_sum AS
+  SELECT produce_overview_sum_T.produce_name, produce_overview_sum_T3.total - produce_overview_sum_T.used AS CurrentStock
+  FROM produce_overview_sum_T3
+  JOIN produce_overview_sum_T
+  USING (produce_name);
 
 /**
 produce_batch (Foreman)
@@ -31,7 +47,7 @@ CREATE OR REPLACE VIEW produce_batch_list AS
 product_batch (Foreman)
 */
 CREATE OR REPLACE VIEW product_batch_list AS
-  SELECT productbatch.pb_id, productbatch.recipe_id, productbatch.status, recipe.recipe_name
+  SELECT productbatch.pb_id, productbatch.recipe_id, recipe.recipe_name, productbatch.status
   FROM productbatch NATURAL JOIN recipe;
 
 /**

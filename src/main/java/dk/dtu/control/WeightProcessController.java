@@ -83,6 +83,12 @@ public class WeightProcessController implements IWeightProcessController {
 						weightAdaptor.confirmOperatorName( operatorDAO.getOperator(Integer.parseInt(oprId)).getOprName() );
 						break oprIdLoop;
 					} catch (Exception e) {
+						try {
+							weightAdaptor.writeInSecondaryDisplay("Wrong operator id!");
+							weightAdaptor.clearSecondaryDisplay();
+						} catch (AdaptorException e1) {
+							e1.printStackTrace();
+						}
 						continue oprIdLoop;
 					}
 				}	
@@ -104,7 +110,7 @@ public class WeightProcessController implements IWeightProcessController {
 			}
 
 			// Asks for the product batch (number), which will be weighed
-			while(true) {
+			pbLoop: while(true) {
 				try {
 					productBatchNumber = weightAdaptor.getProductBatchNumber();
 					Validation.isPositiveInteger(productBatchNumber);
@@ -112,11 +118,23 @@ public class WeightProcessController implements IWeightProcessController {
 					productBatchCompOverviewList = productBatchDAO.getProductBatchDetailsByPbId(Integer.parseInt(productBatchNumber));
 					recipeList = recipeDAO.getRecipeDetailsByID(productBatchCompOverviewList.get(0).getRecipeId());
 				} catch (Exception e) {
-					e.printStackTrace();
-					continue;
+					try {
+						weightAdaptor.writeInSecondaryDisplay("Product batch number doesn't exist!");
+						weightAdaptor.clearSecondaryDisplay();
+					} catch (AdaptorException e1) {
+						e1.printStackTrace();
+					}
+					//e.printStackTrace();
+					continue pbLoop;
 				}
+				
 				// Shows the specific recipe name in secondary display, which will be weighed
 				try {
+					if(productBatchCompOverviewList.get(0).getStatus() == 2) {
+						weightAdaptor.writeInSecondaryDisplay("All produces in this product batch is already weighed!");
+						weightAdaptor.clearSecondaryDisplay();
+						continue pbLoop;
+					}
 					weightAdaptor.confirmRecipeName(recipeList.get(0).getRecipeName());
 				} catch (AdaptorException e) {}
 				break;

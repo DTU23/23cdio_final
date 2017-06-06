@@ -1,9 +1,9 @@
-package dk.dtu.model.interfaces;
+package main.java.dk.dtu.model.interfaces;
 
 import java.util.List;
 
-import dk.dtu.model.dto.OperatorDTO;
-import dk.dtu.model.dto.OperatorNoPWDTO;
+import main.java.dk.dtu.model.dto.OperatorDTO;
+import main.java.dk.dtu.model.dto.OperatorNoPWDTO;
 
 public interface OperatorDAO {
 	OperatorDTO getOperator(int oprId) throws DALException;

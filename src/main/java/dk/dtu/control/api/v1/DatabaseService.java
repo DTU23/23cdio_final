@@ -1,11 +1,11 @@
-package dk.dtu.control.api.v1;
+package main.java.dk.dtu.control.api.v1;
 
 import java.sql.SQLException;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import dk.dtu.model.connector.Connector;
+import main.java.dk.dtu.model.connector.Connector;
 
 @Path("/v1/database")
 public class DatabaseService {

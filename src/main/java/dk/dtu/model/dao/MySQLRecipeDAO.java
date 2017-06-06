@@ -1,15 +1,15 @@
-package dk.dtu.model.dao;
+package main.java.dk.dtu.model.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dk.dtu.model.connector.Connector;
-import dk.dtu.model.dto.RecipeDTO;
-import dk.dtu.model.dto.RecipeListDTO;
-import dk.dtu.model.interfaces.DALException;
-import dk.dtu.model.interfaces.RecipeDAO;
+import main.java.dk.dtu.model.connector.Connector;
+import main.java.dk.dtu.model.dto.RecipeDTO;
+import main.java.dk.dtu.model.dto.RecipeListDTO;
+import main.java.dk.dtu.model.interfaces.DALException;
+import main.java.dk.dtu.model.interfaces.RecipeDAO;
 
 public class MySQLRecipeDAO implements RecipeDAO {
 

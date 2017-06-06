@@ -1,8 +1,8 @@
-package dk.dtu.model;
+package main.java.dk.dtu.model;
 
 import java.util.ArrayList;
 
-import dk.dtu.model.dto.OperatorDTO;
+import main.java.dk.dtu.model.dto.OperatorDTO;
 
 public class OperatorDAO implements IDAL{
 

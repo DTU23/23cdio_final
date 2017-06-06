@@ -1,16 +1,16 @@
-package dk.dtu.model.dao;
+package main.java.dk.dtu.model.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dk.dtu.model.connector.Connector;
-import dk.dtu.model.dto.ProductBatchCompDTO;
-import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
-import dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
-import dk.dtu.model.interfaces.DALException;
-import dk.dtu.model.interfaces.ProductBatchCompDAO;
+import main.java.dk.dtu.model.connector.Connector;
+import main.java.dk.dtu.model.dto.ProductBatchCompDTO;
+import main.java.dk.dtu.model.dto.ProductBatchCompOverviewDTO;
+import main.java.dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
+import main.java.dk.dtu.model.interfaces.DALException;
+import main.java.dk.dtu.model.interfaces.ProductBatchCompDAO;
 
 public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 	@Override

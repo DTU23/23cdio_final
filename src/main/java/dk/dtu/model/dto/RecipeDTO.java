@@ -1,4 +1,4 @@
-package dk.dtu.model.dto;
+package main.java.dk.dtu.model.dto;
 
 public class RecipeDTO {
 	

@@ -1,13 +1,7 @@
-package dk.dtu.control.api;
+package main.java.dk.dtu.control.api;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import dk.dtu.model.dao.MySQLOperatorDAO;
-import dk.dtu.model.dto.OperatorDTO;
-import dk.dtu.model.interfaces.DALException;
+import java.io.IOException;
+import java.security.Principal;
 
 import javax.annotation.Priority;
 import javax.ws.rs.NotAuthorizedException;
@@ -18,8 +12,15 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
-import java.security.Principal;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
+import main.java.dk.dtu.model.dao.MySQLOperatorDAO;
+import main.java.dk.dtu.model.dto.OperatorDTO;
+import main.java.dk.dtu.model.interfaces.DALException;
 
 @Secured
 @Provider

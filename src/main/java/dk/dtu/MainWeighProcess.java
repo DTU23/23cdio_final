@@ -1,7 +1,7 @@
-package dk.dtu;
+package main.java.dk.dtu;
 
-import dk.dtu.control.IWeightProcessController;
-import dk.dtu.control.WeightProcessController;
+import main.java.dk.dtu.control.IWeightProcessController;
+import main.java.dk.dtu.control.WeightProcessController;
 
 public class MainWeighProcess {
 

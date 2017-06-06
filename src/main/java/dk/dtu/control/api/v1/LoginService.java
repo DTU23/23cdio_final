@@ -1,20 +1,22 @@
-package dk.dtu.control.api.v1;
+package main.java.dk.dtu.control.api.v1;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import dk.dtu.model.dao.MySQLOperatorDAO;
-import dk.dtu.model.dto.OperatorDTO;
-import dk.dtu.model.interfaces.DALException;
-import dk.dtu.model.interfaces.OperatorDAO;
+import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
-import java.util.Calendar;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+
+import main.java.dk.dtu.model.dao.MySQLOperatorDAO;
+import main.java.dk.dtu.model.dto.OperatorDTO;
+import main.java.dk.dtu.model.interfaces.DALException;
+import main.java.dk.dtu.model.interfaces.OperatorDAO;
 
 @Path("/v1/login")
 public class LoginService {

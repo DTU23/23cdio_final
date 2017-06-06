@@ -1,4 +1,4 @@
-package dk.dtu.control.api.v1;
+package main.java.dk.dtu.control.api.v1;
 
 public interface IWeightAdaptor {
 	

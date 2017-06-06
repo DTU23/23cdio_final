@@ -1,8 +1,11 @@
-package dk.dtu.model;
+package test.java.dk.dtu.model;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import main.java.dk.dtu.model.Validation;
+import main.java.dk.dtu.model.ValidationException;
 
 public class ValidationTest {
 

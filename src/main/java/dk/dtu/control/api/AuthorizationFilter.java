@@ -1,6 +1,11 @@
-package dk.dtu.control.api;
+package main.java.dk.dtu.control.api;
 
-import dk.dtu.model.interfaces.DALException;
+import java.io.IOException;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
@@ -11,12 +16,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+import main.java.dk.dtu.model.interfaces.DALException;
 
 @Secured
 @Provider

@@ -1,18 +1,24 @@
-package dk.dtu.control.api.v1;
+package main.java.dk.dtu.control.api.v1;
 
-import dk.dtu.control.api.Secured;
-import dk.dtu.model.Validation;
-import dk.dtu.model.ValidationException;
-import dk.dtu.model.dao.MySQLOperatorDAO;
-import dk.dtu.model.dto.OperatorDTO;
-import dk.dtu.model.dto.OperatorNoPWDTO;
-import dk.dtu.model.interfaces.DALException;
-import dk.dtu.model.interfaces.OperatorDAO;
-import dk.dtu.control.api.Role;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import main.java.dk.dtu.control.api.Secured;
+import main.java.dk.dtu.model.Validation;
+import main.java.dk.dtu.model.ValidationException;
+import main.java.dk.dtu.model.dao.MySQLOperatorDAO;
+import main.java.dk.dtu.model.dto.OperatorDTO;
+import main.java.dk.dtu.model.dto.OperatorNoPWDTO;
+import main.java.dk.dtu.model.interfaces.DALException;
+import main.java.dk.dtu.model.interfaces.OperatorDAO;
 
 
 @Path("v1/operator")

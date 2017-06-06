@@ -1,4 +1,4 @@
-package dk.dtu.model.interfaces;
+package main.java.dk.dtu.model.interfaces;
 
 public class DALException extends Exception
 {

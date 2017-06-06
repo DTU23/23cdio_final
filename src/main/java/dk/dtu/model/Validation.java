@@ -1,4 +1,4 @@
-package dk.dtu.model;
+package main.java.dk.dtu.model;
 
 import java.util.ArrayList;
 import java.util.Calendar;

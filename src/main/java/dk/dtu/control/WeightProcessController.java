@@ -8,6 +8,7 @@ import dk.dtu.control.api.v1.IWeightAdaptor;
 import dk.dtu.control.api.v1.WeightAdaptor;
 import dk.dtu.model.Validation;
 import dk.dtu.model.connector.Connector;
+import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dao.MySQLProductBatchCompDAO;
 import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dao.MySQLRecipeDAO;
@@ -15,6 +16,7 @@ import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.interfaces.OperatorDAO;
 import dk.dtu.model.interfaces.ProductBatchCompDAO;
 import dk.dtu.model.interfaces.ProductBatchDAO;
 import dk.dtu.model.interfaces.RecipeDAO;
@@ -24,6 +26,7 @@ public class WeightProcessController implements IWeightProcessController {
 	private String ipAddress;
 	private int portNumber;
 	private IWeightAdaptor weightAdaptor;
+	private OperatorDAO operatorDAO;
 	private ProductBatchDAO productBatchDAO;
 	private RecipeDAO recipeDAO;
 	private ProductBatchCompDAO productBatchCompDAO;
@@ -42,6 +45,7 @@ public class WeightProcessController implements IWeightProcessController {
 		try {
 			// TODO Kig på database forbindelse!!!
 			new Connector();
+			operatorDAO = new MySQLOperatorDAO();
 			productBatchDAO = new MySQLProductBatchDAO();
 			recipeDAO = new MySQLRecipeDAO();
 			productBatchCompDAO = new MySQLProductBatchCompDAO();
@@ -75,6 +79,7 @@ public class WeightProcessController implements IWeightProcessController {
 					try {
 						oprId = weightAdaptor.getOperatorId();
 						Validation.isPositiveInteger(oprId);
+						weightAdaptor.confirmOperatorName( operatorDAO.getOperator(Integer.parseInt(oprId)).getOprName() );
 						break oprIdLoop;
 					} catch (Exception e) {
 						continue oprIdLoop;
@@ -132,6 +137,7 @@ public class WeightProcessController implements IWeightProcessController {
 			// Start the weighing process
 			double tara;
 			double netto;
+			String rbId;
 			double gross;
 			ProductBatchCompDTO productBatchCompDTO;
 
@@ -146,6 +152,7 @@ public class WeightProcessController implements IWeightProcessController {
 					do {
 						netto = Double.parseDouble(weightAdaptor.placeNetto());
 					} while (Math.abs(recipeDTO.getNomNetto() - netto) > tolerance);
+					rbId = weightAdaptor.getProduceBatchNumber();
 					weightAdaptor.tara();
 					gross = Double.parseDouble(weightAdaptor.removeGross());
 					if(tara + netto == Math.abs(gross)) {

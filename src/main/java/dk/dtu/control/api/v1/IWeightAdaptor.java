@@ -6,6 +6,7 @@ public interface IWeightAdaptor {
 	public void setupUnit() throws AdaptorException;
 	
 	public String getOperatorId() throws AdaptorException;
+	public void confirmOperatorName(String operatorName) throws AdaptorException;
 	public String getOperatorPassword() throws AdaptorException;
 	public void loginResult(boolean result) throws AdaptorException;
 	
@@ -16,6 +17,9 @@ public interface IWeightAdaptor {
 	public void tara() throws AdaptorException;
 	public String placeTara() throws AdaptorException;
 	public String placeNetto() throws AdaptorException;
+	public String getProduceBatchNumber() throws AdaptorException;
 	public String removeGross() throws AdaptorException;
 	public void grossCheck(boolean result) throws AdaptorException;
+	
+	
 }

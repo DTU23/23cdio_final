@@ -74,6 +74,17 @@ public class WeightAdaptor implements IWeightAdaptor {
 			throw new AdaptorException(e);
 		}	
 	}
+	
+	@Override
+	public void confirmOperatorName(String operatorName) throws AdaptorException {
+		try {
+			sendCommand("P111 \""+operatorName+" [->\"");
+			waitResponse();
+			waitResponse();
+		} catch (Exception e) {
+			throw new AdaptorException(e);
+		}	
+	}
 
 	@Override
 	public String getOperatorPassword() throws AdaptorException {
@@ -167,6 +178,17 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			sendCommand("S");
 			return waitResponse().split(" ")[7].replace(',', '.');
+		} catch (Exception e) {
+			throw new AdaptorException(e);
+		}
+	}
+	
+	@Override
+	public String getProduceBatchNumber() throws AdaptorException {
+		try {
+			sendCommand("RM20 8 \"RB ID?\" \"\" \"&3\"");
+			waitResponse();
+			return waitResponse().split("\"")[1];
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}

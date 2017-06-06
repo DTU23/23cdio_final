@@ -255,5 +255,16 @@ public class WeightAdaptor implements IWeightAdaptor {
 			throw new AdaptorException(e);
 		}
 	}
+	
+	@Override
+	public void writeInSecondaryDisplay(String msg) throws AdaptorException {
+		try {
+			sendCommand("P111 \"" + msg + " [->\"");
+			waitResponse();
+			waitResponse();
+		} catch (Exception e) {
+			throw new AdaptorException(e);
+		}
+	}
 
 }

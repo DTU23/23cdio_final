@@ -22,6 +22,7 @@ public interface IWeightAdaptor {
 	public String removeGross() throws AdaptorException;
 	public void grossCheck(boolean result) throws AdaptorException;
 	void clearBothDisplays() throws AdaptorException;
+	void writeInSecondaryDisplay(String msg) throws AdaptorException;
 
 	
 	

@@ -15,20 +15,19 @@ CREATE OR REPLACE VIEW produce_overview AS
 /**
 Q3 - Shows an overview of how much os each produce type is in stock.
  */
-CREATE OR REPLACE VIEW produce_overview_sum_T3 AS
-  SELECT produce_name, total
-  FROM produce_overview_sum_T2;
+CREATE OR REPLACE VIEW produce_overview_sum_T AS
+  SELECT produce.produce_name, SUM(productbatchcomponent.netto) AS used
+  FROM productbatchcomponent NATURAL JOIN producebatch NATURAL JOIN produce
+  GROUP BY produce.produce_name;
 
 CREATE OR REPLACE VIEW produce_overview_sum_T2 AS
   SELECT produce.produce_name, SUM(producebatch.amount) AS total
   FROM producebatch NATURAL JOIN produce
   GROUP BY produce.produce_name;
 
-CREATE OR REPLACE VIEW produce_overview_sum_T AS
-  SELECT produce.produce_name, SUM(productbatchcomponent.netto) AS used
-  FROM productbatchcomponent NATURAL JOIN producebatch NATURAL JOIN produce
-  GROUP BY produce.produce_name;
-
+CREATE OR REPLACE VIEW produce_overview_sum_T3 AS
+  SELECT produce_name, total
+  FROM produce_overview_sum_T2;
 
 CREATE OR REPLACE VIEW produce_overview_sum AS
   SELECT produce_overview_sum_T.produce_name, produce_overview_sum_T3.total - produce_overview_sum_T.used AS CurrentStock

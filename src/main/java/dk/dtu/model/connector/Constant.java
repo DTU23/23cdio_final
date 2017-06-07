@@ -1,4 +1,4 @@
-package main.java.dk.dtu.model.connector;
+package dk.dtu.model.connector;
 
 public abstract class Constant
 {

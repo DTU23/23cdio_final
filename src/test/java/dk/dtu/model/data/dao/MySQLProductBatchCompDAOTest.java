@@ -1,4 +1,4 @@
-package test.java.dk.dtu.model.data.dao;
+package dk.dtu.model.data.dao;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
@@ -15,14 +15,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.dk.dtu.model.connector.Connector;
-import main.java.dk.dtu.model.dao.MySQLProductBatchCompDAO;
-import main.java.dk.dtu.model.dao.MySQLProductBatchDAO;
-import main.java.dk.dtu.model.dto.ProductBatchCompDTO;
-import main.java.dk.dtu.model.dto.ProductBatchCompOverviewDTO;
-import main.java.dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
-import main.java.dk.dtu.model.dto.ProductBatchDTO;
-import main.java.dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.connector.Connector;
+import dk.dtu.model.dao.MySQLProductBatchCompDAO;
+import dk.dtu.model.dao.MySQLProductBatchDAO;
+import dk.dtu.model.dto.ProductBatchCompDTO;
+import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
+import dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
+import dk.dtu.model.dto.ProductBatchDTO;
+import dk.dtu.model.interfaces.DALException;
 
 public class MySQLProductBatchCompDAOTest {
     private MySQLProductBatchCompDAO pbcdao;

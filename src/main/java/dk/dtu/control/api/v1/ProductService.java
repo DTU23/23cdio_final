@@ -24,13 +24,13 @@ public class ProductService {
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
 	public OperatorDTO getProduct(@PathParam("id") String pbId) throws ValidationException, DALException {
-
+		return null;
 	}
 
 	@GET
 	@Secured( roles = { Role.Foreman })
 	public List<OperatorNoPWDTO> getProductList() throws DALException {
-
+		return null;
 	}
 
 	@POST

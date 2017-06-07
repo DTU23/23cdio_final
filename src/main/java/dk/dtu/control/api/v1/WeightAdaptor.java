@@ -1,4 +1,4 @@
-package main.java.dk.dtu.control.api.v1;
+package dk.dtu.control.api.v1;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
+
+import dk.dtu.control.api.v1.AdaptorException;
+import dk.dtu.control.api.v1.IWeightAdaptor;
 
 public class WeightAdaptor implements IWeightAdaptor {
 

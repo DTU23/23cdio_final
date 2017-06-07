@@ -1,4 +1,4 @@
-package main.java.dk.dtu.control.api;
+package dk.dtu.control.api;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -18,9 +18,9 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import main.java.dk.dtu.model.dao.MySQLOperatorDAO;
-import main.java.dk.dtu.model.dto.OperatorDTO;
-import main.java.dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.dao.MySQLOperatorDAO;
+import dk.dtu.model.dto.OperatorDTO;
+import dk.dtu.model.interfaces.DALException;
 
 @Secured
 @Provider

@@ -1,15 +1,15 @@
-package main.java.dk.dtu.model.dao;
+package dk.dtu.model.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.dk.dtu.model.connector.Connector;
-import main.java.dk.dtu.model.dto.OperatorDTO;
-import main.java.dk.dtu.model.dto.OperatorNoPWDTO;
-import main.java.dk.dtu.model.interfaces.DALException;
-import main.java.dk.dtu.model.interfaces.OperatorDAO;
+import dk.dtu.model.connector.Connector;
+import dk.dtu.model.dto.OperatorDTO;
+import dk.dtu.model.dto.OperatorNoPWDTO;
+import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.interfaces.OperatorDAO;
 
 public class MySQLOperatorDAO implements OperatorDAO {
 	

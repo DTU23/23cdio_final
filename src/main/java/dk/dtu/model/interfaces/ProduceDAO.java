@@ -1,9 +1,9 @@
-package main.java.dk.dtu.model.interfaces;
+package dk.dtu.model.interfaces;
 
 import java.util.List;
 
-import main.java.dk.dtu.model.dto.ProduceDTO;
-import main.java.dk.dtu.model.dto.ProduceOverviewDTO;
+import dk.dtu.model.dto.ProduceDTO;
+import dk.dtu.model.dto.ProduceOverviewDTO;
 
 public interface ProduceDAO {
 	void createProduce(ProduceDTO raavare) throws DALException;

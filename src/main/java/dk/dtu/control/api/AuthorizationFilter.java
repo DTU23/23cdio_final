@@ -1,4 +1,4 @@
-package main.java.dk.dtu.control.api;
+package dk.dtu.control.api;
 
 import java.io.IOException;
 import java.lang.reflect.AnnotatedElement;
@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
-import main.java.dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.interfaces.DALException;
 
 @Secured
 @Provider

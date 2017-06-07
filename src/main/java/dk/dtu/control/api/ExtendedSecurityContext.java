@@ -1,7 +1,7 @@
-package main.java.dk.dtu.control.api;
+package dk.dtu.control.api;
 
-import main.java.dk.dtu.model.dto.OperatorDTO;
-import main.java.dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.dto.OperatorDTO;
+import dk.dtu.model.interfaces.DALException;
 
 public interface ExtendedSecurityContext extends javax.ws.rs.core.SecurityContext {
     boolean isAdmin() throws DALException;

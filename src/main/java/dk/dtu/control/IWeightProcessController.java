@@ -1,4 +1,4 @@
-package main.java.dk.dtu.control;
+package dk.dtu.control;
 
 public interface IWeightProcessController {
 

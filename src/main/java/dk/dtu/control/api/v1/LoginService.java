@@ -1,4 +1,4 @@
-package main.java.dk.dtu.control.api.v1;
+package dk.dtu.control.api.v1;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
@@ -13,10 +13,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 
-import main.java.dk.dtu.model.dao.MySQLOperatorDAO;
-import main.java.dk.dtu.model.dto.OperatorDTO;
-import main.java.dk.dtu.model.interfaces.DALException;
-import main.java.dk.dtu.model.interfaces.OperatorDAO;
+import dk.dtu.model.dao.MySQLOperatorDAO;
+import dk.dtu.model.dto.OperatorDTO;
+import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.interfaces.OperatorDAO;
 
 @Path("/v1/login")
 public class LoginService {

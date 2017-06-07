@@ -1,4 +1,4 @@
-package main.java.dk.dtu.control.api;
+package dk.dtu.control.api;
 
 public enum Role {
     None(0),

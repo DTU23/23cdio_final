@@ -1,10 +1,10 @@
-package main.java.dk.dtu.model.interfaces;
+package dk.dtu.model.interfaces;
 
 import java.util.List;
 
-import main.java.dk.dtu.model.dto.ProductBatchCompDTO;
-import main.java.dk.dtu.model.dto.ProductBatchCompOverviewDTO;
-import main.java.dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
+import dk.dtu.model.dto.ProductBatchCompDTO;
+import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
+import dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
 
 public interface ProductBatchCompDAO {
 	void createProductBatchComp(ProductBatchCompDTO productbatchcomponent) throws DALException;

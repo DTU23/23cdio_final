@@ -1,4 +1,4 @@
-package main.java.dk.dtu.control.api;
+package dk.dtu.control.api;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;

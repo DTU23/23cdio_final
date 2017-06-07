@@ -1,4 +1,4 @@
-package main.java.dk.dtu.model;
+package dk.dtu.model;
 
 public class ValidationException extends Exception {
 	private static final long serialVersionUID = 670332140423964441L;

@@ -1,4 +1,4 @@
-package main.java.dk.dtu.model.dto;
+package dk.dtu.model.dto;
 
 /**
  * Operatoer Data Access Objekt

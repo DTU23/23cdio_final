@@ -1,4 +1,4 @@
-package main.java.dk.dtu.control.api.v1;
+package dk.dtu.control.api.v1;
 
 import java.util.List;
 
@@ -10,14 +10,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import main.java.dk.dtu.control.api.Role;
-import main.java.dk.dtu.control.api.Secured;
-import main.java.dk.dtu.model.ValidationException;
-import main.java.dk.dtu.model.dao.MySQLProduceBatchDAO;
-import main.java.dk.dtu.model.dto.OperatorDTO;
-import main.java.dk.dtu.model.dto.OperatorNoPWDTO;
-import main.java.dk.dtu.model.dto.ProductBatchDTO;
-import main.java.dk.dtu.model.interfaces.DALException;
+import dk.dtu.control.api.Role;
+import dk.dtu.control.api.Secured;
+import dk.dtu.model.ValidationException;
+import dk.dtu.model.dao.MySQLProduceBatchDAO;
+import dk.dtu.model.dto.OperatorDTO;
+import dk.dtu.model.dto.OperatorNoPWDTO;
+import dk.dtu.model.dto.ProductBatchDTO;
+import dk.dtu.model.interfaces.DALException;
 
 @Path("v1/product")
 @Produces(MediaType.APPLICATION_JSON)

@@ -1,28 +1,29 @@
-package main.java.dk.dtu.control;
+package dk.dtu.control;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import main.java.dk.dtu.control.api.v1.AdaptorException;
-import main.java.dk.dtu.control.api.v1.IWeightAdaptor;
-import main.java.dk.dtu.control.api.v1.WeightAdaptor;
-import main.java.dk.dtu.model.Validation;
-import main.java.dk.dtu.model.connector.Connector;
-import main.java.dk.dtu.model.dao.MySQLOperatorDAO;
-import main.java.dk.dtu.model.dao.MySQLProduceBatchDAO;
-import main.java.dk.dtu.model.dao.MySQLProductBatchCompDAO;
-import main.java.dk.dtu.model.dao.MySQLProductBatchDAO;
-import main.java.dk.dtu.model.dao.MySQLRecipeDAO;
-import main.java.dk.dtu.model.dto.ProductBatchCompDTO;
-import main.java.dk.dtu.model.dto.ProductBatchCompOverviewDTO;
-import main.java.dk.dtu.model.dto.RecipeListDTO;
-import main.java.dk.dtu.model.interfaces.DALException;
-import main.java.dk.dtu.model.interfaces.OperatorDAO;
-import main.java.dk.dtu.model.interfaces.ProduceBatchDAO;
-import main.java.dk.dtu.model.interfaces.ProductBatchCompDAO;
-import main.java.dk.dtu.model.interfaces.ProductBatchDAO;
-import main.java.dk.dtu.model.interfaces.RecipeDAO;
+import dk.dtu.control.IWeightProcessController;
+import dk.dtu.control.api.v1.AdaptorException;
+import dk.dtu.control.api.v1.IWeightAdaptor;
+import dk.dtu.control.api.v1.WeightAdaptor;
+import dk.dtu.model.Validation;
+import dk.dtu.model.connector.Connector;
+import dk.dtu.model.dao.MySQLOperatorDAO;
+import dk.dtu.model.dao.MySQLProduceBatchDAO;
+import dk.dtu.model.dao.MySQLProductBatchCompDAO;
+import dk.dtu.model.dao.MySQLProductBatchDAO;
+import dk.dtu.model.dao.MySQLRecipeDAO;
+import dk.dtu.model.dto.ProductBatchCompDTO;
+import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
+import dk.dtu.model.dto.RecipeListDTO;
+import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.interfaces.OperatorDAO;
+import dk.dtu.model.interfaces.ProduceBatchDAO;
+import dk.dtu.model.interfaces.ProductBatchCompDAO;
+import dk.dtu.model.interfaces.ProductBatchDAO;
+import dk.dtu.model.interfaces.RecipeDAO;
 
 public class WeightProcessController implements IWeightProcessController {
 

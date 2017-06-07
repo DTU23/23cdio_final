@@ -13,7 +13,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
@@ -25,14 +24,11 @@ public class MySQLOperatorDAOTest {
 
 	@Before
 	public void setUp() throws Exception {
-		new Connector();
-		Connector.resetData();
 		opr = new MySQLOperatorDAO();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		Connector.resetData();
 		opr = null;
 	}
 

@@ -173,7 +173,7 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			waitResponse();
 			sendCommand("S");
-			return waitResponse().split(" ")[7].replace(',', '.');
+			return waitResponse().split(" ")[7];
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}
@@ -186,7 +186,7 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			waitResponse();
 			sendCommand("S");
-			return waitResponse().split(" ")[7].replace(',', '.');
+			return waitResponse().split(" ")[7];
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}
@@ -220,7 +220,7 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			waitResponse();
 			sendCommand("S");
-			return waitResponse().split(" ")[7].replace(',', '.');
+			return waitResponse().split(" ")[6];
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}

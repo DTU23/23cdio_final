@@ -35,25 +35,63 @@ public class OperatorDTO
     	this.ini = opr.getIni();
     	this.cpr = opr.getCpr();
     	this.password = opr.getPassword();
-    	this.admin = opr.getAdmin();
+    	this.admin = opr.isAdmin();
     	this.role = opr.getRole();
     }
 
-	public int getOprId() { return oprId; }
-	public void setOprId(int oprId) { this.oprId = oprId; }
-	public String getOprName() { return oprName; }
-	public void setOprNavn(String oprNavn) { this.oprName = oprNavn; }
-	public String getIni() { return ini; }
-	public void setIni(String ini) { this.ini = ini; }
-	public String getCpr() { return cpr; }
-	public void setCpr(String cpr) { this.cpr = cpr; }
-	public String getPassword() { return password; }
-	public void setPassword(String password) { this.password = password; }
-	public boolean getAdmin() { return this.admin; }
-	public void setAdmin(boolean admin) { this.admin = admin; }
-    public String getRole() {return this.role; }
-    public void setRole(String role) {
+	public int getOprId() {
+		return oprId;
+	}
+
+	public void setOprId(int oprId) {
+		this.oprId = oprId;
+	}
+
+	public String getOprName() {
+		return oprName;
+	}
+
+	public void setOprName(String oprName) {
+		this.oprName = oprName;
+	}
+
+	public String getIni() {
+		return ini;
+	}
+
+	public void setIni(String ini) {
+		this.ini = ini;
+	}
+
+	public String getCpr() {
+		return cpr;
+	}
+
+	public void setCpr(String cpr) {
+		this.cpr = cpr;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
 		this.role = role;
 	}
-	public String toString() { return oprId + "\t" + oprName + "\t" + ini + "\t" + cpr + "\t" + password + "\t" + admin + "\t" + role; }
 }

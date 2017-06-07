@@ -7,6 +7,8 @@ public class ProduceBatchDTO
 	private String produceName;             // i omraadet 1-99999999
 	private String supplier;             // kan vaere negativ
 	private double amount;
+	
+	public ProduceBatchDTO(){}
 
 	public ProduceBatchDTO(int rbId, Integer produceId, String produceName, String supplier, double amount)
 	{
@@ -56,11 +58,4 @@ public class ProduceBatchDTO
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-
-	@Override
-	public String toString() {
-		return "ProduceBatchDTO [rbId=" + rbId + ", produceId=" + produceId + ", produceName=" + produceName
-				+ ", supplier=" + supplier + ", amount=" + amount + "]";
-	}
-
 }

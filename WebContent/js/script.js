@@ -309,9 +309,9 @@ $(document).ready(function () {
         $('#Administration').show();
         populateUsersAdmin(false);
         populateProduceAdmin(false);
-        populateProduceBatchAdmin(false);
-        populateProductAdmin(false);
-        populateRecipeAdmin(false);
+        //populateProduceBatchAdmin(false);
+        //populateProductAdmin(false);
+        //populateRecipeAdmin(false);
     }
 });
 
@@ -405,7 +405,9 @@ function populateProduceAdmin(notice) {
         },
         error: function ( msg ) {
             console.log(msg);
-            Materialize.toast("Error in loading data!", 4000);
+            if(notice){
+                Materialize.toast("Error in loading data!", 4000);
+            }
         }
     });
 }

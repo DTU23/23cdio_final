@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     $('.modal').modal({
         dismissible: true, // Modal can be dismissed by clicking outside of the modal
         opacity: .5,
@@ -26,12 +27,12 @@ $(document).ready(function () {
             "admin": row.children().find(".admin").is(':checked'),
             "role": row.children(".role").text()
         });
-        $('#userEditModal').html(rendered).promise().done(function () {
-            var select_box = $('#userEditModal').find('#user_role');
+        $('#EditModal').html(rendered).promise().done(function () {
+            var select_box = $('#EditModal').find('#user_role');
             var option = 'option[value='+select_box.attr('data-selected')+']';
             select_box.find(option).attr("selected", true);
             $('select').material_select();
-            $('#userEditModal').modal('open');
+            $('#EditModal').modal('open');
         });
     });
 
@@ -39,17 +40,106 @@ $(document).ready(function () {
         template = $('#userInsertTemplate').html();
         Mustache.parse(template);   // optional, speeds up future uses
         var rendered = Mustache.render(template, {"role": "None", "admin": false});
-        $('#userEditModal').html(rendered).promise().done(function () {
-            var select_box = $('#userEditModal').find('#user_role');
+        $('#EditModal').html(rendered).promise().done(function () {
+            var select_box = $('#EditModal').find('#user_role');
             var option = 'option[value='+select_box.attr('data-selected')+']';
             select_box.find(option).attr("selected", true);
             $('select').material_select();
         });
-        $('#userEditModal').modal('open');
+        $('#EditModal').modal('open');
         Materialize.updateTextFields();
     });
 
     $(document).on("click", '.delete-user', function (e) {
+        var row = $(this).parent().parent();
+        $.ajax({
+            type: "DELETE",
+            contentType: "application/json",
+            processData: false,
+            data: JSON.stringify({}),
+            url: "./api/v1/operator/"+row.children(".id").text(),
+            success: function( response ) {
+                if(response){
+                    Materialize.toast("User with ID: "+ row.children(".id").text() +" was deleted!", 4000);
+                    row.fadeOut("slow", function () {
+                        row.remove();
+                    });
+                }else{
+                    Materialize.toast("Unable to delete user!", 4000);
+                }
+            },
+            error: function ( msg ) {
+                Materialize.toast("Unable to delete user!", 4000);
+            }
+        });
+    });
+
+    $(document).on("click", ".edit-produce", function (e) {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json",
+            processData: false,
+            async: false,
+            crossDomain: true,
+            url: "./api/v1/produce/"+$(this).attr('data-id'),
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            success: function( response ) {
+                data = {};
+                data["produce"] = response;
+                template = $('#produceEditTemplate').html();
+                Mustache.parse(template);   // optional, speeds up future uses
+                var rendered = Mustache.render(template, data);
+                $('#EditModal').html(rendered).promise().done(function () {
+                    $('#EditModal').modal('open');
+                });
+                return response;
+            },
+            error: function ( msg ) {
+                console.log(msg);
+                Materialize.toast("Error in loading data!", 4000);
+            }
+        });
+    });
+
+
+    $(document).on('click', '.modal-save-produce', function (e) {
+        e.preventDefault();
+        $('#EditModal').find('.preloader-wrapper').removeClass('hide');
+        $.ajax({
+            type: "PUT",
+            contentType: "application/json",
+            processData: false,
+            data: {
+                produceId: $('#produceEdit').attr('data-source-id'),
+                produceName: $('#produceEdit').find('input#produce_name').val(),
+                supplier: $('#produceEdit').find('input#produce_supplier').val()
+            },
+            url: "./api/v1/produce/",
+            success: function( msg ) {
+                console.log("Response: " + msg);
+                $('#EditModal').modal('close');
+            },
+            error: function ( msg ) {
+                Materialize.toast("Unable to update user!", 4000);
+                $('#EditModal').modal('close');
+            }
+        });
+    });
+
+    $(document).on("click", '.add-produce', function (e) {
+        template = $('#produceInsertTemplate').html();
+        Mustache.parse(template);   // optional, speeds up future uses
+        var rendered = Mustache.render(template, {"role": "None", "admin": false});
+        $('#EditModal').html(rendered).promise().done(function () {
+            
+        });
+        $('#EditModal').modal('open');
+        Materialize.updateTextFields();
+    });
+    
+    $(document).on("click", '.delete-produce', function (e) {
         var row = $(this).parent().parent();
         $.ajax({
             type: "DELETE",
@@ -118,7 +208,7 @@ $(document).ready(function () {
         switch($(this).children("a").attr("href"))
         {
             case "#UserAdminTab":
-                populateUsersAdmin();
+                populateUsersAdmin(true);
                 break;
             case "#RecipeAdminTab":
                 break;
@@ -137,9 +227,9 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on('click', '.modal-save', function (e) {
+    $(document).on('click', '.modal-save-user', function (e) {
         e.preventDefault();
-        $('#userEditModal').find('.preloader-wrapper').removeClass('hide');
+        $('#EditModal').find('.preloader-wrapper').removeClass('hide');
         var role;
         if($('#userEdit').find("#user_role").find('li.active.selected').text() === ''){
             role = $('#userEdit').find('input.select-dropdown').attr('value');
@@ -162,18 +252,18 @@ $(document).ready(function () {
             success: function( msg ) {
                 console.log("Response: " + msg);
                 populateUsersAdmin();
-                $('#userEditModal').modal('close');
+                $('#EditModal').modal('close');
             },
             error: function ( msg ) {
                 Materialize.toast("Unable to update user!", 4000);
-                $('#userEditModal').modal('close');
+                $('#EditModal').modal('close');
             }
         });
     });
 
-    $(document).on('click', '.modal-add', function (e) {
+    $(document).on('click', '.modal-add-user', function (e) {
         e.preventDefault();
-        $('#userEditModal').find('.preloader-wrapper').removeClass('hide');
+        $('#EditModal').find('.preloader-wrapper').removeClass('hide');
         var role;
         if($('#userAdd').find("#user_role").find('li.active.selected').text() === ''){
             role = $('#userAdd').find('input.select-dropdown').attr('value');
@@ -196,18 +286,18 @@ $(document).ready(function () {
             success: function( msg ) {
                 console.log("Response: " + msg);
                 populate();
-                $('#userEditModal').modal('close');
+                $('#EditModal').modal('close');
             },
             error: function ( msg ) {
                 Materialize.toast("Unable to update user!", 4000);
-                $('#userEditModal').modal('close');
+                $('#EditModal').modal('close');
             }
         });
     });
 
     $('.logout').on('click', function (e) {
         e.preventDefault();
-        $('#userAdministration').hide();
+        $('#Administration').hide();
         $('#loginForm').show();
         $('main').addClass('valign-wrapper');
         Cookies.remove('auth');
@@ -216,11 +306,16 @@ $(document).ready(function () {
     if(typeof Cookies.get('auth') !== 'undefined'){
         $('#loginForm').hide();
         $('main').removeClass('valign-wrapper');
-        $('#userAdministration').show();
+        $('#Administration').show();
+        populateUsersAdmin(false);
+        populateProduceAdmin(false);
+        populateProduceBatchAdmin(false);
+        populateProductAdmin(false);
+        populateRecipeAdmin(false);
     }
 });
 
-function populateUsersAdmin() {
+function populateUsersAdmin(notice) {
     $.ajax({
         type: "GET",
         contentType: "application/json",
@@ -237,7 +332,6 @@ function populateUsersAdmin() {
             data['users'] = response;
             Mustache.parse(template);   // optional, speeds up future uses
             var rendered = Mustache.render(template, data);
-
             $('#UserAdminTab').html(rendered).promise().done(function () {
                 $("input:checkbox:not(:checked)").each(function () {
                     $(this).prop("indeterminate", true);
@@ -246,12 +340,19 @@ function populateUsersAdmin() {
         },
         error: function ( msg ) {
             console.log(msg);
-            Materialize.toast("Error in loading data!", 4000);
+            switch(msg.status){
+                case 403:
+                    if(notice){
+                        Materialize.toast("You are not an admin!", 4000);
+                    }
+                    $("a[href='#UserAdminTab']").parent().addClass('disabled');
+                    break;
+            }
         }
     });
 }
 
-function populateProduceBatchAdmin() {
+function populateProduceBatchAdmin(notice) {
     $.ajax({
         type: "GET",
         contentType: "application/json",
@@ -280,7 +381,7 @@ function populateProduceBatchAdmin() {
     });
 }
 
-function populateProduceAdmin() {
+function populateProduceAdmin(notice) {
     $.ajax({
         type: "GET",
         contentType: "application/json",
@@ -307,6 +408,14 @@ function populateProduceAdmin() {
             Materialize.toast("Error in loading data!", 4000);
         }
     });
+}
+
+function populateProductAdmin(notice) {
+
+}
+
+function populateRecipeAdmin(notice){
+
 }
 
 function initDB() {

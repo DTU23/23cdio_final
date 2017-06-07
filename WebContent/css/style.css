@@ -11,3 +11,15 @@ main {
 #userAdministration{
     display: none;
 }
+
+.tabs{
+    overflow-x: hidden;
+}
+
+.disabled{
+    opacity: 0.5;
+}
+
+.tabs .tab.disabled a, .tabs .tab.disabled a:hover{
+    cursor: not-allowed;
+}

@@ -13,6 +13,7 @@ DROP PROCEDURE IF EXISTS create_recipe;
 DROP PROCEDURE IF EXISTS create_recipe_component;
 DROP PROCEDURE IF EXISTS get_product_batch_details_by_pb_id;
 DROP PROCEDURE IF EXISTS get_recipe_details_by_id;
+DROP PROCEDURE IF EXISTS get_product_batch_list_details_by_pb_id;
 
 # Tasks
 DROP PROCEDURE IF EXISTS produce_with_at_least_number_occurences_in_producebatch;
@@ -200,6 +201,14 @@ BEGIN
   SELECT productbatchcomponent.rb_id, produce_name, supplier, netto, opr_id
   FROM productbatchcomponent NATURAL JOIN produce NATURAL JOIN producebatch
   WHERE productbatchcomponent.pb_id = input_pb_id;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE get_product_batch_list_details_by_pb_id
+(IN input_pb_id INT)
+BEGIN
+  SELECT * FROM product_batch_list WHERE pb_id = input_pb_id;
 END //
 DELIMITER ;
 

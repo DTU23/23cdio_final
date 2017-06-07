@@ -12,6 +12,105 @@
     <script src="js/mustache.js" type="text/javascript"></script>
 
     <!-- Mustache Templates -->
+    <script type="text/html" id="UserAdministrationTemplate">
+        <table class="striped centered responsive-table" id="userlist">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Initials</th>
+                <th>CPR</th>
+                <th>Admin</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="userListRows">
+            <!--{{#users}}-->
+            <tr id="user-row-{{oprId}}">
+                <td class="id">{{oprId}}</td>
+                <td class="name">{{oprName}}</td>
+                <td class="ini">{{ini}}</td>
+                <td class="cpr">{{cpr}}</td>
+                <td>
+                    <p>
+                        <!--{{#admin}}-->
+                        <input type="checkbox" class="admin" checked="checked" disabled/>
+                        <!--{{/admin}}-->
+                        <!--{{^admin}}-->
+                        <input type="checkbox" class="admin" disabled/>
+                        <!--{{/admin}}-->
+                        <label></label>
+                    </p>
+                </td>
+                <td class="role">{{role}}</td>
+                <td>
+                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-user"><i class="material-icons">delete</i></a>
+                    <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1"><i class="material-icons">edit</i></a>
+                </td>
+            </tr>
+            <!--{{/users}}-->
+            </tbody>
+        </table>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-user"><i class="material-icons">add</i></a>
+    </script>
+
+    <script type="text/html" id="ProduceAdministrationTemplate">
+        <table class="striped centered responsive-table" id="produceList">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Supplier</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="produceListRows">
+            <!--{{#produce}}-->
+            <tr id="produce-row-{{oprId}}">
+                <td class="id">{{produceId}}</td>
+                <td class="name">{{produceName}}</td>
+                <td class="supplier">{{supplier}}</td>
+                <td>
+                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-user"><i class="material-icons">delete</i></a>
+                    <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1"><i class="material-icons">edit</i></a>
+                </td>
+            </tr>
+            <!--{{/produce}}-->
+            </tbody>
+        </table>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-user"><i class="material-icons">add</i></a>
+    </script>
+
+    <script type="text/html" id="ProduceBatchAdministrationTemplate">
+        <table class="striped centered responsive-table" id="produceBatchList">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Supplier</th>
+                <th>Amount</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="produceBatchListRows">
+            <!--{{#producebatch}}-->
+            <tr id="produce-batch-row-{{rb_id}}">
+                <td class="id">{{rbId}}</td>
+                <td class="name">{{produceName}}</td>
+                <td class="supplier">{{supplier}}</td>
+                <td class="supplier">{{amount}}</td>
+                <td>
+                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-user"><i class="material-icons">delete</i></a>
+                    <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1"><i class="material-icons">edit</i></a>
+                </td>
+            </tr>
+            <!--{{/producebatch}}-->
+            </tbody>
+        </table>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-user"><i class="material-icons">add</i></a>
+    </script>
+
     <script type="text/html" id="userEditTemplate">
         <div class="modal-content">
             <h4>Edit User</h4>
@@ -253,34 +352,31 @@
         <br>
         <div class="row">
             <div class="col s12">
-                <ul class="tabs">
+                <ul class="tabs" id="MainTabs">
                     <li class="tab col s3"><a href="#ProductAdminTab" class="blue-grey-text text-darken-3">Product Administration</a></li>
                     <li class="tab col s3"><a href="#ProduceAdminTab" class="blue-grey-text text-darken-3">Produce Administration</a></li>
                     <li class="tab col s3"><a href="#RecipeAdminTab" class="blue-grey-text text-darken-3">Recipe Administration</a></li>
-                    <li class="tab col s3"><a href="#UserAdminTab" class="active blue-grey-text text-darken-3">User Administration</a></li>
+                    <li class="tab col s3"><a href="#UserAdminTab" class="blue-grey-text text-darken-3">User Administration</a></li>
                 </ul>
             </div>
             <div id="ProductAdminTab" class="col s12"></div>
-            <div id="ProduceAdminTab" class="col s12"></div>
+            <div id="ProduceAdminTab" class="col s12">
+                <div class="row">
+                    <div class="col s12">
+                        <ul class="tabs">
+                            <li class="tab col s6"><a class="active blue-grey-text text-darken-3" href="#ProduceAdminSubTab">Produce</a></li>
+                            <li class="tab col s6"><a class="blue-grey-text text-darken-3" href="#ProduceBatchAdminSubTab">Produce Batches</a></li>
+                        </ul>
+                    </div>
+                    <div id="ProduceAdminSubTab" class="col s12">
+                    </div>
+                    <div id="ProduceBatchAdminSubTab" class="col s12">
+                    </div>
+                </div>
+            </div>
             <div id="RecipeAdminTab" class="col s12"></div>
             <div id="UserAdminTab" class="col s12">
-                <table class="striped centered responsive-table" id="userlist">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Initials</th>
-                        <th>CPR</th>
-                        <th>Admin</th>
-                        <th>Role</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody id="userListRows">
 
-                    </tbody>
-                </table>
-                <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-user"><i class="material-icons">add</i></a>
             </div>
         </div>
     </div>

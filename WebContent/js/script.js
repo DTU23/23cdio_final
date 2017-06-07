@@ -102,7 +102,6 @@ $(document).ready(function () {
             success: function( msg ) {
                 console.log("Response: " + msg);
                 Cookies.set("auth", msg, { expires : 7 });
-                populate();
                 $('#loginForm').hide();
                 $('main').removeClass('valign-wrapper');
                 $('#userAdministration').show();
@@ -112,6 +111,30 @@ $(document).ready(function () {
                 console.log(msg);
             }
         });
+    });
+
+    $(document).on('click', 'li.tab', function (e) {
+        e.preventDefault();
+        switch($(this).children("a").attr("href"))
+        {
+            case "#UserAdminTab":
+                populateUsersAdmin();
+                break;
+            case "#RecipeAdminTab":
+                break;
+            case "#ProduceAdminTab":
+                break;
+            case "#ProduceAdminSubTab":
+                populateProduceAdmin();
+                break;
+            case "#ProduceBatchAdminSubTab":
+                populateProduceBatchAdmin();
+                break;
+            case "#ProductAdminTab":
+                break;
+            default:
+                break;
+        }
     });
 
     $(document).on('click', '.modal-save', function (e) {
@@ -138,7 +161,7 @@ $(document).ready(function () {
             url: "./api/v1/operator/",
             success: function( msg ) {
                 console.log("Response: " + msg);
-                populate();
+                populateUsersAdmin();
                 $('#userEditModal').modal('close');
             },
             error: function ( msg ) {
@@ -191,14 +214,13 @@ $(document).ready(function () {
     });
 
     if(typeof Cookies.get('auth') !== 'undefined'){
-        populate();
         $('#loginForm').hide();
         $('main').removeClass('valign-wrapper');
         $('#userAdministration').show();
     }
 });
 
-function populate() {
+function populateUsersAdmin() {
     $.ajax({
         type: "GET",
         contentType: "application/json",
@@ -210,16 +232,74 @@ function populate() {
         },
         success: function( response ) {
             console.log(response);
-            var template = $('#userTableRow').html();
+            var template = $('#UserAdministrationTemplate').html();
             var data = {};
             data['users'] = response;
             Mustache.parse(template);   // optional, speeds up future uses
             var rendered = Mustache.render(template, data);
 
-            $('#userListRows').html(rendered).promise().done(function () {
+            $('#UserAdminTab').html(rendered).promise().done(function () {
                 $("input:checkbox:not(:checked)").each(function () {
                     $(this).prop("indeterminate", true);
                 });
+            });
+        },
+        error: function ( msg ) {
+            console.log(msg);
+            Materialize.toast("Error in loading data!", 4000);
+        }
+    });
+}
+
+function populateProduceBatchAdmin() {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        processData: false,
+        crossDomain: true,
+        url: "./api/v1/producebatch/",
+        headers : {
+            Authorization: Cookies.get("auth")
+        },
+        success: function( response ) {
+            console.log(response);
+            var template = $('#ProduceBatchAdministrationTemplate').html();
+            var data = {};
+            data['producebatch'] = response;
+            Mustache.parse(template);   // optional, speeds up future uses
+            var rendered = Mustache.render(template, data);
+
+            $('#ProduceBatchAdminSubTab').html(rendered).promise().done(function () {
+
+            });
+        },
+        error: function ( msg ) {
+            console.log(msg);
+            Materialize.toast("Error in loading data!", 4000);
+        }
+    });
+}
+
+function populateProduceAdmin() {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        processData: false,
+        crossDomain: true,
+        url: "./api/v1/produce/",
+        headers : {
+            Authorization: Cookies.get("auth")
+        },
+        success: function( response ) {
+            console.log(response);
+            var template = $('#ProduceAdministrationTemplate').html();
+            var data = {};
+            data['produce'] = response;
+            Mustache.parse(template);   // optional, speeds up future uses
+            var rendered = Mustache.render(template, data);
+
+            $('#ProduceAdminSubTab').html(rendered).promise().done(function () {
+
             });
         },
         error: function ( msg ) {

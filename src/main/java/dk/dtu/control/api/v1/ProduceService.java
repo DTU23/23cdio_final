@@ -14,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
-import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLProduceDAO;
 import dk.dtu.model.dto.ProduceDTO;
 import dk.dtu.model.dto.ProduceOverviewDTO;

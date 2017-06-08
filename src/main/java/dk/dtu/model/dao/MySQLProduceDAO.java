@@ -53,8 +53,8 @@ public class MySQLProduceDAO implements ProduceDAO {
 	}
 
 	@Override
-	public void deleteProduce(int raavareId) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL delete_produce(" + raavareId + ");") == 0)
+	public void deleteProduce(int produceId) throws DALException {
+		if(Connector.getInstance().doUpdate("CALL delete_produce(" + produceId + ");") == 0)
 		{
 			throw new DALException("No rows affected");
 		}

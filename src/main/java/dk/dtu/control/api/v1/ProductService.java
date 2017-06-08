@@ -13,30 +13,29 @@ import javax.ws.rs.core.MediaType;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.ValidationException;
-import dk.dtu.model.dao.MySQLProduceBatchDAO;
-import dk.dtu.model.dto.OperatorDTO;
-import dk.dtu.model.dto.OperatorNoPWDTO;
+import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.interfaces.ProductBatchDAO;
 
 @Path("v1/product")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ProductService {
 
-	private MySQLProduceBatchDAO dao = new MySQLProduceBatchDAO();
+	private ProductBatchDAO dao = new MySQLProductBatchDAO();
 
 	@GET
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public OperatorDTO getProduct(@PathParam("id") String pbId) throws ValidationException, DALException {
-		return null;
+	public ProductBatchDTO getProduct(@PathParam("id") int pbId) throws ValidationException, DALException {
+		return dao.getProductBatch(pbId);
 	}
 
 	@GET
 	@Secured( roles = { Role.Foreman })
-	public List<OperatorNoPWDTO> getProductList() throws DALException {
-		return null;
+	public List<ProductBatchDTO> getProductList() throws DALException {
+		return dao.getProductBatchList();
 	}
 
 	@POST

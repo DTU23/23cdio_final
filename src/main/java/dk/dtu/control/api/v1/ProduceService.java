@@ -36,4 +36,16 @@ public class ProduceService {
 	public void createProduce(ProduceDTO pb) throws DALException {
 		dao.createProduce(pb);
 	}
+	
+	@PUT
+	@Secured( roles = { Role.Foreman })
+	public void updateProduce(ProduceDTO produce) throws DALException {
+		dao.updateProduce(produce);
+	}
+	
+	@DELETE
+	@Secured( roles = { Role.Foreman })
+	public void deleteProduce() {
+		dao.
+	}
 }

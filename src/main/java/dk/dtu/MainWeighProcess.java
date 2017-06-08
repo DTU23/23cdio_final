@@ -7,7 +7,7 @@ public class MainWeighProcess {
 
 	public static void main(String[] args) {
 
-		IWeightProcessController weightProcessController = new WeightProcessController("localhost", 8000);
+		IWeightProcessController weightProcessController = new WeightProcessController("169.254.2.3", 8000);
 		weightProcessController.run();
 		
 	}

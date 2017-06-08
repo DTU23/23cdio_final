@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
+import dk.dtu.control.api.v1.AdaptorException;
+import dk.dtu.control.api.v1.IWeightAdaptor;
+
 public class WeightAdaptor implements IWeightAdaptor {
 
 	private Socket clientSocket; 

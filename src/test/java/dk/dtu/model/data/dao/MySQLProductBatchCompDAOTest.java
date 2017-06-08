@@ -49,7 +49,7 @@ public class MySQLProductBatchCompDAOTest {
     public void getProductBatchComp() throws Exception {
         ProductBatchCompDTO pbc1;
         ProductBatchCompDTO expected = new ProductBatchCompDTO(1, 1, 0.5, 10.05, 1);
-        pbc1 = pbcdao.getProductBatchComp(1, 1);
+        pbc1 = pbcdao.readProductBatchComp(1, 1);
         assertThat(pbc1.toString(), is(equalTo(expected.toString())));
     }
 
@@ -60,7 +60,7 @@ public class MySQLProductBatchCompDAOTest {
     @Test (expected = DALException.class)
     public void getProductBatchCompWithNonExistentID() throws Exception {
         ProductBatchCompDTO pbc1;
-        pbc1 = pbcdao.getProductBatchComp(-1, -1);
+        pbc1 = pbcdao.readProductBatchComp(-1, -1);
         assertThat(pbc1, nullValue());
     }
 
@@ -70,11 +70,11 @@ public class MySQLProductBatchCompDAOTest {
      */
     @Test
     public void testStatusTrigger() throws Exception{
-        ProductBatchDTO pb4 = pbdao.getProductBatch(4);
+        ProductBatchDTO pb4 = pbdao.readProductBatch(4);
         assertThat(pb4.getStatus(), is(equalTo(1)));
         ProductBatchCompDTO pbc1 = new ProductBatchCompDTO(4, 2, 5, 10, 1);
         pbcdao.createProductBatchComp(pbc1);
-        pb4 = pbdao.getProductBatch(4);
+        pb4 = pbdao.readProductBatch(4);
         assertThat(pb4.getStatus(), is(equalTo(2)));
     }
     /**
@@ -88,7 +88,7 @@ public class MySQLProductBatchCompDAOTest {
         pbcdao.createProductBatchComp(new ProductBatchCompDTO(pb_id, 1, 10, 10, 1));
         int batchCountAfter = pbcdao.getProductBatchCompList().size();
         assertEquals(batchCountBefore, batchCountAfter-1);
-        assertThat(pbdao.getProductBatch(pb_id).getStatus(), is(not(0)));
+        assertThat(pbdao.readProductBatch(pb_id).getStatus(), is(not(0)));
     }
 
     /**

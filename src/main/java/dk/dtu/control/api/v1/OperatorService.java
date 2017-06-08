@@ -1,5 +1,16 @@
 package dk.dtu.control.api.v1;
 
+import java.util.List;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
 import dk.dtu.model.ValidationException;
@@ -8,11 +19,6 @@ import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
 import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.OperatorDAO;
-import dk.dtu.control.api.Role;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 
 @Path("v1/operator")
@@ -27,7 +33,7 @@ public class OperatorService {
 	@Path("/{id}")
 	public OperatorDTO getOperator(@PathParam("id") String oprID) throws ValidationException, DALException {
 		Validation.isPositiveInteger(oprID);
-		return dao.getOperator(Integer.parseInt(oprID));
+		return dao.readOperator(Integer.parseInt(oprID));
 	}
 
 	@GET

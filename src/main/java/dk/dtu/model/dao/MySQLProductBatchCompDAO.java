@@ -13,10 +13,28 @@ import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.ProductBatchCompDAO;
 
 public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
+	
 	@Override
-	public ProductBatchCompDTO getProductBatchComp(int pbId, int rbId) throws DALException {
-		ResultSet rs = Connector.doQuery("SELECT * from productbatchcomponent WHERE pb_id="+pbId+" AND rb_id="+rbId+";");
-		try {
+	public void createProductBatchComp(ProductBatchCompDTO productBatchComponent) throws DALException {
+		MySQLProductBatchDAO pbdao = new MySQLProductBatchDAO();
+		if(pbdao.exists(productBatchComponent.getPbId())) {
+			Connector.doQuery("CALL create_product_batch_component('" 
+					+ productBatchComponent.getPbId() + "', '" 
+					+ productBatchComponent.getRbId() + "', '" 
+					+ productBatchComponent.getTara() + "', '" 
+					+ productBatchComponent.getNetto() + "', '" 
+					+ productBatchComponent.getOprId() + "');"
+			);
+		} else {
+			throw new DALException("Invalid product batch id!");
+		}
+	}
+	
+	@Override
+	public ProductBatchCompDTO readProductBatchComp(int pbId, int rbId) throws DALException {
+		ResultSet rs = Connector.doQuery("CALL read_product_batch_component('"+pbId+"', '"+rbId+"');");
+		try 
+		{
 			if (!rs.first()) throw new DALException("Product batch with id " + pbId + " not found!");
 			return new ProductBatchCompDTO (
 					rs.getInt("pb_id"),
@@ -25,22 +43,30 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 					rs.getDouble("netto"),
 					rs.getInt("opr_id")
 			);
-		}
-		catch (SQLException e) {
-			throw new DALException(e);
+		} catch (SQLException e) { throw new DALException(e); }
+	}
+
+	@Override
+	public void updateProductBatchComp(ProductBatchCompDTO productBatchComponent) throws DALException {
+		if(Connector.doUpdate("CALL update_product_batch_component('" 
+				+ productBatchComponent.getPbId() + "','" 
+				+ productBatchComponent.getRbId() + "','" 
+				+ productBatchComponent.getTara() + "','"
+				+ productBatchComponent.getNetto() + "','" 
+				+ productBatchComponent.getOprId() + "');") == 0)
+		{
+			throw new DALException("No rows affected");
 		}
 	}
 
 	@Override
-	public void createProductBatchComp(ProductBatchCompDTO productbatchcomponent) throws DALException {
-		MySQLProductBatchDAO pbdao = new MySQLProductBatchDAO();
-		if(pbdao.exists(productbatchcomponent.getPbId())){
-			Connector.doQuery("CALL create_product_batch_component(" + productbatchcomponent.getPbId() + "," + productbatchcomponent.getRbId() + "," + productbatchcomponent.getTara() + "," + productbatchcomponent.getNetto() + "," + productbatchcomponent.getOprId() + ");");
-		}else{
-			throw new DALException("Invalid ProductBatch ID");
+	public void deleteProductBatchComp(int pbId, int rbId) throws DALException {
+		if(Connector.doUpdate("CALL delete_product_batch_component(" + pbId + "," + rbId + ";") == 0)
+		{
+			throw new DALException("No rows affected");
 		}
 	}
-
+	
 	@Override
 	public List<ProductBatchCompDTO> getProductBatchCompList() throws DALException {
 		List<ProductBatchCompDTO> list = new ArrayList<ProductBatchCompDTO>();

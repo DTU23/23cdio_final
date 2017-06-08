@@ -59,7 +59,7 @@ public class LoginService {
 					.withClaim("oprId", oprId)
 					.withClaim("name", oprDAO.readOperator(oprId).getOprName())
 					.withClaim("role", oprDAO.readOperator(oprId).getRole())
-					.withClaim("admin", oprDAO.readOperator(oprId).getAdmin())
+					.withClaim("admin", oprDAO.readOperator(oprId).isAdmin())
 					.withExpiresAt(cal.getTime())
 					.sign(algorithm);
 		} catch (UnsupportedEncodingException | JWTCreationException ignored){

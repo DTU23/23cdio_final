@@ -21,7 +21,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 				+ opr.getIni() + "','" 
 				+ opr.getCpr() + "','" 
 				+ opr.getPassword() + "','" 
-				+ opr.getAdmin() + "','" 
+				+ opr.isAdmin() + "','" 
 				+ opr.getRole() + "');" ) == 0)
 		{
 			throw new DALException("No rows affected");
@@ -59,7 +59,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 				+ opr.getIni() + "','" 
 				+ opr.getCpr() + "','" 
 				+ opr.getPassword() + "','" 
-				+ opr.getAdmin() + "','" 
+				+ opr.isAdmin() + "','" 
 				+ opr.getRole() + "');" ) == 0)
 		{
 			throw new DALException("No rows affected");

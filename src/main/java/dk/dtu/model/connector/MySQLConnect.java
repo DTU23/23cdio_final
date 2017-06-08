@@ -34,19 +34,23 @@ public final class MySQLConnect {
 	public static ResultSet doQuery(String query) throws DALException {
 		getDBConnection();
 		ResultSet rs;
+		rs = null;
 		try {
 			statement = MySQLConnect.connection.createStatement();
 			rs = statement.executeQuery(query);
+			return rs;	
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DALException(e);
 		}
-		finally {			  
+		finally {	
+			
 			try {	
-				// Dont need to close resultset because when a Statement object is closed, its current ResultSet object, if one exists, is also closed.
+				if (rs != null)	 
+				rs.close();
 				if (statement != null)	 
 					statement.close();		 
-				if (connection != null)		 
+				if (connection != null)	 
 					connection.close();		 
 			} catch (SQLException e) {		 
 				e.printStackTrace();		 
@@ -54,7 +58,6 @@ public final class MySQLConnect {
 				e.printStackTrace();		 
 			}		 
 		}
-		return rs;
 
 	}
 
@@ -64,12 +67,13 @@ public final class MySQLConnect {
 		try {
 			statement = MySQLConnect.connection.createStatement();
 			result = statement.executeUpdate(query);
+			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DALException(e);
 		}
 		finally {			  
-			try {		 
+			try {	
 				if (statement != null)	 
 					statement.close();		 
 				if (connection != null)		 
@@ -80,8 +84,7 @@ public final class MySQLConnect {
 				e.printStackTrace();		 
 			}
 		}
-		return result;
 
 	}
-
+	
 }

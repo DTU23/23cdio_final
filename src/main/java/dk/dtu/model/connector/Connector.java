@@ -8,61 +8,73 @@ import java.sql.Statement;
 
 import dk.dtu.model.interfaces.DALException;
 
-public class Connector
+public final class Connector
 {
-	/**
-	 * To connect to a MySQL-server
-	 * 
-	 * @param url must have the form
-	 * "jdbc:mysql://<server>/<database>" for default port (3306)
-	 * OR
-	 * "jdbc:mysql://<server>:<port>/<database>" for specific port
-	 * more formally "jdbc:subprotocol:subname"
-	 * 
-	 * @throws ClassNotFoundException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
-	 * @throws SQLException 
-	 */
-	public static Connection connectToDatabase(String url, String username, String password)
-			throws InstantiationException, IllegalAccessException,
-					ClassNotFoundException, SQLException
-	{
-		// call the driver class' no argument constructor
+	private static Connector instance;
+	private Connection connection;
+	private Statement statement;
+	private ResultSet resultSet;
+
+	private Connector() {}
+
+	public static synchronized Connector getInstance() {
+		if (instance == null) {
+			synchronized(Connector.class) {
+				if (instance == null) {
+					instance = new Connector();
+				}
+			}
+		}
+		return instance;
+	}
+
+	public void connectToDatabase(String server, int port, String database, String username, String password) throws DALException {
+		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-		
-		// get Connection-object via DriverManager
-		return (Connection) DriverManager.getConnection(url, username, password);
+			connection = (Connection) DriverManager.getConnection("jdbc:mysql://"+server+":"+port+"/"+database+"?verifyServerCertificate=false&useSSL=true", username, password);
+		} catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			throw new DALException(e);
+		}
 	}
-	
-	private static Connection conn;
-	private static Statement stm;
-	
-	public Connector(String server, int port, String database, String username, String password) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		conn = connectToDatabase("jdbc:mysql://"+server+":"+port+"/"+database+"?verifyServerCertificate=false&useSSL=true", username, password);
-		stm	= conn.createStatement();
+
+	public void connectToDatabase() throws DALException {
+		connectToDatabase(Constant.server, Constant.port, Constant.database, Constant.username, Constant.password);
 	}
-	
-	public Connector() throws InstantiationException, IllegalAccessException,
-			ClassNotFoundException, SQLException
-	{
-		this(Constant.server, Constant.port, Constant.database,
-				Constant.username, Constant.password);
+
+	public ResultSet doQuery(String cmd) throws DALException {
+		connectToDatabase();
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(cmd);
+			return resultSet;
+		} catch (SQLException e) {
+			throw new DALException(e);
+		}
 	}
-	
-	public static ResultSet doQuery(String cmd) throws DALException
-	{
-		try { return stm.executeQuery(cmd); }
-		catch (SQLException e) { throw new DALException(e); }
+
+	public int doUpdate(String cmd) throws DALException {
+		connectToDatabase();
+		try {
+			statement = connection.createStatement();
+			return statement.executeUpdate(cmd);
+		} catch (SQLException e) {
+			throw new DALException(e);
+		}
 	}
-	
-	public static int doUpdate(String cmd) throws DALException
-	{
-		try { return stm.executeUpdate(cmd); }
-		catch (SQLException e) { throw new DALException(e); }
+
+	public int resetData() throws DALException {
+		connectToDatabase();
+		try {
+			statement = connection.createStatement();
+			return statement.executeUpdate("CALL reset_data();");
+		} catch (SQLException e) {
+			throw new DALException(e);
+		}
 	}
-	public static int resetData() throws DALException{
-		try { return stm.executeUpdate("CALL reset_data();"); }
-		catch (SQLException e) { throw new DALException(e); }
+
+	public void closeResources() {
+		try { if (resultSet != null) resultSet.close(); } catch (SQLException e) {};
+		try { if (statement != null) statement.close(); } catch (SQLException e) {};
+		try { if (connection != null) connection.close(); } catch (SQLException e) {};
 	}
 }

@@ -87,4 +87,11 @@ public class ProductBatchCompOverviewDTO
 	public void setOprId(int oprId) {
 		this.oprId = oprId;
 	}
+
+	@Override
+	public String toString() {
+		return "ProductBatchCompOverviewDTO [pbId=" + pbId + ", rbId=" + rbId + ", recipeId=" + recipeId
+				+ ", recipeName=" + recipeName + ", status=" + status + ", produceName=" + produceName + ", netto="
+				+ netto + ", oprId=" + oprId + "]";
+	}
 }

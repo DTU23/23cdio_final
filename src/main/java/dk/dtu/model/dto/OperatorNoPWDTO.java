@@ -86,4 +86,10 @@ public class OperatorNoPWDTO
 	public void setRole(String role) {
 		this.role = role;
 	}
+
+	@Override
+	public String toString() {
+		return "OperatorNoPWDTO [oprId=" + oprId + ", oprName=" + oprName + ", ini=" + ini + ", cpr=" + cpr + ", admin="
+				+ admin + ", role=" + role + "]";
+	}
 }

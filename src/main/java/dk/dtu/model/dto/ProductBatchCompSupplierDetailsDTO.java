@@ -57,4 +57,10 @@ public class ProductBatchCompSupplierDetailsDTO
 	public void setOprId(int oprId) {
 		OprId = oprId;
 	}
+
+	@Override
+	public String toString() {
+		return "ProductBatchCompSupplierDetailsDTO [rbId=" + rbId + ", produceName=" + produceName + ", supplier="
+				+ supplier + ", netto=" + netto + ", OprId=" + OprId + "]";
+	}
 }

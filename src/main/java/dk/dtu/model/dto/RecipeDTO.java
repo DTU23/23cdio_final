@@ -27,4 +27,9 @@ public class RecipeDTO
 	public void setRecipeName(String recipeName) {
 		this.recipeName = recipeName;
 	}
+
+	@Override
+	public String toString() {
+		return "RecipeDTO [recipeId=" + recipeId + ", recipeName=" + recipeName + "]";
+	}
 }

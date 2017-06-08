@@ -58,4 +58,10 @@ public class ProduceBatchDTO
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
+
+	@Override
+	public String toString() {
+		return "ProduceBatchDTO [rbId=" + rbId + ", produceId=" + produceId + ", produceName=" + produceName
+				+ ", supplier=" + supplier + ", amount=" + amount + "]";
+	}
 }

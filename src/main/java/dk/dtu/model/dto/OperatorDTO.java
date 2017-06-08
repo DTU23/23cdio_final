@@ -94,4 +94,10 @@ public class OperatorDTO
 	public void setRole(String role) {
 		this.role = role;
 	}
+
+	@Override
+	public String toString() {
+		return "OperatorDTO [oprId=" + oprId + ", oprName=" + oprName + ", ini=" + ini + ", cpr=" + cpr + ", password="
+				+ password + ", admin=" + admin + ", role=" + role + "]";
+	}
 }

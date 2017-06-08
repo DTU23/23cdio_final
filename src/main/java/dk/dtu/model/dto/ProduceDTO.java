@@ -41,4 +41,9 @@ public class ProduceDTO
 	public void setSupplier(String supplier) {
 		this.supplier = supplier;
 	}
+
+	@Override
+	public String toString() {
+		return "ProduceDTO [produceId=" + produceId + ", produceName=" + produceName + ", supplier=" + supplier + "]";
+	}
 }

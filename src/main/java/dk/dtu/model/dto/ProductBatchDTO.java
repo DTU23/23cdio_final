@@ -38,5 +38,10 @@ public class ProductBatchDTO
 	public void setStatus(int status) {
 		this.status = status;
 	}
+
+	@Override
+	public String toString() {
+		return "ProductBatchDTO [pbId=" + pbId + ", recipeId=" + recipeId + ", status=" + status + "]";
+	}
 }
 

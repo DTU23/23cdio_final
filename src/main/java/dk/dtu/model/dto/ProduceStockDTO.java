@@ -28,4 +28,9 @@ public class ProduceStockDTO
 	public void setStock(double stock) {
 		this.stock = stock;
 	}
+
+	@Override
+	public String toString() {
+		return "ProduceStockDTO [produceName=" + produceName + ", stock=" + stock + "]";
+	}
 }

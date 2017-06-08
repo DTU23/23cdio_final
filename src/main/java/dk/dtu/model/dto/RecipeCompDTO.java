@@ -47,4 +47,10 @@ public class RecipeCompDTO
 	public void setTolerance(double tolerance) {
 		this.tolerance = tolerance;
 	}
+
+	@Override
+	public String toString() {
+		return "RecipeCompDTO [recipeId=" + recipeId + ", produceId=" + produceId + ", nomNetto=" + nomNetto
+				+ ", tolerance=" + tolerance + "]";
+	}
 }

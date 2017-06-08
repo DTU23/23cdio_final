@@ -22,14 +22,13 @@ public class MySQLRecipeDAOTest {
 
 	@Before
 	public void setUp() throws Exception {
-		new Connector();
-		Connector.resetData();
+		Connector.getInstance().resetData();
 		recipe = new MySQLRecipeDAO();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		Connector.resetData();
+		Connector.getInstance().resetData();
 		recipe = null;
 	}
 
@@ -84,26 +83,27 @@ public class MySQLRecipeDAOTest {
 		RecipeDTO expected = new RecipeDTO(4, "salami");
 		RecipeDTO actual = null;
 		try {
-			recipe.createRecipe(expected);
+			recipe.createRecipe(expected.getRecipeName());
 			actual = recipe.readRecipe(4);
 		} catch (DALException e) {	System.out.println(e.getMessage());}
 		assertThat(expected.toString(), is(equalTo(actual.toString())));
 	}
 	
 	/**
+	 * ## DEPRECATED BECAUSE OF DATABASE CHANGES ##
 	 * negative test for create recipe. 
-	 * Auto-generates an ID so cant create on existing.  
+	 * Auto-generates an ID so cant create on existing. 
 	 */
-	@Test
-	public void createRecipeOnExistingID() {
-		RecipeDTO actual = null;
-		RecipeDTO expected = new RecipeDTO(3, "capricciosa");
-		try {
-			recipe.createRecipe(new RecipeDTO(3, "parmaskinke"));
-			actual = recipe.readRecipe(3);	
-		} catch (DALException e) {	System.out.println(e.getMessage());  }
-		assertThat(expected.toString(), is(equalTo(actual.toString())));
-	}
+//	@Test
+//	public void createRecipeOnExistingID() {
+//		RecipeDTO actual = null;
+//		RecipeDTO expected = new RecipeDTO(3, "capricciosa");
+//		try {
+//			recipe.createRecipe(new RecipeDTO(3, "parmaskinke"));
+//			actual = recipe.readRecipe(3);	
+//		} catch (DALException e) {	System.out.println(e.getMessage());  }
+//		assertThat(expected.toString(), is(equalTo(actual.toString())));
+//	}
 	
 	/**
 	 * get recipe with invalid input

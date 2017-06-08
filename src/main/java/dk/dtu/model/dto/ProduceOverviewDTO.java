@@ -4,14 +4,16 @@ public class ProduceOverviewDTO
 {
     private int produceId;
     private String produceName;
+    private String supplier;
     private double amount;
     
     public ProduceOverviewDTO(){}
 
-	public ProduceOverviewDTO(int produceId, String produceName, double amount)
+	public ProduceOverviewDTO(int produceId, String produceName, String supplier, double amount)
 	{
 		this.produceId = produceId;
 		this.produceName = produceName;
+		this.supplier = supplier;
 		this.amount = amount;
 	}
 
@@ -29,6 +31,14 @@ public class ProduceOverviewDTO
 
 	public void setProduceName(String produceName) {
 		this.produceName = produceName;
+	}
+	
+	public String getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(String supplier) {
+		this.supplier = supplier;
 	}
 
 	public double getAmount() {

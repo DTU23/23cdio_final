@@ -30,40 +30,40 @@ public class ProduceService {
 	private ProduceDAO dao = new MySQLProduceDAO();
 
 	@POST
-	@Secured( roles = { Role.Foreman })
+	@Secured( roles = { Role.Pharmacist })
 	public void createProduce(ProduceDTO pb) throws DALException {
 		dao.createProduce(pb);
 	}
 	
 	@GET
 	@Path("/{id}")
-	@Secured( roles = { Role.Foreman })
+	@Secured( roles = { Role.Pharmacist })
 	public ProduceDTO getProduce(@PathParam("id") int produce_id) throws ValidationException, DALException {
 		return dao.readProduce(produce_id);
 	}
 
 	@GET
-	@Secured( roles = { Role.Foreman })
+	@Secured( roles = { Role.Pharmacist })
 	public List<ProduceDTO> getProduceList() throws DALException {
 		return dao.getProduceList();
 	}
 	
 	@GET
 	@Path("/overview")
-	@Secured( roles = { Role.Foreman })
+	@Secured( roles = { Role.Pharmacist })
 	public List<ProduceOverviewDTO> getProduceOverview() throws DALException {
 		return dao.getProduceOverview();
 	}
 	
 	@PUT
-	@Secured( roles = { Role.Foreman })
+	@Secured( roles = { Role.Pharmacist })
 	public void updateProduce(ProduceDTO produce) throws DALException {
 		dao.updateProduce(produce);
 	}
 	
 	@DELETE
 	@Path("/{id}")
-	@Secured( roles = { Role.Foreman })
+	@Secured( roles = { Role.Pharmacist })
 	public void deleteProduce(@PathParam("id") int produce_id) throws DALException {
 		dao.deleteProduce(produce_id);
 	}

@@ -59,6 +59,8 @@ public final class Connector
 			return statement.executeUpdate(cmd);
 		} catch (SQLException e) {
 			throw new DALException(e);
+		} finally {
+			closeResources();
 		}
 	}
 
@@ -69,6 +71,8 @@ public final class Connector
 			return statement.executeUpdate("CALL reset_data();");
 		} catch (SQLException e) {
 			throw new DALException(e);
+		} finally {
+			closeResources();
 		}
 	}
 

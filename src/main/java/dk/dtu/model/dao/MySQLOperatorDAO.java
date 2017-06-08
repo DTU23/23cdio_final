@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dk.dtu.model.connector.MySQLConnect;
+import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
 import dk.dtu.model.interfaces.DALException;
@@ -15,7 +15,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 	
 	@Override
 	public void createOperator(OperatorDTO opr) throws DALException {
-		if(MySQLConnect.doUpdate("CALL create_operator('" 
+		if(Connector.doUpdate("CALL create_operator('" 
 				+ opr.getOprId() + "','" 
 				+ opr.getOprName() + "','" 
 				+ opr.getIni() + "','" 
@@ -30,7 +30,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 	
 	@Override
 	public OperatorDTO readOperator(int oprId) throws DALException {
-		ResultSet rs = MySQLConnect.doQuery("CALL read_operator("+oprId+");");
+		ResultSet rs = Connector.doQuery("CALL read_operator("+oprId+");");
 		try	
 		{
 			if (!rs.first()) throw new DALException("Operator with id " + oprId + " does not exist");
@@ -47,7 +47,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 
 	@Override
 	public void updateOperator(OperatorDTO opr) throws DALException {
-		if(MySQLConnect.doUpdate("CALL update_operator('" 
+		if(Connector.doUpdate("CALL update_operator('" 
 				+ opr.getOprId() + "','"
 				+ opr.getOprName() + "','" 
 				+ opr.getIni() + "','" 
@@ -62,7 +62,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 
 	@Override
 	public void deleteOperator(int oprId) throws DALException {
-		if(MySQLConnect.doUpdate("CALL delete_operator(" + oprId + ";") == 0) 
+		if(Connector.doUpdate("CALL delete_operator(" + oprId + ";") == 0) 
 		{
 			throw new DALException("No rows affected");
 		}
@@ -71,7 +71,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 	@Override
 	public List<OperatorNoPWDTO> getOperatorList() throws DALException {
 		List<OperatorNoPWDTO> list = new ArrayList<OperatorNoPWDTO>();
-		ResultSet rs = MySQLConnect.doQuery("SELECT * FROM operator_list;");
+		ResultSet rs = Connector.doQuery("SELECT * FROM operator_list;");
 		try
 		{
 			while (rs.next()) 

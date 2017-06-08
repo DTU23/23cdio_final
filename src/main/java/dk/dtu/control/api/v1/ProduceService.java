@@ -38,7 +38,7 @@ public class ProduceService {
 	@GET
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public ProduceDTO getProduce(@PathParam("id") int produce_id) throws ValidationException, DALException {
+	public ProduceDTO getProduce(@PathParam("id") int produce_id) throws DALException {
 		return dao.readProduce(produce_id);
 	}
 	

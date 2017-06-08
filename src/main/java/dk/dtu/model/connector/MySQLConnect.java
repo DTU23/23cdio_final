@@ -4,8 +4,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Connection;
 
-import com.mysql.jdbc.Connection;
 
 import dk.dtu.model.interfaces.DALException;
 
@@ -14,6 +14,7 @@ public final class MySQLConnect {
 	private static Connection connection;
 	private static Statement statement;
 	private static MySQLConnect instance;
+
 
 	private MySQLConnect() {}
 
@@ -33,14 +34,31 @@ public final class MySQLConnect {
 	public static ResultSet doQuery(String query) throws DALException {
 		getDBConnection();
 		ResultSet rs;
+		rs = null;
 		try {
 			statement = MySQLConnect.connection.createStatement();
 			rs = statement.executeQuery(query);
+			return rs;	
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DALException(e);
 		}
-		return rs;
+		finally {	
+			
+			try {	
+				if (rs != null)	 
+				rs.close();
+				if (statement != null)	 
+					statement.close();		 
+				if (connection != null)	 
+					connection.close();		 
+			} catch (SQLException e) {		 
+				e.printStackTrace();		 
+			} catch (Exception e) {		 
+				e.printStackTrace();		 
+			}		 
+		}
+
 	}
 
 	public static int doUpdate(String query) throws DALException {
@@ -49,11 +67,24 @@ public final class MySQLConnect {
 		try {
 			statement = MySQLConnect.connection.createStatement();
 			result = statement.executeUpdate(query);
+			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DALException(e);
 		}
-		return result;
-	}
+		finally {			  
+			try {	
+				if (statement != null)	 
+					statement.close();		 
+				if (connection != null)		 
+					connection.close();		 
+			} catch (SQLException e) {		 
+				e.printStackTrace();		 
+			} catch (Exception e) {		 
+				e.printStackTrace();		 
+			}
+		}
 
+	}
+	
 }

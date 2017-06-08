@@ -26,7 +26,7 @@ import dk.dtu.model.interfaces.ProduceDAO;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ProduceService {
 
-	// This class implements all MySQLProduceDAO methods
+	// This class implements the methods from MySQLProduceDAO
 	private ProduceDAO dao = new MySQLProduceDAO();
 
 	@POST
@@ -41,19 +41,6 @@ public class ProduceService {
 	public ProduceDTO getProduce(@PathParam("id") int produce_id) throws ValidationException, DALException {
 		return dao.readProduce(produce_id);
 	}
-
-	@GET
-	@Secured( roles = { Role.Pharmacist })
-	public List<ProduceDTO> getProduceList() throws DALException {
-		return dao.getProduceList();
-	}
-	
-	@GET
-	@Path("/overview")
-	@Secured( roles = { Role.Pharmacist })
-	public List<ProduceOverviewDTO> getProduceOverview() throws DALException {
-		return dao.getProduceOverview();
-	}
 	
 	@PUT
 	@Secured( roles = { Role.Pharmacist })
@@ -66,5 +53,18 @@ public class ProduceService {
 	@Secured( roles = { Role.Pharmacist })
 	public void deleteProduce(@PathParam("id") int produce_id) throws DALException {
 		dao.deleteProduce(produce_id);
+	}
+
+	@GET
+	@Secured( roles = { Role.Pharmacist })
+	public List<ProduceDTO> getProduceList() throws DALException {
+		return dao.getProduceList();
+	}
+	
+	@GET
+	@Path("/overview")
+	@Secured( roles = { Role.Pharmacist })
+	public List<ProduceOverviewDTO> getProduceOverview() throws DALException {
+		return dao.getProduceOverview();
 	}
 }

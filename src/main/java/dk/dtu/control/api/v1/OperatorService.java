@@ -3,6 +3,7 @@ package dk.dtu.control.api.v1;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -20,14 +21,19 @@ import dk.dtu.model.dto.OperatorNoPWDTO;
 import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.OperatorDAO;
 
-
 @Path("v1/operator")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Secured( admin = true )
 public class OperatorService {
 
+	// This class implements the methods from MySQLOperatorDAO
 	private OperatorDAO dao = new MySQLOperatorDAO();
+
+	@POST
+	public void createOperator(OperatorDTO opr) throws DALException {
+		dao.createOperator(opr);
+	}
 
 	@GET
 	@Path("/{id}")
@@ -36,28 +42,25 @@ public class OperatorService {
 		return dao.readOperator(Integer.parseInt(oprID));
 	}
 
-	@GET
-	public List<OperatorNoPWDTO> getOperatorList() throws DALException {
-		return dao.getOperatorList();
-	}
-
-	@POST
-	public void createOperator(OperatorDTO opr) throws DALException {
-		dao.createOperator(opr);
-	}
-
 	@PUT
 	public void updateOperator(OperatorDTO opr) throws DALException {
 		dao.updateOperator(opr);
 	}
 
-	//	@DELETE
-	//	@Path("/{id}")
-	//	public boolean deleteOperator(@PathParam("id") String oprID) throws DALException {
-	//		if (Validation.isPositiveInteger(oprID)) {
-	//			return dao.deleteOperator(Integer.parseInt(oprID));
-	//		} else {
-	//			return false;
-	//		}
-	//	}
+	@DELETE
+	@Path("/{id}")
+	public boolean deleteOperator(@PathParam("id") String oprID) throws DALException {
+		try {
+			Validation.isPositiveInteger(oprID);
+			dao.deleteOperator(Integer.parseInt(oprID));
+			return true;
+		} catch (ValidationException e) {
+			return false;
+		}
+	}
+
+	@GET
+	public List<OperatorNoPWDTO> getOperatorList() throws DALException {
+		return dao.getOperatorList();
+	}
 }

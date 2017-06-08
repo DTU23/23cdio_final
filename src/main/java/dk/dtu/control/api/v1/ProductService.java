@@ -62,5 +62,4 @@ public class ProductService {
 	//TODO Methods not implemented here from DAO - but necessary? They're used for weighing process.
 	//getProductBatchListDetailsByPbId
 	//getProductBatchDetailsByPbId
-
 }

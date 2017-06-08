@@ -23,6 +23,7 @@ import dk.dtu.model.interfaces.ProduceBatchDAO;
 @Produces(MediaType.APPLICATION_JSON)
 public class ProduceBatchService {
 
+	// This class implements the methods from MySQLProduceBatchDAO
 	private ProduceBatchDAO dao = new MySQLProduceBatchDAO();
 
 	@POST

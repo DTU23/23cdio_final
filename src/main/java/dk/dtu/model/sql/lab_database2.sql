@@ -29,7 +29,7 @@ CREATE TABLE recipecomponent(recipe_id INT, produce_id INT, nom_netto REAL, tole
    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id),
    FOREIGN KEY (produce_id) REFERENCES produce(produce_id)) ENGINE=innoDB;
 
-CREATE TABLE productbatch(pb_id INT NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY, status INT, recipe_id INT,
+CREATE TABLE productbatch(pb_id INT NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY, recipe_id INT, status INT,
    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id)) ENGINE=innoDB;
 
 CREATE TABLE productbatchcomponent(pb_id INT, rb_id INT, tara REAL, netto REAL, opr_id INT,

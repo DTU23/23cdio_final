@@ -13,6 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
@@ -24,11 +25,13 @@ public class MySQLOperatorDAOTest {
 
 	@Before
 	public void setUp() throws Exception {
+		Connector.getInstance().resetData();
 		opr = new MySQLOperatorDAO();
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		Connector.getInstance().resetData();
 		opr = null;
 	}
 
@@ -217,7 +220,7 @@ public class MySQLOperatorDAOTest {
 		assertThat(list.get(0).getOprId(), notNullValue());
 		assertThat(list.get(0).getOprName(), notNullValue());
 		assertThat(list.get(0).getIni(), notNullValue());
-		assertThat(list.get(0).getAdmin(), notNullValue());
+		assertThat(list.get(0).isAdmin(), notNullValue());
 		assertThat(list.get(0).getRole(), notNullValue());
 	}
 }

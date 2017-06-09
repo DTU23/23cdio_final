@@ -193,6 +193,11 @@ $(document).ready(function () {
                 $('#loginForm').hide();
                 $('main').removeClass('valign-wrapper');
                 $('#Administration').show();
+                populateUsersAdmin(false);
+                populateProduceAdmin(false);
+                //populateProduceBatchAdmin(false);
+                //populateProductAdmin(false);
+                populateRecipeAdmin(false);
             },
             error: function ( msg ) {
                 Materialize.toast("Invalid login!", 4000);
@@ -209,14 +214,15 @@ $(document).ready(function () {
                 populateUsersAdmin(true);
                 break;
             case "#RecipeAdminTab":
+                populateRecipeAdmin(true);
                 break;
             case "#ProduceAdminTab":
                 break;
             case "#ProduceAdminSubTab":
-                populateProduceAdmin();
+                populateProduceAdmin(true);
                 break;
             case "#ProduceBatchAdminSubTab":
-                populateProduceBatchAdmin();
+                populateProduceBatchAdmin(true);
                 break;
             case "#ProductAdminTab":
                 break;
@@ -289,6 +295,37 @@ $(document).ready(function () {
             error: function ( msg ) {
                 Materialize.toast("Unable to update user!", 4000);
                 $('#EditModal').modal('close');
+            }
+        });
+    });
+
+    $(document).on('click', '.recipe.collapsible-header', function (e) {
+        var TargetId = $(this).attr('data-id');
+        $.ajax({
+            context: TargetId,
+            type: "GET",
+            contentType: "application/json",
+            processData: false,
+            crossDomain: true,
+            url: "./api/v1/recipecomp/"+$(this).attr('data-id'),
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            success: function( response ) {
+                console.log(response);
+                var template = $('#RecipeComponentsTemplate').html();
+                var data = {};
+                data['recipecomponents'] = response;
+                Mustache.parse(template);   // optional, speeds up future uses
+                var rendered = Mustache.render(template, data);
+
+                $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
+                    console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
+                });
+            },
+            error: function ( msg ) {
+                console.log(msg);
+                Materialize.toast("Error in loading data!", 4000);
             }
         });
     });
@@ -421,11 +458,11 @@ function populateProduceBatchAdmin(notice) {
             console.log(response);
             var template = $('#ProduceBatchStockAdministrationTemplate').html();
             var data = {};
-            data['produce'] = response;
+            data['producebatchstock'] = response;
             Mustache.parse(template);   // optional, speeds up future uses
             var rendered = Mustache.render(template, data);
 
-            $('#ProduceAdminSubTab>div.right').html(rendered).promise().done(function () {
+            $('#ProduceBatchAdminSubTab>div.right').html(rendered).promise().done(function () {
 
             });
         },
@@ -443,5 +480,61 @@ function populateProductAdmin(notice) {
 }
 
 function populateRecipeAdmin(notice){
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        processData: false,
+        crossDomain: true,
+        url: "./api/v1/recipe",
+        headers : {
+            Authorization: Cookies.get("auth")
+        },
+        success: function( response ) {
+            console.log(response);
+            var template = $('#RecipeAdministrationTemplate').html();
+            var data = {};
+            data['recipies'] = response;
+            Mustache.parse(template);   // optional, speeds up future uses
+            var rendered = Mustache.render(template, data);
 
+            $('#RecipeAdminTab').html(rendered).promise().done(function () {
+                $('.collapsible').collapsible();
+                $('.collapsible-header').each(function () {
+                    var TargetId = $(this).attr('data-id');
+                    $.ajax({
+                        context: TargetId,
+                        type: "GET",
+                        contentType: "application/json",
+                        processData: false,
+                        crossDomain: true,
+                        url: "./api/v1/recipecomp/"+$(this).attr('data-id'),
+                        headers : {
+                            Authorization: Cookies.get("auth")
+                        },
+                        success: function( response ) {
+                            console.log(response);
+                            var template = $('#RecipeComponentsTemplate').html();
+                            var data = {};
+                            data['recipecomponents'] = response;
+                            Mustache.parse(template);   // optional, speeds up future uses
+                            var rendered = Mustache.render(template, data);
+
+                            $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
+                                console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
+                            });
+                        },
+                        error: function ( msg ) {
+                            console.log(msg);
+                        }
+                    });
+                })
+            });
+        },
+        error: function ( msg ) {
+            console.log(msg);
+            if(notice){
+
+            }
+        }
+    });
 }

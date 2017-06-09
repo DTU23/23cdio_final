@@ -397,20 +397,16 @@
             <thead>
             <tr>
                 <th>Produce Name</th>
-                <th>Amount</th>
+                <th>Current Stock</th>
             </tr>
             </thead>
             <tbody id="produceBatchStockListRows">
-            <!--{{#producestock}}-->
+            <!--{{#producebatchstock}}-->
             <tr id="produce-batch-stock-row-{{rb_id}}">
                 <td class="name">{{produceName}}</td>
-                <td class="supplier">{{amount}}</td>
-                <td>
-                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-user" data-id="{{rb_id}}"><i class="material-icons">delete</i></a>
-                    <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1" data-id="{{rb_id}}"><i class="material-icons">edit</i></a>
-                </td>
+                <td class="supplier">{{currentStock}}</td>
             </tr>
-            <!--{{/producestock}}-->
+            <!--{{/producebatchstock}}-->
             </tbody>
         </table>
     </script>
@@ -418,6 +414,47 @@
     <!--
         ** Recipe Administration Templates
     -->
+    <script type="text/html" id="RecipeAdministrationTemplate">
+        <div class="container-fluid">
+            <div class="row">
+                <h6 class="center col s2">ID</h6><h6 class="center col s10">Recipe Name</h6>
+            </div>
+        <ul class="collapsible" data-collapsible="accordion">
+            <!--{{#recipies}}-->
+            <li>
+                <div class="recipe collapsible-header" data-id="{{ recipeId }}"><span class="center col s2">{{ recipeId }}</span><span class="center col s10">{{ recipeName }}</span></div>
+                <div class="collapsible-body"></div>
+            </li>
+            <!--{{/recipies}}-->
+        </ul>
+        </div>
+    </script>
+
+    <script type="text/html" id="RecipeComponentsTemplate">
+        <table class="striped centered responsive-table">
+            <thead>
+            <tr>
+                <th>Produce ID</th>
+                <th>Nom. Netto</th>
+                <th>Tolerance</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--{{#recipecomponents}}-->
+            <tr id="recipe-component-{{produceId}}">
+                <td class="produce_id">{{produceId}}</td>
+                <td class="nom_netto">{{nomNetto}}</td>
+                <td class="nom_netto">{{tolerance}}</td>
+                <td>
+                <a class="btn-floating btn waves-effect waves-light red darken-2 delete-produce" data-id="{{produceId}}"><i class="material-icons">delete</i></a>
+                <a class="btn-floating btn waves-effect waves-light blue darken-1 edit-produce" data-id="{{produceId}}"><i class="material-icons">edit</i></a>
+            </td>
+            </tr>
+            <!--{{/recipecomponents}}-->
+            </tbody>
+        </table>
+    </script>
 
 </head>
 <body>
@@ -483,44 +520,6 @@
                 </div>
             </div>
             <div id="RecipeAdminTab" class="col s12">
-                <ul class="collapsible popout" data-collapsible="accordion">
-                    <li>
-                        <div class="collapsible-header">Margharita</div>
-                        <div class="collapsible-body">
-                            <table class="striped centered responsive-table" id="recipe-{id}-ingredients">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Netto</th>
-                                    <th>Tolerance</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody id="produceListRows">
-                                <!--{{#produce}}-->
-                                <tr id="produce-row-{{produceId}}">
-                                    <td class="id">{{produce_id}}</td>
-                                    <td class="netto">{{nom_netto}}</td>
-                                    <td class="name">{{tolerance}}</td>
-                                    <td>
-                                        <a class="btn-floating btn waves-effect waves-light red darken-2 delete-produce" data-id="{{produceId}}"><i class="material-icons">delete</i></a>
-                                        <a class="btn-floating btn waves-effect waves-light blue darken-1 edit-produce" data-id="{{produceId}}"><i class="material-icons">edit</i></a>
-                                    </td>
-                                </tr>
-                                <!--{{/produce}}-->
-                                </tbody>
-                            </table>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-                        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-                    </li>
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-                        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-                    </li>
-                </ul>
             </div>
             <div id="UserAdminTab" class="col s12">
 

@@ -19,6 +19,7 @@ import dk.dtu.model.Validation;
 import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLProduceBatchDAO;
 import dk.dtu.model.dto.ProduceBatchDTO;
+import dk.dtu.model.dto.StockDTO;
 import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.ProduceBatchDAO;
 
@@ -65,9 +66,16 @@ public class ProduceBatchService {
 	}
 	
 	@GET
-	@Path("/{id}")
+	@Path("/list/{id}")
 	@Secured( roles = { Role.Foreman })
 	public ProduceBatchDTO getProduceBatchListWithProduceName(int rbId) throws DALException {
 		return dao.getProduceBatchWithProduceName(rbId);
+	}
+
+	@GET
+	@Path("/stock")
+	@Secured( roles = {Role.Foreman})
+	public List<StockDTO> getProduceStock() throws DALException{
+		return dao.getProduceInStock();
 	}
 }

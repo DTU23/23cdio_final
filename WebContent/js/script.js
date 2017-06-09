@@ -102,6 +102,103 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", '.add-recipecomp', function (e) {
+        template = $('#recipeComponentInsertTemplate').html();
+        Mustache.parse(template);   // optional, speeds up future uses
+        data = {};
+        data["recipeId"] = $(this).attr('data-recipe-id');
+        console.log(data);
+        var rendered = Mustache.render(template, data);
+        $('#EditModal').html(rendered).promise().done(function () {
+
+        });
+        $('#EditModal').modal('open');
+    });
+
+    $(document).on("click", ".edit-recipecomp", function (e) {
+        var recipeId= $(this).attr('data-recipe-id');
+        $.ajax({
+            type: "GET",
+            contentType: "application/json",
+            processData: false,
+            async: false,
+            context: recipeId,
+            crossDomain: true,
+            url: "./api/v1/recipecomp/"+$(this).attr('data-recipe-id')+'/'+$(this).attr('data-produce-id'),
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            success: function( response ) {
+                data = {};
+                data["recipecomponents"] = response;
+                data["recipeId"] = recipeId;
+                data["produceId"] = response.produceId;
+                template = $('#recipeComponentEditTemplate').html();
+                Mustache.parse(template);   // optional, speeds up future uses
+                var rendered = Mustache.render(template, data);
+                $('#EditModal').html(rendered).promise().done(function () {
+                    $('#EditModal').modal('open');
+                });
+                return response;
+            },
+            error: function ( msg ) {
+                console.log(msg);
+                Materialize.toast("Error in loading data!", 4000);
+            }
+        });
+    });
+
+    $(document).on("click", ".delete-recipecomp", function (e) {
+        var TargetId = $(this).attr('data-recipe-id');
+        $.ajax({
+            type: "DELETE",
+            contentType: "application/json",
+            processData: false,
+            context: TargetId,
+            async: false,
+            crossDomain: true,
+            url: "./api/v1/recipecomp/"+$(this).attr('data-recipe-id')+'/'+$(this).attr('data-produce-id'),
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            success: function( response ) {
+                console.log(TargetId);
+                $.ajax({
+                    context: TargetId,
+                    type: "GET",
+                    contentType: "application/json",
+                    processData: false,
+                    crossDomain: true,
+                    url: "./api/v1/recipecomp/list/"+TargetId,
+                    headers : {
+                        Authorization: Cookies.get("auth")
+                    },
+                    success: function( response ) {
+                        console.log(response);
+                        var template = $('#RecipeComponentsTemplate').html();
+                        var data = {};
+                        data['recipecomponents'] = response;
+                        Mustache.parse(template);   // optional, speeds up future uses
+                        var rendered = Mustache.render(template, data);
+
+                        $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
+                            console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
+                        });
+                    },
+                    error: function ( msg ) {
+                        console.log(msg);
+                        Materialize.toast("Error in loading data!", 4000);
+                    }
+                });
+                return response;
+            },
+            error: function ( msg ) {
+                console.log(msg);
+                Materialize.toast("Error in deleting recipe component!", 4000);
+            }
+        });
+    });
+
     $(document).on('click', '.modal-save-produce', function (e) {
         e.preventDefault();
         $('#EditModal').find('.preloader-wrapper').removeClass('hide');
@@ -132,6 +229,17 @@ $(document).ready(function () {
         var rendered = Mustache.render(template, {"role": "None", "admin": false});
         $('#EditModal').html(rendered).promise().done(function () {
             
+        });
+        $('#EditModal').modal('open');
+        Materialize.updateTextFields();
+    });
+
+    $(document).on("click", '.add-recipe', function (e) {
+        template = $('#recipeInsertTemplate').html();
+        Mustache.parse(template);   // optional, speeds up future uses
+        var rendered = Mustache.render(template);
+        $('#EditModal').html(rendered).promise().done(function () {
+
         });
         $('#EditModal').modal('open');
         Materialize.updateTextFields();
@@ -244,6 +352,9 @@ $(document).ready(function () {
             type: "PUT",
             contentType: "application/json",
             processData: false,
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
             data: JSON.stringify({
                 "oprId": $('#userEdit').find("#user_id").val(),
                 "oprName": $('#userEdit').find("#user_name").val(),
@@ -260,6 +371,64 @@ $(document).ready(function () {
             },
             error: function ( msg ) {
                 Materialize.toast("Unable to update user!", 4000);
+                $('#EditModal').modal('close');
+            }
+        });
+    });
+
+    $(document).on('click', '.modal-save-recipecomp', function (e) {
+        var TargetId = $('#recipeComponentEdit').attr('data-recipe-id');
+        e.preventDefault();
+        $.ajax({
+            type: "PUT",
+            context: TargetId,
+            contentType: "application/json",
+            processData: false,
+            data: JSON.stringify({
+                "produceId": $('#recipeComponentEdit').attr('data-produce-id'),
+                "recipeId": $('#recipeComponentEdit').attr('data-recipe-id'),
+                "nomNetto": $('#EditModal').find('#nom_netto').val(),
+                "tolerance": $('#EditModal').find('#tolerance').val()
+            }),
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            url: "./api/v1/recipecomp/",
+            success: function( msg ) {
+                console.log("Response: " + msg);
+                console.log(TargetId);
+                $.ajax({
+                    context: TargetId,
+                    type: "GET",
+                    contentType: "application/json",
+                    processData: false,
+                    crossDomain: true,
+                    url: "./api/v1/recipecomp/list/"+TargetId,
+                    headers : {
+                        Authorization: Cookies.get("auth")
+                    },
+                    success: function( response ) {
+                        console.log(response);
+                        var template = $('#RecipeComponentsTemplate').html();
+                        var data = {};
+                        data['recipecomponents'] = response;
+                        data['recipeId'] = TargetId;
+                        Mustache.parse(template);   // optional, speeds up future uses
+                        var rendered = Mustache.render(template, data);
+
+                        $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
+                            console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
+                        });
+                    },
+                    error: function ( msg ) {
+                        console.log(msg);
+                        Materialize.toast("Error in loading data!", 4000);
+                    }
+                });
+                $('#EditModal').modal('close');
+            },
+            error: function ( msg ) {
+                Materialize.toast("Unable to update recipe component!", 4000);
                 $('#EditModal').modal('close');
             }
         });
@@ -299,6 +468,96 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on('click', '.modal-add-recipe', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            context: $('#EditModal').find('#recipe_name').val(),
+            contentType: "application/json",
+            processData: false,
+            data: JSON.stringify({
+                "recipeName": $('#EditModal').find('#recipe_name').val()
+            }),
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            url: "./api/v1/recipe/",
+            success: function( msg ) {
+                console.log("Response: " + msg);
+                populateRecipeAdmin(true);
+                $('#EditModal').modal('close');
+            },
+            error: function ( msg ) {
+                Materialize.toast("Unable to update recipe component!", 4000);
+                $('#EditModal').modal('close');
+            }
+        });
+    });
+
+    $(document).on('click', '.modal-add-recipecomp', function (e) {
+        var TargetId = $('#recipeComponentAdd').attr('data-recipe-id');
+        e.preventDefault();
+        console.log({
+            "produceId": $('#EditModal').find('#produce_id').val(),
+            "recipeId": $('#recipeComponentAdd').attr('data-recipe-id'),
+            "nomNetto": $('#EditModal').find('#nom_netto').val(),
+            "tolerance": $('#EditModal').find('#tolerance').val()
+        });
+        $.ajax({
+            type: "POST",
+            context: TargetId,
+            contentType: "application/json",
+            processData: false,
+            data: JSON.stringify({
+                "produceId": $('#EditModal').find('#produce_id').val(),
+                "recipeId": $('#recipeComponentAdd').attr('data-recipe-id'),
+                "nomNetto": $('#EditModal').find('#nom_netto').val(),
+                "tolerance": $('#EditModal').find('#tolerance').val()
+            }),
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            url: "./api/v1/recipecomp/",
+            success: function( msg ) {
+                console.log("Response: " + msg);
+                console.log(TargetId);
+                $.ajax({
+                    context: TargetId,
+                    type: "GET",
+                    contentType: "application/json",
+                    processData: false,
+                    crossDomain: true,
+                    url: "./api/v1/recipecomp/list/"+TargetId,
+                    headers : {
+                        Authorization: Cookies.get("auth")
+                    },
+                    success: function( response ) {
+                        console.log(response);
+                        var template = $('#RecipeComponentsTemplate').html();
+                        var data = {};
+                        data['recipecomponents'] = response;
+                        data['recipeId'] = TargetId;
+                        Mustache.parse(template);   // optional, speeds up future uses
+                        var rendered = Mustache.render(template, data);
+
+                        $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
+                            console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
+                        });
+                    },
+                    error: function ( msg ) {
+                        console.log(msg);
+                        Materialize.toast("Error in loading data!", 4000);
+                    }
+                });
+                $('#EditModal').modal('close');
+            },
+            error: function ( msg ) {
+                Materialize.toast("Unable to update recipe component!", 4000);
+                $('#EditModal').modal('close');
+            }
+        });
+    });
+
     $(document).on('click', '.recipe.collapsible-header', function (e) {
         var TargetId = $(this).attr('data-id');
         $.ajax({
@@ -307,7 +566,7 @@ $(document).ready(function () {
             contentType: "application/json",
             processData: false,
             crossDomain: true,
-            url: "./api/v1/recipecomp/"+$(this).attr('data-id'),
+            url: "./api/v1/recipecomp/list/"+$(this).attr('data-id'),
             headers : {
                 Authorization: Cookies.get("auth")
             },
@@ -316,6 +575,7 @@ $(document).ready(function () {
                 var template = $('#RecipeComponentsTemplate').html();
                 var data = {};
                 data['recipecomponents'] = response;
+                data['recipeId'] = TargetId;
                 Mustache.parse(template);   // optional, speeds up future uses
                 var rendered = Mustache.render(template, data);
 
@@ -507,7 +767,7 @@ function populateRecipeAdmin(notice){
                         contentType: "application/json",
                         processData: false,
                         crossDomain: true,
-                        url: "./api/v1/recipecomp/"+$(this).attr('data-id'),
+                        url: "./api/v1/recipecomp/list/"+$(this).attr('data-id'),
                         headers : {
                             Authorization: Cookies.get("auth")
                         },

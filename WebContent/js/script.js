@@ -103,7 +103,6 @@ $(document).ready(function () {
         });
     });
 
-
     $(document).on('click', '.modal-save-produce', function (e) {
         e.preventDefault();
         $('#EditModal').find('.preloader-wrapper').removeClass('hide');

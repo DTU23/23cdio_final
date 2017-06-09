@@ -11,6 +11,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import dk.dtu.control.IWebInterfaceController;
+import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.ValidationException;
@@ -25,12 +27,13 @@ public class ProduceBatchService {
 
 	// This class implements the methods from MySQLProduceBatchDAO
 	private ProduceBatchDAO dao = new MySQLProduceBatchDAO();
+	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
 	@Path("/{id};{amount}")
 	@Secured( roles = { Role.Foreman })
-	public void createProduceBatch(@PathParam("id") int produce_id, @PathParam("amount") double amount) throws DALException {
-		dao.createProduceBatch(produce_id, amount);
+	public void createProduceBatch(@PathParam("id") int produce_id, @PathParam("amount") double amount) throws DALException, ValidationException {
+		controller.createProduceBatchValidation(produce_id, amount);
 	}
 	
 	@GET
@@ -42,8 +45,8 @@ public class ProduceBatchService {
 	
 	@PUT
 	@Secured( roles = { Role.Foreman })
-	public void updateProduceBatch(ProduceBatchDTO produceBatch) throws DALException {
-		dao.updateProduceBatch(produceBatch.getProduceId(), produceBatch.getAmount());
+	public void updateProduceBatch(ProduceBatchDTO produceBatch) throws DALException, ValidationException {
+		controller.updateProduceBatchValidation(produceBatch);
 	}
 	
 	@DELETE

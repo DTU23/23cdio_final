@@ -370,7 +370,7 @@ function populateProduceBatchAdmin(notice) {
             Mustache.parse(template);   // optional, speeds up future uses
             var rendered = Mustache.render(template, data);
 
-            $('#ProduceBatchAdminSubTab').html(rendered).promise().done(function () {
+            $('#ProduceBatchAdminSubTab>div.left').html(rendered).promise().done(function () {
 
             });
         },
@@ -400,6 +400,34 @@ function populateProduceAdmin(notice) {
             var rendered = Mustache.render(template, data);
 
             $('#ProduceAdminSubTab').html(rendered).promise().done(function () {
+
+            });
+        },
+        error: function ( msg ) {
+            console.log(msg);
+            if(notice){
+                Materialize.toast("Error in loading data!", 4000);
+            }
+        }
+    });
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        processData: false,
+        crossDomain: true,
+        url: "./api/v1/produce/stock",
+        headers : {
+            Authorization: Cookies.get("auth")
+        },
+        success: function( response ) {
+            console.log(response);
+            var template = $('#ProduceBatchStockAdministrationTemplate').html();
+            var data = {};
+            data['produce'] = response;
+            Mustache.parse(template);   // optional, speeds up future uses
+            var rendered = Mustache.render(template, data);
+
+            $('#ProduceAdminSubTab>div.right').html(rendered).promise().done(function () {
 
             });
         },

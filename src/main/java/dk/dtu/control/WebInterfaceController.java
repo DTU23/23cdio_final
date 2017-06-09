@@ -1,6 +1,8 @@
 package dk.dtu.control;
 
-import javax.validation.Valid;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import dk.dtu.model.Validation;
 import dk.dtu.model.ValidationException;
@@ -33,7 +35,11 @@ public class WebInterfaceController implements IWebInterfaceController {
 		Validation.isValidInitials(opr.getIni());
 		Validation.isValidCpr(opr.getCpr());
 		Validation.isValidRole(opr.getRole());
-		//TODO MANGLER PASSWORD GENERERING - SKAL RETURNERES (METODEN SKAL LIGGE SOM HJÆLPEMETODE, CDIO1)
+		String generatedPassword;
+		do {
+			generatedPassword = generatePassword(10);
+		} while (!isValidPassword(generatedPassword));
+		opr.setPassword(generatedPassword);
 		OperatorDAO dao = new MySQLOperatorDAO();
 		dao.createOperator(opr);
 	}
@@ -137,6 +143,42 @@ public class WebInterfaceController implements IWebInterfaceController {
 		Validation.isValidUserName(recipe.getRecipeName());
 		RecipeDAO dao = new MySQLRecipeDAO();
 		dao.updateRecipe(recipe);
+	}
+	
+	/**
+	 * Method taken from CDIO2.1
+	 * Generates a random password with listed characters and symbols
+	 * @param length - how many characters should the password be
+	 * @return String
+	 */
+	private String generatePassword(int length){
+		String charactersCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String characters = "abcdefghijklmnopqrstuvwxyz";
+		String numbers = "0123456789";
+		String symbols = "!@#$&*";
+		String passwordCharacters = charactersCaps + characters + numbers + symbols;
+		Random rnd = new Random();
+		char[] password = new char[length];
+		for (int i = 0; i < length; i++) {
+			password[i] = passwordCharacters.charAt(rnd.nextInt(passwordCharacters.length()));
+		}
+		return new String(password);
+	}
+	
+	/**
+	 * Method taken from CDIO2.1
+	 * Method can validate if a chosen password is allowed or not, based on the following requirements:
+	 * Minimum 2 symbols
+	 * Minimum 2 upper case characters
+	 * Minimum 2 lower case characters
+	 * @param password
+	 * @return true if the password is valid.
+	 */
+	private boolean isValidPassword(String password) {
+		//(?!.*" + hashMap.get("userName").toString()+")
+		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
+		Matcher m = p.matcher(password);
+		return m.matches();
 	}
 
 }

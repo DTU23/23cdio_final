@@ -12,8 +12,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import dk.dtu.control.IWebInterfaceController;
+import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
+import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLRecipeCompDAO;
 import dk.dtu.model.dto.RecipeCompDTO;
 import dk.dtu.model.interfaces.DALException;
@@ -26,11 +29,12 @@ public class RecipeCompService {
 
 	// This class implements the methods from MySQLRecipeCompDAO
 	private RecipeCompDAO dao = new MySQLRecipeCompDAO();
+	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
 	@Secured( roles = { Role.Pharmacist })
-	public void createRecipeComp(RecipeCompDTO recipeComp) throws DALException {
-		dao.createRecipeComp(recipeComp);
+	public void createRecipeComp(RecipeCompDTO recipeComp) throws DALException, ValidationException {
+		controller.createRecipeCompValidation(recipeComp);
 	}
 	
 	@GET
@@ -42,8 +46,8 @@ public class RecipeCompService {
 	
 	@PUT
 	@Secured( roles = { Role.Pharmacist })
-	public void updateRecipeComp(RecipeCompDTO recipeComp) throws DALException {
-		dao.updateRecipeComp(recipeComp);
+	public void updateRecipeComp(RecipeCompDTO recipeComp) throws DALException, ValidationException {
+		controller.updateRecipeCompValidation(recipeComp);
 	}
 	
 	@DELETE

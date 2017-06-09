@@ -1,6 +1,7 @@
 package dk.dtu.model.data.dao;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -100,12 +101,12 @@ public class MySQLProduceDAOTest {
 	public void testCreateProduce() throws Exception {
 		// The ID doesn't affect anything when creating, because it will be auto generated
 		ProduceDTO expected = new ProduceDTO(8, "smør", "Kærgården"); 
-		ProduceDTO actual = null;
+		int ListLengthPre = produce.getProduceList().size();
 
 		produce.createProduce(expected);
-		actual = produce.readProduce(8);
+		int ListLengthPost = produce.getProduceList().size();
 
-		assertThat(actual.toString(), is(expected.toString()));
+		assertThat(ListLengthPost, is(not(ListLengthPre)));
 	}
 
 	/**
@@ -140,7 +141,7 @@ public class MySQLProduceDAOTest {
 		System.out.println();
 		
 		assertThat(produceOverview, notNullValue());
-		assertThat(produceOverview.get(0).toString(), is(produceOverviewDTO.toString()));
+		assertThat(produceOverview.get(6).toString(), is(produceOverviewDTO.toString()));
 	}
 
 }

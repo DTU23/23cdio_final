@@ -46,7 +46,7 @@ public class Validation {
 		}
 	}
 
-	public static void isPositiveDouble(int input) throws ValidationException {
+	public static void isPositiveDouble(double input) throws ValidationException {
 		if (input <= 0) {
 			throw new ValidationException("Input is not a positive number");
 		}
@@ -87,6 +87,13 @@ public class Validation {
 		isPositiveInteger(ID);
 		int i = Integer.parseInt(ID);
 		if(i > 99999999) {
+			throw new ValidationException("ID out of bounds.");
+		}
+	}
+	
+	public static void isValidID(int ID) throws ValidationException {
+		isPositiveInteger(ID);
+		if(ID > 99999999) {
 			throw new ValidationException("ID out of bounds.");
 		}
 	}

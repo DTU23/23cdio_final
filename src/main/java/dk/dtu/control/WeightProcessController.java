@@ -15,7 +15,6 @@ import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dao.MySQLRecipeDAO;
 import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
-import dk.dtu.model.dto.ProductBatchListDTO;
 import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.OperatorDAO;
@@ -75,7 +74,7 @@ public class WeightProcessController implements IWeightProcessController {
 			String productBatchNumber = null;
 			List<RecipeListDTO> recipeList = null; // The theoretical recipe. List of the all the produces, which are supposed to be in the recipe. 
 			List<ProductBatchCompOverviewDTO> productBatchCompOverviewList = null; // The actual product batch. List of the actual already weighed produces. 
-			ProductBatchListDTO productBatchRequest = null;
+			ProductBatchCompOverviewDTO productBatchRequest = null;
 
 			loginLoop: while(true) {
 				// Get operator identification number and validate it

@@ -9,6 +9,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 
+import dk.dtu.model.Validation;
+import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.interfaces.DALException;
@@ -31,6 +33,12 @@ public class LoginController implements ILoginController {
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
+	}
+
+	@Override
+	public void authenticateUser(String oprId, String password) throws ValidationException, AuthException, DALException {
+		Validation.isPositiveInteger(oprId);
+		passwordCheck(Integer.parseInt(oprId), password);
 	}
 
 	private void passwordCheck(int oprId, String password) throws AuthException, DALException {

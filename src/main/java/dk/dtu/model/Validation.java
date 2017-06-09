@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import dk.dtu.control.api.Role;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.interfaces.DALException;
@@ -166,15 +167,10 @@ public class Validation {
 	 * @throws ValidationException
 	 */
 	public static void isValidRole(String role) throws ValidationException {
-		ArrayList<String> validRoles = new ArrayList<>();
-		validRoles.add("pharmacist");
-		validRoles.add("foreman");
-		validRoles.add("operator");
-		validRoles.add("none");
-		role = role.toLowerCase();
-		// if its a valid role
-		if (!validRoles.contains(role)) {
-			throw new ValidationException("Not a valid role");
+		for (Role validrole : Role.values()) {
+			if (!validrole.name().equals(role)) {
+				throw new ValidationException("Not a valid role");
+			}
 		}
 	}
 }

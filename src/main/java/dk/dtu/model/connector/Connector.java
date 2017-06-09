@@ -17,11 +17,16 @@ public final class Connector
 
 	private Connector() {}
 
-	public static synchronized Connector getInstance() {
+	public static synchronized Connector getInstance() throws DALException{
 		if (instance == null) {
 			synchronized(Connector.class) {
 				if (instance == null) {
 					instance = new Connector();
+					try {
+						Class.forName("com.mysql.jdbc.Driver").newInstance();
+					} catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+						throw new DALException(e);
+					}
 				}
 			}
 		}
@@ -30,9 +35,8 @@ public final class Connector
 
 	public void connectToDatabase(String server, int port, String database, String username, String password) throws DALException {
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			connection = (Connection) DriverManager.getConnection("jdbc:mysql://"+server+":"+port+"/"+database+"?verifyServerCertificate=false&useSSL=true", username, password);
-		} catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+		} catch (SQLException e) {
 			throw new DALException(e);
 		}
 	}

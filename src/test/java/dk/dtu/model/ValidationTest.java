@@ -25,11 +25,6 @@ public class ValidationTest {
 	}
 
 	@Test
-	public void testAuthenticateUser() throws ValidationException {
-		Validation.authenticateUser("admin", "root");
-	}
-
-	@Test
 	public void testIsValidID() throws ValidationException {
 		Validation.isValidID("6755");
 	}

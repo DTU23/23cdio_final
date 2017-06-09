@@ -1,8 +1,6 @@
 package dk.dtu.control;
 
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import dk.dtu.model.Validation;
 import dk.dtu.model.ValidationException;
@@ -36,9 +34,13 @@ public class WebInterfaceController implements IWebInterfaceController {
 		Validation.isValidCpr(opr.getCpr());
 		Validation.isValidRole(opr.getRole());
 		String generatedPassword;
-		do {
-			generatedPassword = generatePassword(10);
-		} while (!isValidPassword(generatedPassword));
+		while(true) {
+			try {
+			generatedPassword = generatePassword(7);
+			Validation.isValidPassword(generatedPassword);
+			break;
+			} catch (ValidationException e) {}
+		}
 		opr.setPassword(generatedPassword);
 		OperatorDAO dao = new MySQLOperatorDAO();
 		dao.createOperator(opr);
@@ -154,8 +156,7 @@ public class WebInterfaceController implements IWebInterfaceController {
 		String charactersCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		String characters = "abcdefghijklmnopqrstuvwxyz";
 		String numbers = "0123456789";
-		String symbols = "!@#$&*";
-		String passwordCharacters = charactersCaps + characters + numbers + symbols;
+		String passwordCharacters = charactersCaps + characters + numbers;
 		Random rnd = new Random();
 		char[] password = new char[length];
 		for (int i = 0; i < length; i++) {
@@ -163,21 +164,4 @@ public class WebInterfaceController implements IWebInterfaceController {
 		}
 		return new String(password);
 	}
-	
-	/**
-	 * Method taken from CDIO2.1
-	 * Method can validate if a chosen password is allowed or not, based on the following requirements:
-	 * Minimum 2 symbols
-	 * Minimum 2 upper case characters
-	 * Minimum 2 lower case characters
-	 * @param password
-	 * @return true if the password is valid.
-	 */
-	private boolean isValidPassword(String password) {
-		//(?!.*" + hashMap.get("userName").toString()+")
-		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
-		Matcher m = p.matcher(password);
-		return m.matches();
-	}
-
 }

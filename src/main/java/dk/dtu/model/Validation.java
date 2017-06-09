@@ -7,35 +7,41 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dk.dtu.control.api.Role;
-import dk.dtu.model.dao.MySQLOperatorDAO;
-import dk.dtu.model.dto.OperatorDTO;
-import dk.dtu.model.interfaces.DALException;
-import dk.dtu.model.interfaces.OperatorDAO;
 
 public class Validation {
 
 	/**
-	 * Method to validate if an input is a positive number.
+	 * Method to validate if an input is a positive integer.
 	 * @param input
-	 * @return true if the input i a positive number
+	 * @throws ValidationException
 	 */
 	public static void isPositiveInteger(String input) throws ValidationException {
 		try {
 			long i = Long.parseLong(input);
 			if (i <= 0) {
-				throw new ValidationException("Input is not a positive number");
+				throw new ValidationException("Input is not a positive integer");
 			}
 		} catch (NumberFormatException e) {
 			throw new ValidationException("Input is not an integer");
 		}
 	}
 
+	/**
+	 * Method to validate if an input is a positive integer.
+	 * @param input
+	 * @throws ValidationException
+	 */
 	public static void isPositiveInteger(int input) throws ValidationException {
 		if (input <= 0) {
-			throw new ValidationException("Input is not a positive number");
+			throw new ValidationException("Input is not a positive integer");
 		}
 	}
 
+	/**
+	 * Method to validate if an input is a positive number.
+	 * @param input
+	 * @throws ValidationException
+	 */
 	public static void isPositiveDouble(String input) throws ValidationException {
 		try {
 			double i = Double.parseDouble(input);
@@ -47,6 +53,11 @@ public class Validation {
 		}
 	}
 
+	/**
+	 * Method to validate if an input is a positive number.
+	 * @param input
+	 * @throws ValidationException
+	 */
 	public static void isPositiveDouble(double input) throws ValidationException {
 		if (input <= 0) {
 			throw new ValidationException("Input is not a positive number");
@@ -64,22 +75,6 @@ public class Validation {
 	}
 
 	/**
-	 * Method authenticate user login credentials.
-	 * @param ID
-	 * @param password
-	 * @throws ValidationException
-	 */
-	public static void authenticateUser(String ID, String password) throws ValidationException, DALException {
-		OperatorDAO dao = new MySQLOperatorDAO();
-		isPositiveInteger(ID);
-		OperatorDTO opr = dao.readOperator(Integer.parseInt(ID));
-		if(opr.getPassword() != password) {
-			// ved godt det er dårlig praksis at oplyse, men nu er dette bare et skoleprojekt hvor vi gerne vil vide hvor eventulle problemer opstår.
-			throw new ValidationException("Incorrect password.");
-		}
-	}
-
-	/**
 	 * Method to validate if an ID is a valid choice.
 	 * @param ID
 	 * @throws ValidationException
@@ -92,6 +87,11 @@ public class Validation {
 		}
 	}
 	
+	/**
+	 * Method to validate if an ID is a valid choice.
+	 * @param ID
+	 * @throws ValidationException
+	 */
 	public static void isValidID(int ID) throws ValidationException {
 		isPositiveInteger(ID);
 		if(ID > 99999999) {
@@ -174,21 +174,18 @@ public class Validation {
 
 	/**
 	 * Method can validate if a chosen password is allowed or not, based on the following requirements:
-	 * minimum 2 symbols
 	 * minimum 2 upper case characters
 	 * minimum 2 lower case characters
-	 * (user name not present in password string)
+	 * minimum 1 number
 	 * @param password
 	 * @throws ValidationException
 	 */
 	public static void isValidPassword(String password) throws ValidationException {
-		//(?!.*" + hashMap.get("userName").toString()+")
-		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
+		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?=.*[0-9])(?=.*[a-z].*[a-z]).{7,}$");
 		Matcher m = p.matcher(password);
 		if(!m.matches()) {
 			throw new ValidationException("Not a valid password");
 		}
-		//TODO styr på denne matcher
 	}
 
 	/**
@@ -197,10 +194,13 @@ public class Validation {
 	 * @throws ValidationException
 	 */
 	public static void isValidRole(String role) throws ValidationException {
+		ArrayList<String> validRoles = new ArrayList<>();
 		for (Role validrole : Role.values()) {
-			if (!validrole.name().equals(role)) {
-				throw new ValidationException("Not a valid role");
-			}
+			validRoles.add(validrole.toString().toLowerCase());
+		}
+		// if its a valid role
+		if (!validRoles.contains(role.toLowerCase())) {
+			throw new ValidationException("Not a valid role");
 		}
 	}
 }

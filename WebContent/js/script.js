@@ -55,17 +55,14 @@ $(document).ready(function () {
             type: "DELETE",
             contentType: "application/json",
             processData: false,
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
             data: JSON.stringify({}),
             url: "./api/v1/operator/"+row.children(".id").text(),
             success: function( response ) {
-                if(response){
-                    Materialize.toast("User with ID: "+ row.children(".id").text() +" was deleted!", 4000);
-                    row.fadeOut("slow", function () {
-                        row.remove();
-                    });
-                }else{
-                    Materialize.toast("Unable to delete user!", 4000);
-                }
+                Materialize.toast("User with ID: "+ row.children(".id").text() +" was deleted!", 4000);
+                populateUsersAdmin(false);
             },
             error: function ( msg ) {
                 Materialize.toast("Unable to delete user!", 4000);

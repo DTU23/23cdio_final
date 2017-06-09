@@ -15,9 +15,9 @@ import dk.dtu.model.interfaces.OperatorDAO;
 public class Validation {
 
 	/**
-	 * Method to validate if an input is a positive integer.
+	 * Method to validate if an input is a positive number.
 	 * @param input
-	 * @return true if the input i a positive integer
+	 * @return true if the input i a positive number
 	 */
 	public static void isPositiveInteger(String input) throws ValidationException {
 		try {
@@ -26,7 +26,30 @@ public class Validation {
 				throw new ValidationException("Input is not a positive number");
 			}
 		} catch (NumberFormatException e) {
-			throw new ValidationException("Input is not an integer.");
+			throw new ValidationException("Input is not an integer");
+		}
+	}
+
+	public static void isPositiveInteger(int input) throws ValidationException {
+		if (input <= 0) {
+			throw new ValidationException("Input is not a positive number");
+		}
+	}
+
+	public static void isPositiveDouble(String input) throws ValidationException {
+		try {
+			double i = Double.parseDouble(input);
+			if (i <= 0) {
+				throw new ValidationException("Input is not a positive number");
+			}
+		} catch (NumberFormatException e) {
+			throw new ValidationException("Input is not a double");
+		}
+	}
+
+	public static void isPositiveDouble(double input) throws ValidationException {
+		if (input <= 0) {
+			throw new ValidationException("Input is not a positive number");
 		}
 	}
 
@@ -65,6 +88,13 @@ public class Validation {
 		isPositiveInteger(ID);
 		int i = Integer.parseInt(ID);
 		if(i > 99999999) {
+			throw new ValidationException("ID out of bounds.");
+		}
+	}
+	
+	public static void isValidID(int ID) throws ValidationException {
+		isPositiveInteger(ID);
+		if(ID > 99999999) {
 			throw new ValidationException("ID out of bounds.");
 		}
 	}

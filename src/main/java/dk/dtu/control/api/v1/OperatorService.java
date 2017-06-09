@@ -12,6 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import dk.dtu.control.IWebInterfaceController;
+import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
 import dk.dtu.model.ValidationException;
@@ -29,10 +31,11 @@ public class OperatorService {
 
 	// This class implements the methods from MySQLOperatorDAO
 	private OperatorDAO dao = new MySQLOperatorDAO();
+	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
-	public void createOperator(OperatorDTO opr) throws DALException {
-		dao.createOperator(opr);
+	public void createOperator(OperatorDTO opr) throws DALException, ValidationException {
+		controller.createOperatorValidation(opr);
 	}
 
 	@GET
@@ -43,8 +46,8 @@ public class OperatorService {
 	}
 
 	@PUT
-	public void updateOperator(OperatorDTO opr) throws DALException {
-		dao.updateOperator(opr);
+	public void updateOperator(OperatorDTO opr) throws DALException, ValidationException {
+		controller.updateOperatorValidation(opr);
 	}
 
 	@DELETE

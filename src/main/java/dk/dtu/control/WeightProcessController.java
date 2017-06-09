@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import dk.dtu.control.IWeightProcessController;
 import dk.dtu.control.api.v1.AdaptorException;
 import dk.dtu.control.api.v1.IWeightAdaptor;
 import dk.dtu.control.api.v1.WeightAdaptor;
 import dk.dtu.model.Validation;
-import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dao.MySQLProduceBatchDAO;
 import dk.dtu.model.dao.MySQLProductBatchCompDAO;
@@ -48,8 +46,6 @@ public class WeightProcessController implements IWeightProcessController {
 	@Override
 	public void run() {
 		try {
-			// TODO Kig på database forbindelse!!!
-			new Connector();
 			operatorDAO = new MySQLOperatorDAO();
 			productBatchDAO = new MySQLProductBatchDAO();
 			produceBatchDAO = new MySQLProduceBatchDAO();

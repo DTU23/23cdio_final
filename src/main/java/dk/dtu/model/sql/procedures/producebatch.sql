@@ -45,6 +45,14 @@ DELIMITER ;
 /**
 Produce_batch related
  */
+DELIMITER //
+CREATE PROCEDURE read_produce_batch_list(IN input_rb_id INT)
+BEGIN
+  SELECT *
+  FROM produce_batch_list
+  WHERE produce_batch_list.rb_id = input_rb_id;
+END //
+DELIMITER ;
 
 /**
 Q2 - Shows the amount of specified produce_name that is in stock.

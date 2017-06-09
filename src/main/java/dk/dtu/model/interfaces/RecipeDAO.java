@@ -6,7 +6,7 @@ import dk.dtu.model.dto.RecipeDTO;
 import dk.dtu.model.dto.RecipeListDTO;
 
 public interface RecipeDAO {
-	void createRecipe(RecipeDTO recipe) throws DALException;
+	void createRecipe(String recipeName) throws DALException;
 	RecipeDTO readRecipe(int receptId) throws DALException;
 	void updateRecipe(RecipeDTO recipe) throws DALException;
 	void deleteRecipe(int receptId) throws DALException;

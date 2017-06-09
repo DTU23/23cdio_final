@@ -13,10 +13,10 @@ DROP PROCEDURE IF EXISTS get_involved_operator;
 Product_batch CRUD
  */
 DELIMITER //
-CREATE PROCEDURE create_product_batch(IN recipe_id_input INT)
+CREATE PROCEDURE create_product_batch(IN input_recipe_id INT)
 BEGIN
-  INSERT INTO productbatch(productbatch.status, recipe_id)
-  VALUES(0, recipe_id_input);
+  INSERT INTO productbatch(recipe_id, productbatch.status)
+  VALUES(input_recipe_id, 0);
 END //
 DELIMITER ;
 
@@ -30,10 +30,10 @@ END //
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE update_product_batch(IN input_pb_id INT, IN input_status INT)
+CREATE PROCEDURE update_product_batch(IN input_pb_id INT, IN input_recipe_id INT, IN input_status INT)
 BEGIN
   UPDATE productbatch
-  SET productbatch.status = input_status
+  SET productbatch.recipe_id = input_recipe_id, productbatch.status = input_status
   WHERE productbatch.pb_id = input_pb_id;
 END //
 DELIMITER ;

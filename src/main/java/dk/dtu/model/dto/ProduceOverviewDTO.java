@@ -1,43 +1,57 @@
 package dk.dtu.model.dto;
 
-/**
- * Produce Data Objekt
- * 
- * @author mn/sh/tb
- * @version 1.2
- */
 public class ProduceOverviewDTO
 {
     private int produceId;
     private String produceName;
+    private String supplier;
     private double amount;
+    
+    public ProduceOverviewDTO(){}
 
-	public ProduceOverviewDTO(int produceId, String produceName, double amount)
+	public ProduceOverviewDTO(int produceId, String produceName, String supplier, double amount)
 	{
 		this.produceId = produceId;
 		this.produceName = produceName;
+		this.supplier = supplier;
 		this.amount = amount;
 	}
 
-    public int getProduceId() {
-	    return produceId;
+	public int getProduceId() {
+		return produceId;
 	}
-    public void setProduceId(int produceId) {
-	    this.produceId = produceId;
+
+	public void setProduceId(int produceId) {
+		this.produceId = produceId;
 	}
-    public String getProduceName() {
-	    return this.produceName;
+
+	public String getProduceName() {
+		return produceName;
 	}
-    public void setProduceName(String produceName) {
-	    this.produceName = produceName;
+
+	public void setProduceName(String produceName) {
+		this.produceName = produceName;
 	}
-    public double getAmount() {
-	    return this.amount;
+	
+	public String getSupplier() {
+		return supplier;
 	}
-    public void setAmount(double amount) {
-	    this.amount = amount;
+
+	public void setSupplier(String supplier) {
+		this.supplier = supplier;
 	}
-    public String toString() { 
-		return this.produceId + "\t" + this.produceName +"\t" + this.amount;
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+
+	@Override
+	public String toString() {
+		return "ProduceOverviewDTO [produceId=" + produceId + ", produceName=" + produceName + ", supplier=" + supplier
+				+ ", amount=" + amount + "]";
 	}
 }

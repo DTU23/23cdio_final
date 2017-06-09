@@ -24,14 +24,13 @@ public class MySQLRecipeCompDaoTest {
 
 	@Before
 	public void setUp() throws Exception {
-		new Connector();
-		Connector.resetData();
+		Connector.getInstance().resetData();
 		recipeComp = new MySQLRecipeCompDAO();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		Connector.resetData();
+		Connector.getInstance().resetData();
 		recipeComp = null;
 	}
 
@@ -70,7 +69,7 @@ public class MySQLRecipeCompDaoTest {
 	public void positiveGetListRecipeCompWithID() {
 		List<RecipeCompDTO> actual = null;
 		try {
-			actual = recipeComp.getRecipeCompList(1);
+			actual = recipeComp.getRecipeCompByRecipeId(1);
 			
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(actual.get(1).getRecipeId(), not(nullValue()));
@@ -87,7 +86,7 @@ public class MySQLRecipeCompDaoTest {
 	public void positiveGetListRecipeComp() {
 		List<RecipeCompDTO> actual = null;
 		try {
-			actual = recipeComp.getWholeRecipeCompList();
+			actual = recipeComp.getRecipeCompList();
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(actual.get(0).getRecipeId(), notNullValue());
 		assertThat(actual.get(0).getProduceId(), notNullValue());

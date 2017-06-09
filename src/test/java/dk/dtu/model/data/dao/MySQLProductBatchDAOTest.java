@@ -16,20 +16,20 @@ import org.junit.Test;
 import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dto.ProductBatchDTO;
+import dk.dtu.model.dto.ProductBatchListDTO;
 import dk.dtu.model.interfaces.DALException;
 
 public class MySQLProductBatchDAOTest {
     private MySQLProductBatchDAO pbdao;
     @Before
     public void setUp() throws Exception {
-        new Connector();
-        Connector.resetData();
+    	Connector.getInstance().resetData();
         pbdao = new MySQLProductBatchDAO();
     }
 
     @After
     public void tearDown() throws Exception {
-        Connector.resetData();
+    	Connector.getInstance().resetData();
         pbdao = null;
     }
 
@@ -51,7 +51,7 @@ public class MySQLProductBatchDAOTest {
      */
     @Test
     public void getProductBatchList() throws Exception {
-        List<ProductBatchDTO> list;
+        List<ProductBatchListDTO> list;
         list = pbdao.getProductBatchList();
         assertThat(list, notNullValue());
     }
@@ -90,7 +90,7 @@ public class MySQLProductBatchDAOTest {
         ProductBatchDTO afterEdit = pbdao.readProductBatch(1);
         afterEdit.setStatus(0);
 
-        pbdao.updateProductBatchStatus(afterEdit);
+        pbdao.updateProductBatch(afterEdit);
 
         assertThat(afterEdit.toString(), is(equalTo(pbdao.readProductBatch(1).toString())));
         assertThat(beforeEdit.toString(), is(not(equalTo(pbdao.readProductBatch(1).toString()))));
@@ -106,7 +106,7 @@ public class MySQLProductBatchDAOTest {
         ProductBatchDTO afterEdit = pbdao.readProductBatch(1);
         afterEdit.setStatus(-1);
 
-        pbdao.updateProductBatchStatus(afterEdit);
+        pbdao.updateProductBatch(afterEdit);
 
         assertThat(afterEdit.toString(), is(not(equalTo(pbdao.readProductBatch(1).toString()))));
         assertThat(beforeEdit.toString(), is(equalTo(pbdao.readProductBatch(1).toString())));

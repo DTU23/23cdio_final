@@ -130,11 +130,10 @@ public class WebInterfaceController implements IWebInterfaceController {
 	}
 
 	@Override
-	public void createRecipeValidation(RecipeDTO recipe) throws DALException, ValidationException {
-		Validation.isPositiveInteger(recipe.getRecipeId());
-		Validation.isValidUserName(recipe.getRecipeName());
+	public void createRecipeValidation(String recipeName) throws DALException, ValidationException {
+		Validation.isValidUserName(recipeName);
 		RecipeDAO dao = new MySQLRecipeDAO();
-		dao.createRecipe(recipe.getRecipeName());
+		dao.createRecipe(recipeName);
 	}
 
 	@Override

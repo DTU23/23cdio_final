@@ -35,8 +35,8 @@ public class RecipeService {
 	
 	@POST
 	@Secured( roles = { Role.Pharmacist })
-	public void createRecipe(RecipeDTO recipe) throws DALException, ValidationException {
-		controller.createRecipeValidation(recipe);
+	public void createRecipe(String recipeName) throws DALException, ValidationException {
+		controller.createRecipeValidation(recipeName);
 	}
 	
 	@GET

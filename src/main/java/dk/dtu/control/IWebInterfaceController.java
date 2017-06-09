@@ -27,7 +27,7 @@ public interface IWebInterfaceController {
 	void createRecipeCompValidation(RecipeCompDTO recipeComp) throws DALException, ValidationException;
 	void updateRecipeCompValidation(RecipeCompDTO recipeComp) throws DALException, ValidationException;
 	// Recipe
-	void createRecipeValidation(RecipeDTO recipe) throws DALException, ValidationException;
+	void createRecipeValidation(String recipeName) throws DALException, ValidationException;
 	void updateRecipeValidation(RecipeDTO recipe) throws DALException, ValidationException;
 	
 }

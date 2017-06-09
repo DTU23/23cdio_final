@@ -15,6 +15,7 @@ import dk.dtu.control.IWebInterfaceController;
 import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
+import dk.dtu.model.Validation;
 import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLProduceBatchDAO;
 import dk.dtu.model.dto.ProduceBatchDTO;
@@ -32,15 +33,16 @@ public class ProduceBatchService {
 	@POST
 	@Path("/{id};{amount}")
 	@Secured( roles = { Role.Foreman })
-	public void createProduceBatch(@PathParam("id") int produce_id, @PathParam("amount") double amount) throws DALException, ValidationException {
-		controller.createProduceBatchValidation(produce_id, amount);
+	public void createProduceBatch(@PathParam("id") int produceId, @PathParam("amount") double amount) throws DALException, ValidationException {
+		controller.createProduceBatchValidation(produceId, amount);
 	}
 	
 	@GET
 	@Path("/{id}")
 	@Secured( roles = { Role.Foreman })
-	public ProduceBatchDTO getProduceBatch(@PathParam("id") int pb_id) throws ValidationException, DALException {
-		return dao.readProduceBatch(pb_id);
+	public ProduceBatchDTO getProduceBatch(@PathParam("id") int pbId) throws ValidationException, DALException {
+		Validation.isPositiveInteger(pbId);
+		return dao.readProduceBatch(pbId);
 	}
 	
 	@PUT
@@ -51,7 +53,8 @@ public class ProduceBatchService {
 	
 	@DELETE
 	@Secured( roles = { Role.Foreman })
-	public void deleteProduceBatch(int rbId) throws DALException {
+	public void deleteProduceBatch(int rbId) throws DALException, ValidationException {
+		Validation.isPositiveInteger(rbId);
 		dao.deleteProduceBatch(rbId);
 	}
 	

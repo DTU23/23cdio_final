@@ -16,6 +16,7 @@ import dk.dtu.control.IWebInterfaceController;
 import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
+import dk.dtu.model.Validation;
 import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLProduceDAO;
 import dk.dtu.model.dto.ProduceDTO;
@@ -41,8 +42,9 @@ public class ProduceService {
 	@GET
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public ProduceDTO getProduce(@PathParam("id") int produce_id) throws DALException {
-		return dao.readProduce(produce_id);
+	public ProduceDTO getProduce(@PathParam("id") int produceId) throws DALException, ValidationException {
+		Validation.isPositiveInteger(produceId);
+		return dao.readProduce(produceId);
 	}
 	
 	@PUT
@@ -54,8 +56,9 @@ public class ProduceService {
 	@DELETE
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public void deleteProduce(@PathParam("id") int produce_id) throws DALException {
-		dao.deleteProduce(produce_id);
+	public void deleteProduce(@PathParam("id") int produceId) throws DALException, ValidationException {
+		Validation.isPositiveInteger(produceId);
+		dao.deleteProduce(produceId);
 	}
 
 	@GET

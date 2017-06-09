@@ -16,6 +16,7 @@ import dk.dtu.control.IWebInterfaceController;
 import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
+import dk.dtu.model.Validation;
 import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLRecipeDAO;
 import dk.dtu.model.dto.RecipeDTO;
@@ -41,7 +42,8 @@ public class RecipeService {
 	@GET
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public RecipeDTO getRecipe(@PathParam("id") int recipeId) throws DALException {
+	public RecipeDTO getRecipe(@PathParam("id") int recipeId) throws DALException, ValidationException {
+		Validation.isPositiveInteger(recipeId);
 		return dao.readRecipe(recipeId);
 	}
 	
@@ -54,7 +56,8 @@ public class RecipeService {
 	@DELETE
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public void deleteRecipe(@PathParam("id") int recipeId) throws DALException {
+	public void deleteRecipe(@PathParam("id") int recipeId) throws DALException, ValidationException {
+		Validation.isPositiveInteger(recipeId);
 		dao.deleteRecipe(recipeId);
 	}
 

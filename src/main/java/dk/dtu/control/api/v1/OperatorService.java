@@ -52,14 +52,9 @@ public class OperatorService {
 
 	@DELETE
 	@Path("/{id}")
-	public boolean deleteOperator(@PathParam("id") String oprID) throws DALException {
-		try {
-			Validation.isPositiveInteger(oprID);
-			dao.deleteOperator(Integer.parseInt(oprID));
-			return true;
-		} catch (ValidationException e) {
-			return false;
-		}
+	public void deleteOperator(@PathParam("id") String oprID) throws DALException, ValidationException {
+		Validation.isPositiveInteger(oprID);
+		dao.deleteOperator(Integer.parseInt(oprID));
 	}
 
 	@GET

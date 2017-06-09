@@ -16,6 +16,7 @@ import dk.dtu.control.IWebInterfaceController;
 import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
+import dk.dtu.model.Validation;
 import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dto.ProductBatchDTO;
@@ -42,6 +43,7 @@ public class ProductService {
 	@Path("/{id}")
 	@Secured( roles = { Role.Foreman })
 	public ProductBatchDTO getProductBatch(@PathParam("id") int pbId) throws ValidationException, DALException {
+		Validation.isPositiveInteger(pbId);
 		return dao.readProductBatch(pbId);
 	}
 	
@@ -53,7 +55,8 @@ public class ProductService {
 	
 	@DELETE
 	@Secured( roles = { Role.Foreman })
-	public void deleteProductBatch(int pbId) throws DALException {
+	public void deleteProductBatch(int pbId) throws DALException, ValidationException {
+		Validation.isPositiveInteger(pbId);
 		dao.deleteProductBatch(pbId);
 	}
 	

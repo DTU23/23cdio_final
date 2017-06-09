@@ -58,7 +58,7 @@ public class MySQLRecipeCompDaoTest {
 		try {
 			recipeComp.readRecipeComp(4,1);
 		} catch (DALException e) { errorMsg = e.getMessage(); }
-		assertThat(errorMsg, is(equalTo("Recipecomponent with recipeid 4 and produceid 1 does not exist")));
+		assertThat(errorMsg, is(equalTo("Recipe component with recipe id 4 and produce id 1 does not exist")));
 	}
 
 	/**

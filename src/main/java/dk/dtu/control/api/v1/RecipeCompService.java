@@ -39,7 +39,7 @@ public class RecipeCompService {
 	}
 	
 	@GET
-	@Path("/{recipeId};{produceId}")
+	@Path("/{recipeId}/{produceId}")
 	@Secured( roles = { Role.Pharmacist })
 	public RecipeCompDTO getRecipeComp(@PathParam("recipeId") int recipeId, @PathParam("produceId") int produceId) throws DALException, ValidationException {
 		Validation.isPositiveInteger(recipeId);
@@ -54,7 +54,7 @@ public class RecipeCompService {
 	}
 	
 	@DELETE
-	@Path("/{recipeId};{produceId}")
+	@Path("/{recipeId}/{produceId}")
 	@Secured( roles = { Role.Pharmacist })
 	public void deleteProduce(@PathParam("recipeId") int recipeId, @PathParam("produceId") int produceId) throws DALException, ValidationException {
 		Validation.isPositiveInteger(recipeId);
@@ -63,7 +63,7 @@ public class RecipeCompService {
 	}
 
 	@GET
-	@Path("/{id}")
+	@Path("list/{id}")
 	@Secured( roles = { Role.Pharmacist })
 	public List<RecipeCompDTO> getRecipeCompList(@PathParam("id") int recipeId) throws DALException {
 		return dao.getRecipeCompByRecipeId(recipeId);

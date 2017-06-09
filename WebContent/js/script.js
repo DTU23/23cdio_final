@@ -10,7 +10,10 @@ $(document).ready(function () {
         ready: function () {
         }
     });
-    
+
+    $('#MainTabs').tabs();
+    $('#ProduceSubTabs').tabs();
+
     $(document).on("click", ".edit-user", function (e) {
         var row = $(this).parent().parent();
         template = $('#userEditTemplate').html();
@@ -189,7 +192,7 @@ $(document).ready(function () {
                 Cookies.set("auth", msg, { expires : 7 });
                 $('#loginForm').hide();
                 $('main').removeClass('valign-wrapper');
-                $('#userAdministration').show();
+                $('#Administration').show();
             },
             error: function ( msg ) {
                 Materialize.toast("Invalid login!", 4000);
@@ -345,36 +348,7 @@ function populateUsersAdmin(notice) {
             }
         }
     });
-}
-
-function populateProduceBatchAdmin(notice) {
-    $.ajax({
-        type: "GET",
-        contentType: "application/json",
-        processData: false,
-        crossDomain: true,
-        url: "./api/v1/producebatch/",
-        headers : {
-            Authorization: Cookies.get("auth")
-        },
-        success: function( response ) {
-            console.log(response);
-            var template = $('#ProduceBatchAdministrationTemplate').html();
-            var data = {};
-            data['producebatch'] = response;
-            Mustache.parse(template);   // optional, speeds up future uses
-            var rendered = Mustache.render(template, data);
-
-            $('#ProduceBatchAdminSubTab>div.left').html(rendered).promise().done(function () {
-
-            });
-        },
-        error: function ( msg ) {
-            console.log(msg);
-            Materialize.toast("Error in loading data!", 4000);
-        }
-    });
-}
+}   
 
 function populateProduceAdmin(notice) {
     $.ajax({
@@ -403,6 +377,35 @@ function populateProduceAdmin(notice) {
             if(notice){
                 Materialize.toast("Error in loading data!", 4000);
             }
+        }
+    });
+}
+
+function populateProduceBatchAdmin(notice) {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        processData: false,
+        crossDomain: true,
+        url: "./api/v1/producebatch/",
+        headers : {
+            Authorization: Cookies.get("auth")
+        },
+        success: function( response ) {
+            console.log(response);
+            var template = $('#ProduceBatchAdministrationTemplate').html();
+            var data = {};
+            data['producebatch'] = response;
+            Mustache.parse(template);   // optional, speeds up future uses
+            var rendered = Mustache.render(template, data);
+
+            $('#ProduceBatchAdminSubTab>div.left').html(rendered).promise().done(function () {
+
+            });
+        },
+        error: function ( msg ) {
+            console.log(msg);
+            Materialize.toast("Error in loading data!", 4000);
         }
     });
     $.ajax({

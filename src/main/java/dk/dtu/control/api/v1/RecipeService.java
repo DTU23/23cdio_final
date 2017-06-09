@@ -12,8 +12,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import dk.dtu.control.IWebInterfaceController;
+import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
+import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLRecipeDAO;
 import dk.dtu.model.dto.RecipeDTO;
 import dk.dtu.model.dto.RecipeListDTO;
@@ -27,11 +30,12 @@ public class RecipeService {
 	
 	// This class implements the methods from MySQLRecipeDAO
 	private RecipeDAO dao = new MySQLRecipeDAO();
+	private IWebInterfaceController controller = new WebInterfaceController();
 	
 	@POST
 	@Secured( roles = { Role.Pharmacist })
-	public void createRecipe(RecipeDTO recipe) throws DALException {
-		dao.createRecipe(recipe.getRecipeName());
+	public void createRecipe(RecipeDTO recipe) throws DALException, ValidationException {
+		controller.createRecipeValidation(recipe);
 	}
 	
 	@GET
@@ -43,8 +47,8 @@ public class RecipeService {
 	
 	@PUT
 	@Secured( roles = { Role.Pharmacist })
-	public void updateProduce(RecipeDTO recipe) throws DALException {
-		dao.updateRecipe(recipe);
+	public void updateRecipe(RecipeDTO recipe) throws DALException, ValidationException {
+		controller.updateRecipeValidation(recipe);
 	}
 	
 	@DELETE

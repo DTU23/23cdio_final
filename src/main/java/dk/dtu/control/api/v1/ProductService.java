@@ -12,6 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import dk.dtu.control.IWebInterfaceController;
+import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.ValidationException;
@@ -28,11 +30,12 @@ public class ProductService {
 
 	// This class implements all MySQLProductBatchDAO methods
 	private ProductBatchDAO dao = new MySQLProductBatchDAO();
+	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
 	@Secured( roles = { Role.Foreman })
-	public void createProductBatch(int recipeId) throws DALException {
-		dao.createProductBatch(recipeId);
+	public void createProductBatch(int recipeId) throws DALException, ValidationException {
+		controller.createProductBatchValidation(recipeId);
 	}
 	
 	@GET
@@ -44,8 +47,8 @@ public class ProductService {
 	
 	@PUT
 	@Secured( roles = { Role.Foreman })
-	public void updateProductBatch(ProductBatchDTO productBatch) throws DALException {
-		dao.updateProductBatch(productBatch);
+	public void updateProductBatch(ProductBatchDTO productBatch) throws DALException, ValidationException {
+		controller.updateProductBatchValidation(productBatch);
 	}
 	
 	@DELETE

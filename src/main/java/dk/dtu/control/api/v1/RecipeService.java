@@ -31,7 +31,7 @@ public class RecipeService {
 	@POST
 	@Secured( roles = { Role.Pharmacist })
 	public void createRecipe(RecipeDTO recipe) throws DALException {
-		dao.createRecipe(recipe);
+		dao.createRecipe(recipe.getRecipeName());
 	}
 	
 	@GET

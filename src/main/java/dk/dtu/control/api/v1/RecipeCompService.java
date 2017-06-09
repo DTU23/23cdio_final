@@ -57,13 +57,13 @@ public class RecipeCompService {
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
 	public List<RecipeCompDTO> getRecipeCompList(@PathParam("id") int recipeId) throws DALException {
-		return dao.getRecipeCompList(recipeId);
+		return dao.getRecipeCompByRecipeId(recipeId);
 	}
 	
 	@GET
 	@Path("/list")
 	@Secured( roles = { Role.Pharmacist })
 	public List<RecipeCompDTO> getWholeRecipeCompList() throws DALException {
-		return dao.getWholeRecipeCompList();
+		return dao.getRecipeCompList();
 	}
 }

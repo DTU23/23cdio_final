@@ -17,6 +17,7 @@ import dk.dtu.control.api.Secured;
 import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dto.ProductBatchDTO;
+import dk.dtu.model.dto.ProductBatchListDTO;
 import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.ProductBatchDAO;
 
@@ -44,7 +45,7 @@ public class ProductService {
 	@PUT
 	@Secured( roles = { Role.Foreman })
 	public void updateProductBatch(ProductBatchDTO productBatch) throws DALException {
-		dao.updateProductBatchStatus(productBatch);
+		dao.updateProductBatch(productBatch);
 	}
 	
 	@DELETE
@@ -55,7 +56,7 @@ public class ProductService {
 	
 	@GET
 	@Secured( roles = { Role.Foreman })
-	public List<ProductBatchDTO> getProductList() throws DALException {
+	public List<ProductBatchListDTO> getProductList() throws DALException {
 		return dao.getProductBatchList();
 	}
 	

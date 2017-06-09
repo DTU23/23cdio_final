@@ -348,7 +348,7 @@ function populateUsersAdmin(notice) {
             }
         }
     });
-}   
+}
 
 function populateProduceAdmin(notice) {
     $.ajax({

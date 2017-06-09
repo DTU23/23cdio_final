@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
+import dk.dtu.control.api.v1.AdaptorException;
+import dk.dtu.control.api.v1.IWeightAdaptor;
+
 public class WeightAdaptor implements IWeightAdaptor {
 
 	private Socket clientSocket; 
@@ -170,7 +173,7 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			waitResponse();
 			sendCommand("S");
-			return waitResponse().split(" ")[7].replace(',', '.');
+			return waitResponse().split(" ")[7];
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}
@@ -183,7 +186,7 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			waitResponse();
 			sendCommand("S");
-			return waitResponse().split(" ")[7].replace(',', '.');
+			return waitResponse().split(" ")[7];
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}
@@ -217,7 +220,7 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			waitResponse();
 			sendCommand("S");
-			return waitResponse().split(" ")[7].replace(',', '.');
+			return waitResponse().split(" ")[6];
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}

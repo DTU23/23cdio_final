@@ -6,9 +6,10 @@ import dk.dtu.model.dto.ProduceDTO;
 import dk.dtu.model.dto.ProduceOverviewDTO;
 
 public interface ProduceDAO {
-	ProduceDTO getProduce(int raavareId) throws DALException;
-	List<ProduceDTO> getProduceList() throws DALException;
 	void createProduce(ProduceDTO raavare) throws DALException;
+	ProduceDTO readProduce(int raavareId) throws DALException;
 	void updateProduce(ProduceDTO raavare) throws DALException;
+	void deleteProduce(int raavareId) throws DALException;
+	List<ProduceDTO> getProduceList() throws DALException;
 	List<ProduceOverviewDTO> getProduceOverview() throws DALException;
 }

@@ -1,20 +1,22 @@
 package dk.dtu.control.api.v1;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import dk.dtu.model.dao.MySQLOperatorDAO;
-import dk.dtu.model.dto.OperatorDTO;
-import dk.dtu.model.interfaces.DALException;
-import dk.dtu.model.interfaces.OperatorDAO;
+import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
-import java.util.Calendar;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+
+import dk.dtu.model.dao.MySQLOperatorDAO;
+import dk.dtu.model.dto.OperatorDTO;
+import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.interfaces.OperatorDAO;
 
 @Path("/v1/login")
 public class LoginService {
@@ -40,7 +42,7 @@ public class LoginService {
 
 	private void authenticate(int oprId, String password) throws Exception {
 		OperatorDAO oprDao = new MySQLOperatorDAO();
-		OperatorDTO sysOpr = oprDao.getOperator(oprId);
+		OperatorDTO sysOpr = oprDao.readOperator(oprId);
 		if (!sysOpr.getPassword().equals(password)) {
 			throw new DALException("Wrong Password!");
 		}
@@ -55,9 +57,9 @@ public class LoginService {
 			return JWT.create()
 					.withIssuer("auth0")
 					.withClaim("oprId", oprId)
-					.withClaim("name", oprDAO.getOperator(oprId).getOprName())
-					.withClaim("role", oprDAO.getOperator(oprId).getRole())
-					.withClaim("admin", oprDAO.getOperator(oprId).getAdmin())
+					.withClaim("name", oprDAO.readOperator(oprId).getOprName())
+					.withClaim("role", oprDAO.readOperator(oprId).getRole())
+					.withClaim("admin", oprDAO.readOperator(oprId).getAdmin())
 					.withExpiresAt(cal.getTime())
 					.sign(algorithm);
 		} catch (UnsupportedEncodingException | JWTCreationException ignored){

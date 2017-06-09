@@ -6,8 +6,9 @@ import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
 
 public interface OperatorDAO {
-	OperatorDTO getOperator(int oprId) throws DALException;
-	List<OperatorNoPWDTO> getOperatorList() throws DALException;
 	void createOperator(OperatorDTO opr) throws DALException;
+	OperatorDTO readOperator(int oprId) throws DALException;
 	void updateOperator(OperatorDTO opr) throws DALException;
+	void deleteOperator(int oprId) throws DALException;
+	List<OperatorNoPWDTO> getOperatorList() throws DALException;
 }

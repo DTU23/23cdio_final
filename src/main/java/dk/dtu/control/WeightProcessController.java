@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import dk.dtu.control.IWeightProcessController;
 import dk.dtu.control.api.v1.AdaptorException;
 import dk.dtu.control.api.v1.IWeightAdaptor;
 import dk.dtu.control.api.v1.WeightAdaptor;
@@ -77,6 +78,7 @@ public class WeightProcessController implements IWeightProcessController {
 			String productBatchNumber = null;
 			List<RecipeListDTO> recipeList = null; // The theoretical recipe. List of the all the produces, which are supposed to be in the recipe. 
 			List<ProductBatchCompOverviewDTO> productBatchCompOverviewList = null; // The actual product batch. List of the actual already weighed produces. 
+			ProductBatchCompOverviewDTO productBatchRequest = null;
 
 			loginLoop: while(true) {
 				// Get operator identification number and validate it
@@ -84,7 +86,7 @@ public class WeightProcessController implements IWeightProcessController {
 					try {
 						oprId = weightAdaptor.getOperatorId();
 						Validation.isPositiveInteger(oprId);
-						weightAdaptor.confirmOperatorName( operatorDAO.getOperator(Integer.parseInt(oprId)).getOprName() );
+						weightAdaptor.confirmOperatorName( operatorDAO.readOperator(Integer.parseInt(oprId)).getOprName() );
 						break oprIdLoop;
 					} catch (Exception e) {
 						try {
@@ -118,9 +120,16 @@ public class WeightProcessController implements IWeightProcessController {
 				try {
 					productBatchNumber = weightAdaptor.getProductBatchNumber();
 					Validation.isPositiveInteger(productBatchNumber);
-					// Saves list of ProductBatchCompOverviewDTO's specified by the product batch number
-					productBatchCompOverviewList = productBatchDAO.getProductBatchDetailsByPbId(Integer.parseInt(productBatchNumber));
-					recipeList = recipeDAO.getRecipeDetailsByID(productBatchCompOverviewList.get(0).getRecipeId());
+					productBatchRequest = productBatchDAO.getProductBatchListDetailsByPbId(Integer.parseInt(productBatchNumber));
+
+					if(productBatchRequest.getStatus() == 2) {
+						weightAdaptor.writeInSecondaryDisplay("All produces in this product batch is already weighed! Status 2");
+						weightAdaptor.clearSecondaryDisplay();
+						continue pbLoop;
+					}
+					
+					recipeList = recipeDAO.getRecipeDetailsByID(productBatchRequest.getRecipeId());
+					weightAdaptor.confirmRecipeName(productBatchRequest.getRecipeName());
 				} catch (Exception e) {
 					try {
 						weightAdaptor.writeInSecondaryDisplay("Product batch number doesn't exist!");
@@ -131,16 +140,16 @@ public class WeightProcessController implements IWeightProcessController {
 					//e.printStackTrace();
 					continue pbLoop;
 				}
-				
-				// Shows the specific recipe name in secondary display, which will be weighed
-				try {
-					if(productBatchCompOverviewList.get(0).getStatus() == 2) {
-						weightAdaptor.writeInSecondaryDisplay("All produces in this product batch is already weighed! Status 2");
-						weightAdaptor.clearSecondaryDisplay();
-						continue pbLoop;
+
+				// Saves list of ProductBatchCompOverviewDTO's specified by the product batch number
+					try {
+						productBatchCompOverviewList = productBatchDAO.getProductBatchDetailsByPbId(Integer.parseInt(productBatchNumber));
+					} catch (NumberFormatException | DALException e) {
+						productBatchCompOverviewList = null;
+						e.printStackTrace();
 					}
-					weightAdaptor.confirmRecipeName(recipeList.get(0).getRecipeName());
-				} catch (AdaptorException e) {}
+
+
 				break;
 			}
 
@@ -149,13 +158,15 @@ public class WeightProcessController implements IWeightProcessController {
 			for(ProductBatchCompOverviewDTO dto : productBatchCompOverviewList ) {
 				producesAlreadyWeighed.add(dto.getProduceName());
 			}
-			
+
 			// Removes all the produces that has been weighed. Produces that needs to be weighed is left in the ArrayList
-			Iterator<RecipeListDTO> iterator = recipeList.iterator();
-			while(iterator.hasNext()) {
-				RecipeListDTO dto = iterator.next();
-				if( producesAlreadyWeighed.contains( dto.getProduceName()) ) {
-					iterator.remove();
+			if(productBatchCompOverviewList != null) {
+				Iterator<RecipeListDTO> iterator = recipeList.iterator();
+				while(iterator.hasNext()) {
+					RecipeListDTO dto = iterator.next();
+					if( producesAlreadyWeighed.contains( dto.getProduceName()) ) {
+						iterator.remove();
+					}
 				}
 			}
 
@@ -178,11 +189,11 @@ public class WeightProcessController implements IWeightProcessController {
 						netto = Double.parseDouble(weightAdaptor.placeNetto());
 					} while (Math.abs(recipeDTO.getNomNetto() - netto) > tolerance);
 					weightAdaptor.clearSecondaryDisplay();
-					
+
 					do {
 						rbId = weightAdaptor.getProduceBatchNumber();
 						try {
-							produceBatchDAO.getProduceBatch(Integer.parseInt(rbId));
+							produceBatchDAO.readProduceBatch(Integer.parseInt(rbId));
 						} catch (Exception e) {
 							weightAdaptor.writeInSecondaryDisplay("Wrong produce batch id!");
 							weightAdaptor.clearSecondaryDisplay();
@@ -190,11 +201,11 @@ public class WeightProcessController implements IWeightProcessController {
 						}
 						break;
 					} while(true);
-					
+
 					weightAdaptor.tara();
 					gross = Double.parseDouble(weightAdaptor.removeGross());
 					if(tara + netto == Math.abs(gross)) {
-						productBatchCompDTO = new ProductBatchCompDTO(productBatchCompOverviewList.get(0).getPbId(), Integer.parseInt(rbId), tara, netto, Integer.parseInt(oprId));
+						productBatchCompDTO = new ProductBatchCompDTO(productBatchRequest.getPbId(), Integer.parseInt(rbId), tara, netto, Integer.parseInt(oprId));
 						try {
 							productBatchCompDAO.createProductBatchComp(productBatchCompDTO);
 						} catch (DALException e) {
@@ -209,7 +220,7 @@ public class WeightProcessController implements IWeightProcessController {
 					e.printStackTrace(); // TODO MANGLER EXCEPTION HÅNDTERING
 				}
 			}
-			
+
 			try {
 				weightAdaptor.clearBothDisplays();
 			} catch (AdaptorException e) {

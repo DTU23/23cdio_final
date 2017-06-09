@@ -41,7 +41,7 @@ public class MySQLProductBatchDAOTest {
     public void getProductBatch() throws Exception {
         ProductBatchDTO pb1, expected;
         expected = new ProductBatchDTO(1, 2, 1);
-        pb1 = pbdao.getProductBatch(1);
+        pb1 = pbdao.readProductBatch(1);
         assertThat(pb1.toString(), is(equalTo(expected.toString())));
     }
 
@@ -86,14 +86,14 @@ public class MySQLProductBatchDAOTest {
      */
     @Test
     public void updateProductBatchStatus() throws Exception {
-        ProductBatchDTO beforeEdit = pbdao.getProductBatch(1);
-        ProductBatchDTO afterEdit = pbdao.getProductBatch(1);
+        ProductBatchDTO beforeEdit = pbdao.readProductBatch(1);
+        ProductBatchDTO afterEdit = pbdao.readProductBatch(1);
         afterEdit.setStatus(0);
 
         pbdao.updateProductBatchStatus(afterEdit);
 
-        assertThat(afterEdit.toString(), is(equalTo(pbdao.getProductBatch(1).toString())));
-        assertThat(beforeEdit.toString(), is(not(equalTo(pbdao.getProductBatch(1).toString()))));
+        assertThat(afterEdit.toString(), is(equalTo(pbdao.readProductBatch(1).toString())));
+        assertThat(beforeEdit.toString(), is(not(equalTo(pbdao.readProductBatch(1).toString()))));
     }
 
     /**
@@ -102,13 +102,13 @@ public class MySQLProductBatchDAOTest {
      */
     @Test(expected = DALException.class)
     public void updateProductBatchWithInvalidStatus() throws Exception {
-        ProductBatchDTO beforeEdit = pbdao.getProductBatch(1);
-        ProductBatchDTO afterEdit = pbdao.getProductBatch(1);
+        ProductBatchDTO beforeEdit = pbdao.readProductBatch(1);
+        ProductBatchDTO afterEdit = pbdao.readProductBatch(1);
         afterEdit.setStatus(-1);
 
         pbdao.updateProductBatchStatus(afterEdit);
 
-        assertThat(afterEdit.toString(), is(not(equalTo(pbdao.getProductBatch(1).toString()))));
-        assertThat(beforeEdit.toString(), is(equalTo(pbdao.getProductBatch(1).toString())));
+        assertThat(afterEdit.toString(), is(not(equalTo(pbdao.readProductBatch(1).toString()))));
+        assertThat(beforeEdit.toString(), is(equalTo(pbdao.readProductBatch(1).toString())));
     }
 }

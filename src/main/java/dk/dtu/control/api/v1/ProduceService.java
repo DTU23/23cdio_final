@@ -22,7 +22,7 @@ public class ProduceService {
 	@Path("/{id}")
 	@Secured( roles = { Role.Foreman })
 	public ProduceDTO getProduce(@PathParam("id") int produce_id) throws ValidationException, DALException {
-		return dao.getProduce(produce_id);
+		return dao.readProduce(produce_id);
 	}
 
 	@GET

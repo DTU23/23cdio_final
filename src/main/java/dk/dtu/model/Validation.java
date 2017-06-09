@@ -48,7 +48,7 @@ public class Validation {
 	public static void authenticateUser(String ID, String password) throws ValidationException, DALException {
 		OperatorDAO dao = new MySQLOperatorDAO();
 		isPositiveInteger(ID);
-		OperatorDTO opr = dao.getOperator(Integer.parseInt(ID));
+		OperatorDTO opr = dao.readOperator(Integer.parseInt(ID));
 		if(opr.getPassword() != password) {
 			// ved godt det er dårlig praksis at oplyse, men nu er dette bare et skoleprojekt hvor vi gerne vil vide hvor eventulle problemer opstår.
 			throw new ValidationException("Incorrect password.");

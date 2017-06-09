@@ -21,7 +21,7 @@ public class ProduceBatchService {
 	@Path("/{id}")
 	@Secured( roles = { Role.Foreman })
 	public ProduceBatchDTO getProduceBatch(@PathParam("id") int pb_id) throws ValidationException, DALException {
-		return dao.getProduceBatch(pb_id);
+		return dao.readProduceBatch(pb_id);
 	}
 
 	@GET

@@ -1,10 +1,10 @@
 package dk.dtu.model.connector;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import dk.dtu.model.interfaces.DALException;
 
@@ -12,7 +12,7 @@ public final class Connector
 {
 	private static Connector instance;
 	private Connection connection;
-	private Statement statement;
+	private PreparedStatement statement;
 	private ResultSet resultSet;
 
 	private Connector() {}
@@ -48,8 +48,8 @@ public final class Connector
 	public ResultSet doQuery(String cmd) throws DALException {
 		connectToDatabase();
 		try {
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(cmd);
+			statement = connection.prepareStatement(cmd);
+			resultSet = statement.executeQuery();
 			return resultSet;
 		} catch (SQLException e) {
 			throw new DALException(e);
@@ -59,8 +59,8 @@ public final class Connector
 	public int doUpdate(String cmd) throws DALException {
 		connectToDatabase();
 		try {
-			statement = connection.createStatement();
-			return statement.executeUpdate(cmd);
+			statement = connection.prepareStatement(cmd);
+			return statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
@@ -71,8 +71,8 @@ public final class Connector
 	public int resetData() throws DALException {
 		connectToDatabase();
 		try {
-			statement = connection.createStatement();
-			return statement.executeUpdate("CALL reset_data();");
+			statement = connection.prepareStatement("CALL reset_data();");
+			return statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {

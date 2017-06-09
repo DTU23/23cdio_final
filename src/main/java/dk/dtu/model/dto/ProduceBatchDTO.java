@@ -10,7 +10,7 @@ public class ProduceBatchDTO
 	
 	public ProduceBatchDTO(){}
 
-	public ProduceBatchDTO(int rbId, Integer produceId, String produceName, String supplier, double amount)
+	public ProduceBatchDTO(int rbId, int produceId, String produceName, String supplier, double amount)
 	{
 		this.rbId = rbId;
 		this.produceId = produceId;

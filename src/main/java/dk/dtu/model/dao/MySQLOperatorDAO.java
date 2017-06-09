@@ -20,8 +20,8 @@ public class MySQLOperatorDAO implements OperatorDAO {
 				+ opr.getOprName() + "','" 
 				+ opr.getIni() + "','" 
 				+ opr.getCpr() + "','" 
-				+ opr.getPassword() + "','" 
-				+ opr.isAdmin() + "','" 
+				+ opr.getPassword() + "'," 
+				+ opr.isAdmin() + ",'" 
 				+ opr.getRole() + "');" ) == 0)
 		{
 			throw new DALException("No rows affected");
@@ -58,8 +58,8 @@ public class MySQLOperatorDAO implements OperatorDAO {
 				+ opr.getOprName() + "','" 
 				+ opr.getIni() + "','" 
 				+ opr.getCpr() + "','" 
-				+ opr.getPassword() + "','" 
-				+ opr.isAdmin() + "','" 
+				+ opr.getPassword() + "'," 
+				+ opr.isAdmin() + ",'" 
 				+ opr.getRole() + "');" ) == 0)
 		{
 			throw new DALException("No rows affected");
@@ -98,5 +98,4 @@ public class MySQLOperatorDAO implements OperatorDAO {
 			Connector.getInstance().closeResources();
 		}
 	}
-
 }

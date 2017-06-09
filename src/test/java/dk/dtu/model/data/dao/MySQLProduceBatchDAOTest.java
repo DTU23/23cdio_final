@@ -46,7 +46,7 @@ public class MySQLProduceBatchDAOTest {
 	 */
 	@Test
 	public void testGetProduceBatchByID() throws Exception {
-		ProduceBatchDTO expected = new ProduceBatchDTO(1, null, "dej", "Wawelka", 1000);
+		ProduceBatchDTO expected = new ProduceBatchDTO(1, 1, null, null, 1000);
 		ProduceBatchDTO actual = null;
 		// Get produce batch from DB specified by ID
 		actual = produceBatch.readProduceBatch(1);
@@ -79,7 +79,7 @@ public class MySQLProduceBatchDAOTest {
 	public void testGetProduceBatchList() throws Exception{
 		List<ProduceBatchDTO> pbList = null;
 		// Equal to the element in second row of the view produce_batch_list
-		ProduceBatchDTO produceBatchDTO = new ProduceBatchDTO(2, null, "tomat", "Knoor", 300);
+		ProduceBatchDTO produceBatchDTO = new ProduceBatchDTO(2, 0, "tomat", "Knoor", 300);
 
 		pbList = produceBatch.getProduceBatchList();
 
@@ -101,16 +101,14 @@ public class MySQLProduceBatchDAOTest {
 		// Get an already created produce
 		MySQLProduceDAO produce = new MySQLProduceDAO();
 		ProduceDTO produceDTO = produce.readProduce(4);
+		int ListLengthPre = produceBatch.getProduceBatchList().size();
 		// Define amount of produce
 		double amount = 500;
 
-		ProduceBatchDTO actual = null;
-		ProduceBatchDTO expected = new ProduceBatchDTO(8, null, "tomat", "Franz", amount);
-
 		produceBatch.createProduceBatch(produceDTO.getProduceId(), amount);
-		actual = produceBatch.readProduceBatch(8);
+		int ListLengthPost = produceBatch.getProduceBatchList().size();
 
-		assertThat(actual.toString(), is(expected.toString()));
+		assertThat(ListLengthPost, is(not(ListLengthPre)));
 	}
 
 	/**
@@ -118,7 +116,7 @@ public class MySQLProduceBatchDAOTest {
 	 */
 	@Test
 	public void testUpdateProduceBatch() throws Exception {
-		ProduceBatchDTO pbDTO = new ProduceBatchDTO(3, null, "tomat", "Veaubais", 300);
+		ProduceBatchDTO pbDTO = new ProduceBatchDTO(3, 0, "tomat", "Veaubais", 300);
 		ProduceBatchDTO actual = null;
 		double amount = 600;
 
@@ -134,7 +132,7 @@ public class MySQLProduceBatchDAOTest {
 	 */
 	@Test
 	public void testUpdateProduceBatchThatDoesntExist() throws Exception{
-		ProduceBatchDTO pbDTO = new ProduceBatchDTO(12, null, "ketchup", "Heinz", 200);
+		ProduceBatchDTO pbDTO = new ProduceBatchDTO(12, 0, "ketchup", "Heinz", 200);
 		ProduceBatchDTO actual = null;
 		String error = null;
 		double amount = 400;

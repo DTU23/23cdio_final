@@ -67,7 +67,7 @@ public class MySQLProduceBatchDAO implements ProduceBatchDAO {
 			{
 				list.add(new ProduceBatchDTO(
 						rs.getInt("rb_id"),
-						null,
+						0,
 						rs.getString("produce_name"),
 						rs.getString("supplier"),
 						rs.getDouble("amount")));
@@ -89,7 +89,7 @@ public class MySQLProduceBatchDAO implements ProduceBatchDAO {
 			}
 			return new ProduceBatchDTO(
 					rs.getInt("rb_id"),
-					null,
+					0,
 					rs.getString("produce_name"),
 					rs.getString("supplier"),
 					rs.getDouble("amount")

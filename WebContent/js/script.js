@@ -10,10 +10,6 @@ $(document).ready(function () {
         ready: function () {
         }
     });
-
-    $('ul.tabs').tabs();
-
-    initDB();
     
     $(document).on("click", ".edit-user", function (e) {
         var row = $(this).parent().parent();
@@ -414,7 +410,7 @@ function populateProduceAdmin(notice) {
         contentType: "application/json",
         processData: false,
         crossDomain: true,
-        url: "./api/v1/produce/stock",
+        url: "./api/v1/producebatch/stock",
         headers : {
             Authorization: Cookies.get("auth")
         },
@@ -445,20 +441,4 @@ function populateProductAdmin(notice) {
 
 function populateRecipeAdmin(notice){
 
-}
-
-function initDB() {
-    $.ajax({
-        type: "GET",
-        contentType: "application/json",
-        processData: false,
-        url: "./api/v1/database/init",
-        success: function( response ) {
-            console.log(response);
-        },
-        error: function ( msg ) {
-            console.log(msg);
-            Materialize.toast("Error initializing database!", 4000);
-        }
-    });
 }

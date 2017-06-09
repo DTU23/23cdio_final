@@ -1,17 +1,18 @@
 package dk.dtu.model.dto;
 
-public class ProductBatchDTO
-{
+public class ProductBatchListDTO extends ProductBatchCompOverviewDTO {
 	private int pbId;                     // i omraadet 1-99999999
 	private int recipeId;
+	String recipeName;
 	private int status;					// 0: ikke paabegyndt, 1: under produktion, 2: afsluttet
 
-	public ProductBatchDTO(){}
+	public ProductBatchListDTO(){}
 	
-	public ProductBatchDTO(int pbId, int recipeId, int status)
+	public ProductBatchListDTO(int pbId, int recipeId, String recipeName, int status)
 	{
 		this.pbId = pbId;
 		this.recipeId = recipeId;
+		this.recipeName = recipeName;
 		this.status = status;
 	}
 
@@ -31,6 +32,14 @@ public class ProductBatchDTO
 		this.recipeId = recipeId;
 	}
 
+	public String getRecipeName() {
+		return recipeName;
+	}
+
+	public void setRecipeName(String recipeName) {
+		this.recipeName = recipeName;
+	}
+
 	public int getStatus() {
 		return status;
 	}
@@ -41,7 +50,8 @@ public class ProductBatchDTO
 
 	@Override
 	public String toString() {
-		return "ProductBatchDTO [pbId=" + pbId + ", recipeId=" + recipeId + ", status=" + status + "]";
+		return "ProductBatchListDTO [pbId=" + pbId + ", recipeId=" + recipeId + ", recipeName=" + recipeName
+				+ ", status=" + status + "]";
 	}
 }
 

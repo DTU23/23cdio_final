@@ -6,6 +6,11 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import dk.dtu.model.dao.MySQLOperatorDAO;
+import dk.dtu.model.dto.OperatorDTO;
+import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.interfaces.OperatorDAO;
+
 public class Validation {
 
 	/**
@@ -40,8 +45,14 @@ public class Validation {
 	 * @param password
 	 * @throws ValidationException
 	 */
-	public static void authenticateUser(String ID, String password) throws ValidationException {
-		//TODO
+	public static void authenticateUser(String ID, String password) throws ValidationException, DALException {
+		OperatorDAO dao = new MySQLOperatorDAO();
+		isPositiveInteger(ID);
+		OperatorDTO opr = dao.readOperator(Integer.parseInt(ID));
+		if(opr.getPassword() != password) {
+			// ved godt det er dårlig praksis at oplyse, men nu er dette bare et skoleprojekt hvor vi gerne vil vide hvor eventulle problemer opstår.
+			throw new ValidationException("Incorrect password.");
+		}
 	}
 
 	/**

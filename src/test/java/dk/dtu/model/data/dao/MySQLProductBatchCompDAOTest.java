@@ -29,16 +29,15 @@ public class MySQLProductBatchCompDAOTest {
     private MySQLProductBatchDAO pbdao;
     @Before
     public void setUp() throws Exception {
-        new Connector();
-        Connector.resetData();
+    	Connector.getInstance().resetData();
         pbcdao = new MySQLProductBatchCompDAO();
         pbdao = new MySQLProductBatchDAO();
     }
 
     @After
     public void tearDown() throws Exception {
+    	Connector.getInstance().resetData();
         pbcdao = null;
-        Connector.resetData();
     }
 
     /**
@@ -157,7 +156,7 @@ public class MySQLProductBatchCompDAOTest {
     @Test
     public void getSupplierDetailById() throws Exception {
         List<ProductBatchCompSupplierDetailsDTO> pbcsd;
-        pbcsd = pbcdao.getSupplierDetailById(1);
+        pbcsd = pbcdao.getProductBatchComponentSupplierDetailsByPbId(1);
         assertThat(pbcsd, notNullValue());
     }
 
@@ -168,7 +167,7 @@ public class MySQLProductBatchCompDAOTest {
     @Test(expected = DALException.class)
     public void getSupplierDetailByNonExistentId() throws Exception {
         List<ProductBatchCompSupplierDetailsDTO> pbcsd;
-        pbcsd = pbcdao.getSupplierDetailById(-1);
+        pbcsd = pbcdao.getProductBatchComponentSupplierDetailsByPbId(-1);
         assertTrue(pbcsd.size() == 0);
     }
 }

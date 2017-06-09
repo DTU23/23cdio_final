@@ -29,13 +29,13 @@ public class MySQLProduceDAOTest {
 
 	@Before
 	public void setUp() throws Exception {
-		new Connector();
+		Connector.getInstance().resetData();
 		produce = new MySQLProduceDAO();
 	}
 
 	@After
 	public void tearDown() throws Exception{
-		Connector.resetData();
+		Connector.getInstance().resetData();
 		produce = null;
 	}
 
@@ -129,7 +129,7 @@ public class MySQLProduceDAOTest {
 	public void testGetProduceOverview() throws Exception {
 		List<ProduceOverviewDTO> produceOverview = null;
 		// First row in our view, produce_overview
-		ProduceOverviewDTO produceOverviewDTO = new ProduceOverviewDTO(7, "champignon", 100);
+		ProduceOverviewDTO produceOverviewDTO = new ProduceOverviewDTO(7, "champignon", "Igloo Frostvarer", 100);
 
 		produceOverview = produce.getProduceOverview();
 

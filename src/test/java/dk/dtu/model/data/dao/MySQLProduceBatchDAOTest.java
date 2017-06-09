@@ -31,13 +31,13 @@ public class MySQLProduceBatchDAOTest {
 
 	@Before
 	public void setUp() throws Exception {
-		new Connector();
+		Connector.getInstance().resetData();
 		produceBatch = new MySQLProduceBatchDAO();
 	}
 
 	@After
 	public void tearDown() throws Exception{
-		Connector.resetData();
+		Connector.getInstance().resetData();
 		produceBatch = null;
 	}
 

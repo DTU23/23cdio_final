@@ -12,29 +12,31 @@ import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.OperatorDAO;
 
 public class MySQLOperatorDAO implements OperatorDAO {
-	
+
 	@Override
 	public void createOperator(OperatorDTO opr) throws DALException {
-		if(Connector.doUpdate("CALL create_operator('" 
+		if(Connector.getInstance().doUpdate("CALL create_operator('" 
 				+ opr.getOprId() + "','" 
 				+ opr.getOprName() + "','" 
 				+ opr.getIni() + "','" 
 				+ opr.getCpr() + "','" 
-				+ opr.getPassword() + "'," 
-				+ opr.getAdmin() + ",'" 
+				+ opr.getPassword() + "','" 
+				+ opr.isAdmin() + "','" 
 				+ opr.getRole() + "');" ) == 0)
 		{
 			throw new DALException("No rows affected");
 		}
 	}
-	
+
 	@Override
 	public OperatorDTO readOperator(int oprId) throws DALException {
-		ResultSet rs = Connector.doQuery("CALL read_operator("+oprId+");");
+		ResultSet rs = Connector.getInstance().doQuery("CALL read_operator(" + oprId + ");");
 		try	
 		{
-			if (!rs.first()) throw new DALException("Operator with id " + oprId + " does not exist");
-			return new OperatorDTO (
+			if (!rs.first()) {
+				throw new DALException("Operator with id " + oprId + " does not exist");
+			}
+			return new OperatorDTO(
 					rs.getInt("opr_id"),
 					rs.getString("opr_name"),
 					rs.getString("ini"),
@@ -42,18 +44,22 @@ public class MySQLOperatorDAO implements OperatorDAO {
 					rs.getString("password"),
 					rs.getBoolean("admin"),
 					rs.getString("role"));
-		} catch (SQLException e) { throw new DALException(e); }
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			Connector.getInstance().closeResources();
+		}
 	}
 
 	@Override
 	public void updateOperator(OperatorDTO opr) throws DALException {
-		if(Connector.doUpdate("CALL update_operator('" 
+		if(Connector.getInstance().doUpdate("CALL update_operator('" 
 				+ opr.getOprId() + "','"
 				+ opr.getOprName() + "','" 
 				+ opr.getIni() + "','" 
 				+ opr.getCpr() + "','" 
-				+ opr.getPassword() + "'," 
-				+ opr.getAdmin() + ",'" 
+				+ opr.getPassword() + "','" 
+				+ opr.isAdmin() + "','" 
 				+ opr.getRole() + "');" ) == 0)
 		{
 			throw new DALException("No rows affected");
@@ -62,7 +68,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 
 	@Override
 	public void deleteOperator(int oprId) throws DALException {
-		if(Connector.doUpdate("CALL delete_operator(" + oprId + ";") == 0) 
+		if(Connector.getInstance().doUpdate("CALL delete_operator(" + oprId + ");") == 0) 
 		{
 			throw new DALException("No rows affected");
 		}
@@ -71,16 +77,26 @@ public class MySQLOperatorDAO implements OperatorDAO {
 	@Override
 	public List<OperatorNoPWDTO> getOperatorList() throws DALException {
 		List<OperatorNoPWDTO> list = new ArrayList<OperatorNoPWDTO>();
-		ResultSet rs = Connector.doQuery("SELECT * FROM operator_list;");
+		ResultSet rs = Connector.getInstance().doQuery("SELECT * FROM operator_list;");
 		try
 		{
 			while (rs.next()) 
 			{
-				list.add(new OperatorNoPWDTO(rs.getInt("opr_id"), rs.getString("opr_name"), rs.getString("ini"), rs.getString("cpr"), rs.getBoolean("admin"), rs.getString("role")));
+				list.add(new OperatorNoPWDTO(
+						rs.getInt("opr_id"),
+						rs.getString("opr_name"),
+						rs.getString("ini"),
+						rs.getString("cpr"),
+						rs.getBoolean("admin"),
+						rs.getString("role")));
 			}
+			return list;
 		}
-		catch (SQLException e) { throw new DALException(e); }
-		return list;
+		catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			Connector.getInstance().closeResources();
+		}
 	}
 
 }

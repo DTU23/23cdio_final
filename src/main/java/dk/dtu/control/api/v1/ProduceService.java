@@ -12,8 +12,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import dk.dtu.control.IWebInterfaceController;
+import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
+import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLProduceDAO;
 import dk.dtu.model.dto.ProduceDTO;
 import dk.dtu.model.dto.ProduceOverviewDTO;
@@ -27,11 +30,12 @@ public class ProduceService {
 
 	// This class implements the methods from MySQLProduceDAO
 	private ProduceDAO dao = new MySQLProduceDAO();
+	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
 	@Secured( roles = { Role.Pharmacist })
-	public void createProduce(ProduceDTO pb) throws DALException {
-		dao.createProduce(pb);
+	public void createProduce(ProduceDTO produce) throws DALException, ValidationException {
+		controller.createProduceValidation(produce);
 	}
 	
 	@GET
@@ -43,8 +47,8 @@ public class ProduceService {
 	
 	@PUT
 	@Secured( roles = { Role.Pharmacist })
-	public void updateProduce(ProduceDTO produce) throws DALException {
-		dao.updateProduce(produce);
+	public void updateProduce(ProduceDTO produce) throws DALException, ValidationException {
+		controller.updateProduceValidation(produce);
 	}
 	
 	@DELETE

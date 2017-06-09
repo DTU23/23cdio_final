@@ -98,5 +98,4 @@ public class MySQLOperatorDAO implements OperatorDAO {
 			Connector.getInstance().closeResources();
 		}
 	}
-
 }

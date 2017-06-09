@@ -1,7 +1,6 @@
 package dk.dtu.model.dto;
 
-public class ProductBatchListDTO
-{
+public class ProductBatchListDTO extends ProductBatchCompOverviewDTO {
 	private int pbId;                     // i omraadet 1-99999999
 	private int recipeId;
 	String recipeName;

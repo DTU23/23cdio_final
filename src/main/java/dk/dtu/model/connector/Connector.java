@@ -17,11 +17,16 @@ public final class Connector
 
 	private Connector() {}
 
-	public static synchronized Connector getInstance() {
+	public static synchronized Connector getInstance() throws DALException{
 		if (instance == null) {
 			synchronized(Connector.class) {
 				if (instance == null) {
 					instance = new Connector();
+					try {
+						Class.forName("com.mysql.jdbc.Driver").newInstance();
+					} catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+						throw new DALException(e);
+					}
 				}
 			}
 		}

@@ -97,7 +97,8 @@ public class WeightProcessController implements IWeightProcessController {
 			// Get the specific operators password and validate password
 			try {
 				oprPW = weightAdaptor.getOperatorPassword();
-				Validation.authenticateUser(oprId, oprPW);
+				ILoginController controller = new LoginController();
+				controller.authenticateUser(oprId, oprPW);
 			} catch (Exception e) {
 				try {
 					weightAdaptor.loginResult(false);

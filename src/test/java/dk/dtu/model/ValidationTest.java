@@ -18,15 +18,20 @@ public class ValidationTest {
 	public void testIsPositiveInteger() throws ValidationException {
 		Validation.isPositiveInteger("7");
 	}
+	
+	@Test(expected = ValidationException.class)
+	public void testIsNotPositiveInteger() throws ValidationException {
+		Validation.isPositiveInteger("-7");
+	}
 
 	@Test
 	public void testIsOnlyLetters() throws ValidationException {
 		Validation.isOnlyLetters("egrtjtyERHRT");
 	}
 
-	@Test
-	public void testAuthenticateUser() throws ValidationException {
-		Validation.authenticateUser("admin", "root");
+	@Test(expected = ValidationException.class)
+	public void testIsNotOnlyLetters() throws ValidationException {
+		Validation.isOnlyLetters("egrtj345RHRT");
 	}
 
 	@Test
@@ -34,14 +39,29 @@ public class ValidationTest {
 		Validation.isValidID("6755");
 	}
 
+	@Test(expected = ValidationException.class)
+	public void testIsInvalidID() throws ValidationException {
+		Validation.isValidID("-1");
+	}
+
 	@Test
 	public void testIsValidUserName() throws ValidationException {
 		Validation.isValidUserName("Peter Madsen");
 	}
 
+	@Test(expected = ValidationException.class)
+	public void testIsInvalidUserName() throws ValidationException {
+		Validation.isValidUserName("P3t3r M4ds3n");
+	}
+
 	@Test
 	public void testIsValidInitials() throws ValidationException {
 		Validation.isValidInitials("PM");
+	}
+
+	@Test(expected = ValidationException.class)
+	public void testIsInvalidInitials() throws ValidationException {
+		Validation.isValidInitials("C3PO");
 	}
 
 	@Test
@@ -74,9 +94,19 @@ public class ValidationTest {
 		Validation.isValidPassword("dfgE*%34RET");
 	}
 
+	@Test(expected = ValidationException.class)
+	public void testIsInvalidPassword() throws ValidationException {
+		Validation.isValidPassword("123");
+	}
+
 	@Test
 	public void testIsValidRole() throws ValidationException {
 		Validation.isValidRole("foreman");
+	}
+
+	@Test(expected = ValidationException.class)
+	public void testIsInvalidRole() throws ValidationException {
+		Validation.isValidRole("hacker");
 	}
 
 }

@@ -8,6 +8,22 @@ main {
     flex: 1 0 auto;
 }
 
-#userAdministration{
+#Administration{
     display: none;
+}
+
+ul.collapsible{
+    transition: all ease 1s;
+}
+
+.tabs{
+    overflow-x: hidden;
+}
+
+.disabled{
+    opacity: 0.5;
+}
+
+.tabs .tab.disabled a, .tabs .tab.disabled a:hover{
+    cursor: not-allowed;
 }

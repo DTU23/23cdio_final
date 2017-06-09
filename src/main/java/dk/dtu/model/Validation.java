@@ -6,21 +6,61 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import dk.dtu.control.api.Role;
+
 public class Validation {
 
 	/**
 	 * Method to validate if an input is a positive integer.
 	 * @param input
-	 * @return true if the input i a positive integer
+	 * @throws ValidationException
 	 */
 	public static void isPositiveInteger(String input) throws ValidationException {
 		try {
 			long i = Long.parseLong(input);
 			if (i <= 0) {
+				throw new ValidationException("Input is not a positive integer");
+			}
+		} catch (NumberFormatException e) {
+			throw new ValidationException("Input is not an integer");
+		}
+	}
+
+	/**
+	 * Method to validate if an input is a positive integer.
+	 * @param input
+	 * @throws ValidationException
+	 */
+	public static void isPositiveInteger(int input) throws ValidationException {
+		if (input <= 0) {
+			throw new ValidationException("Input is not a positive integer");
+		}
+	}
+
+	/**
+	 * Method to validate if an input is a positive number.
+	 * @param input
+	 * @throws ValidationException
+	 */
+	public static void isPositiveDouble(String input) throws ValidationException {
+		try {
+			double i = Double.parseDouble(input);
+			if (i <= 0) {
 				throw new ValidationException("Input is not a positive number");
 			}
 		} catch (NumberFormatException e) {
-			throw new ValidationException("Input is not an integer.");
+			throw new ValidationException("Input is not a double");
+		}
+	}
+
+	/**
+	 * Method to validate if an input is a positive number.
+	 * @param input
+	 * @throws ValidationException
+	 */
+	public static void isPositiveDouble(double input) throws ValidationException {
+		if (input <= 0) {
+			throw new ValidationException("Input is not a positive number");
 		}
 	}
 
@@ -35,16 +75,6 @@ public class Validation {
 	}
 
 	/**
-	 * Method authenticate user login credentials.
-	 * @param ID
-	 * @param password
-	 * @throws ValidationException
-	 */
-	public static void authenticateUser(String ID, String password) throws ValidationException {
-		//TODO
-	}
-
-	/**
 	 * Method to validate if an ID is a valid choice.
 	 * @param ID
 	 * @throws ValidationException
@@ -53,6 +83,18 @@ public class Validation {
 		isPositiveInteger(ID);
 		int i = Integer.parseInt(ID);
 		if(i > 99999999) {
+			throw new ValidationException("ID out of bounds.");
+		}
+	}
+	
+	/**
+	 * Method to validate if an ID is a valid choice.
+	 * @param ID
+	 * @throws ValidationException
+	 */
+	public static void isValidID(int ID) throws ValidationException {
+		isPositiveInteger(ID);
+		if(ID > 99999999) {
 			throw new ValidationException("ID out of bounds.");
 		}
 	}
@@ -132,21 +174,18 @@ public class Validation {
 
 	/**
 	 * Method can validate if a chosen password is allowed or not, based on the following requirements:
-	 * minimum 2 symbols
 	 * minimum 2 upper case characters
 	 * minimum 2 lower case characters
-	 * (user name not present in password string)
+	 * minimum 1 number
 	 * @param password
 	 * @throws ValidationException
 	 */
 	public static void isValidPassword(String password) throws ValidationException {
-		//(?!.*" + hashMap.get("userName").toString()+")
-		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
+		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?=.*[0-9])(?=.*[a-z].*[a-z]).{7,}$");
 		Matcher m = p.matcher(password);
 		if(!m.matches()) {
 			throw new ValidationException("Not a valid password");
 		}
-		//TODO styr på denne matcher
 	}
 
 	/**
@@ -156,13 +195,11 @@ public class Validation {
 	 */
 	public static void isValidRole(String role) throws ValidationException {
 		ArrayList<String> validRoles = new ArrayList<>();
-		validRoles.add("pharmacist");
-		validRoles.add("foreman");
-		validRoles.add("operator");
-		validRoles.add("none");
-		role = role.toLowerCase();
+		for (Role validrole : Role.values()) {
+			validRoles.add(validrole.toString().toLowerCase());
+		}
 		// if its a valid role
-		if (!validRoles.contains(role)) {
+		if (!validRoles.contains(role.toLowerCase())) {
 			throw new ValidationException("Not a valid role");
 		}
 	}

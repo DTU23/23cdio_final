@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 
 public class OldConnector {
 	/**

@@ -5,7 +5,7 @@ import javax.ws.rs.Path;
 
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.connector.Connector;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 import dk.dtu.control.api.Role;
 
 @Path("/v1/database")

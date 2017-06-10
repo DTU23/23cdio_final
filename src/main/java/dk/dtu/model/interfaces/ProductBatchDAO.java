@@ -5,6 +5,7 @@ import java.util.List;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.dto.ProductBatchListDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public interface ProductBatchDAO {
 	void createProductBatch(int recipe_id) throws DALException;

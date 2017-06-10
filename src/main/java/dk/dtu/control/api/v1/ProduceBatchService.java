@@ -10,11 +10,11 @@ import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
-import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLProduceBatchDAO;
 import dk.dtu.model.dto.ProduceBatchDTO;
 import dk.dtu.model.dto.StockDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.ProduceBatchDAO;
 
 @Path("v1/producebatch")

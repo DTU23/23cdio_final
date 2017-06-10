@@ -4,6 +4,7 @@ import java.util.List;
 
 import dk.dtu.model.dto.ProduceDTO;
 import dk.dtu.model.dto.ProduceOverviewDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public interface ProduceDAO {
 	void createProduce(ProduceDTO raavare) throws DALException;

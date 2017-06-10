@@ -1,4 +1,4 @@
-package dk.dtu.control;
+package dk.dtu.model.exceptions;
 
 public class AuthException extends Exception {
 	private static final long serialVersionUID = -5325383575045241965L;

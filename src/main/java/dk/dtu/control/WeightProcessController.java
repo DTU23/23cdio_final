@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import dk.dtu.control.api.v1.AdaptorException;
 import dk.dtu.control.api.v1.IWeightAdaptor;
 import dk.dtu.control.api.v1.WeightAdaptor;
 import dk.dtu.model.Validation;
@@ -16,7 +15,8 @@ import dk.dtu.model.dao.MySQLRecipeDAO;
 import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.RecipeListDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.AdaptorException;
+import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.interfaces.OperatorDAO;
 import dk.dtu.model.interfaces.ProduceBatchDAO;
 import dk.dtu.model.interfaces.ProductBatchCompDAO;

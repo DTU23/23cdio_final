@@ -1,5 +1,7 @@
 package dk.dtu.control.api.v1;
 
+import dk.dtu.model.exceptions.AdaptorException;
+
 public interface IWeightAdaptor {
 	
 	public void establishConnection(String ip, int port) throws AdaptorException;

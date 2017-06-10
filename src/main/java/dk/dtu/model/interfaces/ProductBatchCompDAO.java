@@ -5,6 +5,7 @@ import java.util.List;
 import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public interface ProductBatchCompDAO {
 	void createProductBatchComp(ProductBatchCompDTO productbatchcomponent) throws DALException;

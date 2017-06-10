@@ -16,7 +16,7 @@ import org.junit.Test;
 import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dao.MySQLRecipeCompDAO;
 import dk.dtu.model.dto.RecipeCompDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 
 public class MySQLRecipeCompDaoTest {
 

@@ -17,7 +17,7 @@ import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 
 public class MySQLOperatorDAOTest {
 

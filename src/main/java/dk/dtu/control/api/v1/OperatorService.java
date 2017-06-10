@@ -16,11 +16,11 @@ import dk.dtu.control.IWebInterfaceController;
 import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
-import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.OperatorDAO;
 
 @Path("v1/operator")

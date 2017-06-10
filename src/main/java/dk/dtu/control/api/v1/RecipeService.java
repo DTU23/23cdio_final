@@ -25,8 +25,8 @@ import dk.dtu.model.interfaces.DALException;
 import dk.dtu.model.interfaces.RecipeDAO;
 
 @Path("v1/recipe")
-@Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class RecipeService {
 	
 	// This class implements the methods from MySQLRecipeDAO
@@ -48,6 +48,7 @@ public class RecipeService {
 	}
 	
 	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Pharmacist })
 	public void updateRecipe(RecipeDTO recipe) throws DALException, ValidationException {
 		controller.updateRecipeValidation(recipe);

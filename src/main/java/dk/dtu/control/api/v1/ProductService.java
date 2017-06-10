@@ -26,7 +26,6 @@ import dk.dtu.model.interfaces.ProductBatchDAO;
 
 @Path("v1/product")
 @Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class ProductService {
 
 	// This class implements all MySQLProductBatchDAO methods
@@ -34,6 +33,7 @@ public class ProductService {
 	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Foreman })
 	public void createProductBatch(int recipeId) throws DALException, ValidationException {
 		controller.createProductBatchValidation(recipeId);
@@ -48,6 +48,7 @@ public class ProductService {
 	}
 	
 	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Foreman })
 	public void updateProductBatch(ProductBatchDTO productBatch) throws DALException, ValidationException {
 		controller.updateProductBatchValidation(productBatch);

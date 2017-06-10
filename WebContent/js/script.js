@@ -15,6 +15,98 @@ $(document).ready(function () {
     $('#ProduceSubTabs').tabs();
 
     /**
+     * ProductBatch Listeners
+     */
+    // Recipe Opening/closing
+    $(document).on('click', '.product.collapsible-header', function (e) {
+        var TargetId = $(this).attr('data-id');
+        $.ajax({
+            context: TargetId,
+            type: "GET",
+            contentType: "application/json",
+            processData: false,
+            crossDomain: true,
+            url: "./api/v1/productbatch/list/"+$(this).attr('data-id'),
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            success: function( response ) {
+                console.log(response);
+                var template = $('#productBatchComponentsTemplate').html();
+                var data = {};
+                data['productbatchcomponents'] = response;
+                data['pbId'] = TargetId;
+                Mustache.parse(template);   // optional, speeds up future uses
+                var rendered = Mustache.render(template, data);
+
+                $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
+                    console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
+                });
+            },
+            error: function ( msg ) {
+                console.log(msg);
+                Materialize.toast("Error in loading data!", 4000);
+            }
+        });
+    });
+
+    $(document).on("click", '.add-recipecomp', function (e) {
+        template = $('#recipeComponentInsertTemplate').html();
+        Mustache.parse(template);   // optional, speeds up future uses
+        data = {};
+        data["recipeId"] = $(this).attr('data-recipe-id');
+        console.log(data);
+        var rendered = Mustache.render(template, data);
+        $('#EditModal').html(rendered).promise().done(function () {
+
+        });
+        $('#EditModal').modal('open');
+    });
+
+    $(document).on("click", '.add-productbatch', function (e) {
+        template = $('#productBatchInsertTemplate').html();
+        Mustache.parse(template);   // optional, speeds up future uses
+        var rendered = Mustache.render(template);
+        $('#EditModal').html(rendered).promise().done(function () {
+
+        });
+        $('#EditModal').modal('open');
+        Materialize.updateTextFields();
+    });
+
+    $(document).on('click', '.modal-add-productbatch', function (e) {
+        e.preventDefault();
+        console.log($('#productBatchAdd').find('#recipe_id').val());
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            context: $('#productBatchAdd').find('#recipe_id').val(),
+            processData: false,
+            data: JSON.stringify({
+                    recipeId: $('#productBatchAdd').find('#recipe_id').val()
+            }),
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            url: "./api/v1/product/",
+            success: function( msg ) {
+                console.log("Response: " + msg);
+                populateProductAdmin(false);
+                $('#EditModal').modal('close');
+            },
+            error: function ( msg ) {
+                Materialize.toast("Unable to update product batch!", 4000);
+                $('#EditModal').modal('close');
+            }
+        });
+    });
+
+    /**
+     * ProductBathcComp Listeners
+     */
+
+
+    /**
      * User Listeners
      */
     $(document).on("click", '.add-user', function (e) {
@@ -86,6 +178,9 @@ $(document).ready(function () {
             type: "POST",
             contentType: "application/json",
             processData: false,
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
             data: JSON.stringify({
                 "oprId": $('#userAdd').find("#user_id").val(),
                 "oprName": $('#userAdd').find("#user_name").val(),
@@ -97,7 +192,7 @@ $(document).ready(function () {
             url: "./api/v1/operator/",
             success: function( msg ) {
                 console.log("Response: " + msg);
-                populate();
+                populateUsersAdmin(false);
                 $('#EditModal').modal('close');
             },
             error: function ( msg ) {
@@ -159,8 +254,10 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".edit-produce", function (e) {
+        var TargetId = $(this).attr('data-id');
         $.ajax({
             type: "GET",
+            context: TargetId,
             contentType: "application/json",
             processData: false,
             async: false,
@@ -172,6 +269,7 @@ $(document).ready(function () {
             success: function( response ) {
                 data = {};
                 data["produce"] = response;
+                data["produceId"] = TargetId;
                 template = $('#produceEditTemplate').html();
                 Mustache.parse(template);   // optional, speeds up future uses
                 var rendered = Mustache.render(template, data);
@@ -188,25 +286,19 @@ $(document).ready(function () {
     });
 
     $(document).on("click", '.delete-produce', function (e) {
-        var row = $(this).parent().parent();
         $.ajax({
             type: "DELETE",
-            contentType: "application/json",
             processData: false,
-            data: JSON.stringify({}),
-            url: "./api/v1/operator/"+row.children(".id").text(),
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            url: "./api/v1/operator/"+$(this).attr('data-id'),
             success: function( response ) {
-                if(response){
-                    Materialize.toast("User with ID: "+ row.children(".id").text() +" was deleted!", 4000);
-                    row.fadeOut("slow", function () {
-                        row.remove();
-                    });
-                }else{
-                    Materialize.toast("Unable to delete user!", 4000);
-                }
+                Materialize.toast("User with ID: "+ row.children(".id").text() +" was deleted!", 4000);
+                populateProduceAdmin(false);
             },
             error: function ( msg ) {
-                Materialize.toast("Unable to delete user!", 4000);
+                Materialize.toast("Unable to delete produce!", 4000);
             }
         });
     });
@@ -218,18 +310,145 @@ $(document).ready(function () {
             type: "PUT",
             contentType: "application/json",
             processData: false,
-            data: {
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            data: JSON.stringify({
                 produceId: $('#produceEdit').attr('data-source-id'),
                 produceName: $('#produceEdit').find('input#produce_name').val(),
                 supplier: $('#produceEdit').find('input#produce_supplier').val()
-            },
+            }),
             url: "./api/v1/produce/",
             success: function( msg ) {
-                console.log("Response: " + msg);
+                populateProduceAdmin(false);
                 $('#EditModal').modal('close');
             },
             error: function ( msg ) {
                 Materialize.toast("Unable to update user!", 4000);
+                $('#EditModal').modal('close');
+            }
+        });
+    });
+
+    $(document).on('click', '.modal-add-produce', function (e) {
+        e.preventDefault();
+        $('#EditModal').find('.preloader-wrapper').removeClass('hide');
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            processData: false,
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            data: JSON.stringify({
+                produceName: $('#produceAdd').find('input#produce_name').val(),
+                supplier: $('#produceAdd').find('input#produce_supplier').val()
+            }),
+            url: "./api/v1/produce/",
+            success: function( msg ) {
+                console.log("Response: " + msg);
+                populateProduceAdmin(false);
+                $('#EditModal').modal('close');
+            },
+            error: function ( msg ) {
+                Materialize.toast("Unable to update user!", 4000);
+                $('#EditModal').modal('close');
+            }
+        });
+    });
+
+    /**
+     * Producebatch Listeners
+     */
+
+    $(document).on("click", '.add-producebatch', function (e) {
+        template = $('#produceBatchInsertTemplate').html();
+        Mustache.parse(template);   // optional, speeds up future uses
+        var rendered = Mustache.render(template);
+        $('#EditModal').html(rendered).promise().done(function () {
+
+        });
+        $('#EditModal').modal('open');
+        Materialize.updateTextFields();
+    });
+
+    $(document).on("click", ".edit-producebatch", function (e) {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json",
+            processData: false,
+            async: false,
+            crossDomain: true,
+            url: "./api/v1/producebatch/"+$(this).attr('data-rb-id'),
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            success: function( response ) {
+                console.log(response);
+                data = {};
+                data["producebatch"] = response;
+                template = $('#produceBatchEditTemplate').html();
+                Mustache.parse(template);   // optional, speeds up future uses
+                var rendered = Mustache.render(template, data);
+                $('#EditModal').html(rendered).promise().done(function () {
+                    $('#EditModal').modal('open');
+                });
+                return response;
+            },
+            error: function ( msg ) {
+                console.log(msg);
+                Materialize.toast("Error in loading data!", 4000);
+            }
+        });
+    });
+
+    $(document).on('click', '.modal-save-producebatch', function (e) {
+        e.preventDefault();
+        $('#EditModal').find('.preloader-wrapper').removeClass('hide');
+        $.ajax({
+            type: "PUT",
+            contentType: "application/json",
+            processData: false,
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            data: JSON.stringify({
+                rbId: $('#produceBatchEdit').attr('data-source-id'),
+                produceName: null,
+                supplier: null,
+                produceId: $('#produceBatchEdit').find('input#produceId').val(),
+                amount: $('#produceBatchEdit').find('input#amount').val()
+            }),
+            url: "./api/v1/producebatch/",
+            success: function( msg ) {
+                populateProduceBatchAdmin(false);
+                $('#EditModal').modal('close');
+            },
+            error: function ( msg ) {
+                Materialize.toast("Unable to update produce batch!", 4000);
+                $('#EditModal').modal('close');
+            }
+        });
+    });
+
+    $(document).on('click', '.modal-add-producebatch', function (e) {
+        e.preventDefault();
+        $('#EditModal').find('.preloader-wrapper').removeClass('hide');
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            processData: false,
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            url: "./api/v1/producebatch/"+$('#produceBatchAdd').find('input#produce_id').val()+'/'+$('#produceBatchAdd').find('input#amount').val(),
+            success: function( msg ) {
+                console.log("Response: " + msg);
+                populateProduceBatchAdmin(false);
+                $('#EditModal').modal('close');
+            },
+            error: function ( msg ) {
+                Materialize.toast("Unable to add produce batch!", 4000);
                 $('#EditModal').modal('close');
             }
         });
@@ -271,6 +490,39 @@ $(document).ready(function () {
             error: function ( msg ) {
                 Materialize.toast("Unable to update recipe component!", 4000);
                 $('#EditModal').modal('close');
+            }
+        });
+    });
+
+    // Recipe Opening/closing
+    $(document).on('click', '.recipe.collapsible-header', function (e) {
+        var TargetId = $(this).attr('data-id');
+        $.ajax({
+            context: TargetId,
+            type: "GET",
+            contentType: "application/json",
+            processData: false,
+            crossDomain: true,
+            url: "./api/v1/recipecomp/list/"+$(this).attr('data-id'),
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            success: function( response ) {
+                console.log(response);
+                var template = $('#RecipeComponentsTemplate').html();
+                var data = {};
+                data['recipecomponents'] = response;
+                data['recipeId'] = TargetId;
+                Mustache.parse(template);   // optional, speeds up future uses
+                var rendered = Mustache.render(template, data);
+
+                $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
+                    console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
+                });
+            },
+            error: function ( msg ) {
+                console.log(msg);
+                Materialize.toast("Error in loading data!", 4000);
             }
         });
     });
@@ -573,43 +825,11 @@ $(document).ready(function () {
                 populateProduceBatchAdmin(true);
                 break;
             case "#ProductAdminTab":
+                populateProductAdmin(true);
                 break;
             default:
                 break;
         }
-    });
-
-    // Recipe Opening/closing
-    $(document).on('click', '.recipe.collapsible-header', function (e) {
-        var TargetId = $(this).attr('data-id');
-        $.ajax({
-            context: TargetId,
-            type: "GET",
-            contentType: "application/json",
-            processData: false,
-            crossDomain: true,
-            url: "./api/v1/recipecomp/list/"+$(this).attr('data-id'),
-            headers : {
-                Authorization: Cookies.get("auth")
-            },
-            success: function( response ) {
-                console.log(response);
-                var template = $('#RecipeComponentsTemplate').html();
-                var data = {};
-                data['recipecomponents'] = response;
-                data['recipeId'] = TargetId;
-                Mustache.parse(template);   // optional, speeds up future uses
-                var rendered = Mustache.render(template, data);
-
-                $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
-                    console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
-                });
-            },
-            error: function ( msg ) {
-                console.log(msg);
-                Materialize.toast("Error in loading data!", 4000);
-            }
-        });
     });
 
     /**
@@ -699,6 +919,7 @@ function populateProduceBatchAdmin(notice) {
     $.ajax({
         type: "GET",
         contentType: "application/json",
+        async: false,
         processData: false,
         crossDomain: true,
         url: "./api/v1/producebatch/",
@@ -753,7 +974,37 @@ function populateProduceBatchAdmin(notice) {
 }
 
 function populateProductAdmin(notice) {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        processData: false,
+        crossDomain: true,
+        url: "./api/v1/product",
+        headers : {
+            Authorization: Cookies.get("auth")
+        },
+        success: function( response ) {
+            console.log(response);
+            var template = $('#ProductBatchAdministrationTemplate').html();
+            var data = {};
+            data['productbatch'] = response;
+            Mustache.parse(template);   // optional, speeds up future uses
+            var rendered = Mustache.render(template, data);
 
+            $('#ProductAdminTab').html(rendered).promise().done(function () {
+                $('.collapsible').collapsible();
+                $('.collapsible-header').each(function () {
+                    var TargetId = $(this).attr('data-id');
+                })
+            });
+        },
+        error: function ( msg ) {
+            console.log(msg);
+            if(notice){
+
+            }
+        }
+    });
 }
 
 function populateRecipeAdmin(notice){

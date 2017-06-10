@@ -3,7 +3,6 @@ package dk.dtu.control;
 import java.util.Random;
 
 import dk.dtu.model.Validation;
-import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dao.MySQLProduceBatchDAO;
 import dk.dtu.model.dao.MySQLProduceDAO;
@@ -16,7 +15,8 @@ import dk.dtu.model.dto.ProduceDTO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.dto.RecipeCompDTO;
 import dk.dtu.model.dto.RecipeDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.OperatorDAO;
 import dk.dtu.model.interfaces.ProduceBatchDAO;
 import dk.dtu.model.interfaces.ProduceDAO;
@@ -71,8 +71,6 @@ public class WebInterfaceController implements IWebInterfaceController {
 		Validation.isPositiveInteger(produceBatch.getProduceId());
 		Validation.isPositiveInteger(produceBatch.getRbId());
 		Validation.isPositiveDouble(produceBatch.getAmount());
-		Validation.isValidUserName(produceBatch.getProduceName());
-		Validation.isValidUserName(produceBatch.getSupplier());
 		ProduceBatchDAO dao = new MySQLProduceBatchDAO();
 		dao.updateProduceBatch(produceBatch.getProduceId(), produceBatch.getAmount());
 	}
@@ -90,7 +88,7 @@ public class WebInterfaceController implements IWebInterfaceController {
 	public void updateProduceValidation(ProduceDTO produce) throws DALException, ValidationException {
 		Validation.isPositiveInteger(produce.getProduceId());
 		Validation.isValidUserName(produce.getProduceName());
-		Validation.isValidUserName(produce.getSupplier());
+			Validation.isValidUserName(produce.getSupplier());
 		ProduceDAO dao = new MySQLProduceDAO();
 		dao.updateProduce(produce);		
 	}

@@ -1,13 +1,13 @@
 package dk.dtu.control;
 
-import dk.dtu.model.ValidationException;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.ProduceBatchDTO;
 import dk.dtu.model.dto.ProduceDTO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.dto.RecipeCompDTO;
 import dk.dtu.model.dto.RecipeDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.ValidationException;
 
 public interface IWebInterfaceController {
 

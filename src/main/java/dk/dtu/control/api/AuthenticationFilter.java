@@ -20,7 +20,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dto.OperatorDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 
 @Secured
 @Provider

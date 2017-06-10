@@ -17,16 +17,16 @@ import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
-import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLRecipeDAO;
 import dk.dtu.model.dto.RecipeDTO;
 import dk.dtu.model.dto.RecipeListDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.RecipeDAO;
 
 @Path("v1/recipe")
-@Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class RecipeService {
 	
 	// This class implements the methods from MySQLRecipeDAO
@@ -48,6 +48,7 @@ public class RecipeService {
 	}
 	
 	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Pharmacist })
 	public void updateRecipe(RecipeDTO recipe) throws DALException, ValidationException {
 		controller.updateRecipeValidation(recipe);

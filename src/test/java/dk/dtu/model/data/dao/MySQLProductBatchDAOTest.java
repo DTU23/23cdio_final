@@ -17,7 +17,7 @@ import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.dto.ProductBatchListDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 
 public class MySQLProductBatchDAOTest {
     private MySQLProductBatchDAO pbdao;

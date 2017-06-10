@@ -8,7 +8,7 @@ import java.util.List;
 import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dto.RecipeDTO;
 import dk.dtu.model.dto.RecipeListDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.interfaces.RecipeDAO;
 
 public class MySQLRecipeDAO implements RecipeDAO {

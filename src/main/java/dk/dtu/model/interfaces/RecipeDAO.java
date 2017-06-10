@@ -4,6 +4,7 @@ import java.util.List;
 
 import dk.dtu.model.dto.RecipeDTO;
 import dk.dtu.model.dto.RecipeListDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public interface RecipeDAO {
 	void createRecipe(String recipeName) throws DALException;

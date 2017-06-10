@@ -6,13 +6,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import dk.dtu.control.AuthException;
 import dk.dtu.control.ILoginController;
 import dk.dtu.control.LoginController;
 import dk.dtu.model.Validation;
-import dk.dtu.model.ValidationException;
 import dk.dtu.model.dto.OperatorDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.AuthException;
+import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.ValidationException;
 
 @Path("/v1/login")
 public class LoginService {

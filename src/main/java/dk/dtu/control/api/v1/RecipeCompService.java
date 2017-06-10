@@ -17,10 +17,10 @@ import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
-import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLRecipeCompDAO;
 import dk.dtu.model.dto.RecipeCompDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.RecipeCompDAO;
 
 @Path("v1/recipecomp")

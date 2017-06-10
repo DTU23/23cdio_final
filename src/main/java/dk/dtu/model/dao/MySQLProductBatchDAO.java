@@ -9,7 +9,7 @@ import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.dto.ProductBatchListDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.interfaces.ProductBatchDAO;
 
 public class MySQLProductBatchDAO implements ProductBatchDAO {

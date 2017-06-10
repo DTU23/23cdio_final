@@ -8,7 +8,7 @@ import java.util.List;
 import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.interfaces.OperatorDAO;
 
 public class MySQLOperatorDAO implements OperatorDAO {

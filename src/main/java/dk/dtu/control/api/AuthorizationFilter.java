@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 
 @Secured
 @Provider

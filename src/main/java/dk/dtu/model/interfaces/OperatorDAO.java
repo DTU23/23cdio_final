@@ -4,6 +4,7 @@ import java.util.List;
 
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public interface OperatorDAO {
 	void createOperator(OperatorDTO opr) throws DALException;

@@ -9,7 +9,7 @@ import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.interfaces.ProductBatchCompDAO;
 
 public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
@@ -131,8 +131,8 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 			{
 				list.add(new ProductBatchCompSupplierDetailsDTO(
 						rs.getInt("rb_id"),
-						rs.getString("produce_name"),
 						rs.getString("supplier"),
+						rs.getString("produce_name"),
 						rs.getDouble("netto"),
 						rs.getInt("opr_id")));
 			}

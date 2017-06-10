@@ -20,6 +20,427 @@
     -->
 
     <!--
+        ** ProduceBatch Administration Templates
+    -->
+    <script type="text/html" id="ProductBatchAdministrationTemplate">
+        <div class="container-fluid">
+            <table class="striped centered responsive-table" id="productBatchHeader">
+                <thead>
+                <tr>
+                    <th class="col s3">ID</th>
+                    <th class="col s3">Recipe ID</th>
+                    <th class="col s3">Recipe Name</th>
+                    <th class="col s3">Status</th>
+                </tr>
+                </thead>
+            </table>
+            <ul class="collapsible" data-collapsible="accordion">
+                <!--{{#productbatch}}-->
+                <li>
+                    <div class="center product collapsible-header" data-id="{{ pbId }}">
+                        <span class="col s3 pbId">{{pbId}}</span>
+                        <span class="col s3 recipeId">{{recipeId}}</span>
+                        <span class="col s3 recipeName">{{recipeName}}</span>
+                        <span class="col s3 status">{{status}}</span>
+                    </div>
+                    <div class="collapsible-body"></div>
+                </li>
+                <!--{{/productbatch}}-->
+            </ul>
+            <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-productbatch"><i class="material-icons">add</i></a>
+        </div>
+    </script>
+
+    <script type="text/html" id="productBatchEditTemplate">
+        <div class="modal-content">
+            <h4>Edit Produce Batch</h4>
+            <!--{{#productbatch}}-->
+            <form id="productBatchEdit" data-source-id="{{pbId}}">
+                <div class="row">
+
+                </div>
+            </form>
+            <!--{{/productbatch}}-->
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-save-producebatch waves-effect waves-green btn-flat">Save</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="productBatchInsertTemplate">
+        <div class="modal-content">
+            <h4>Add Produce Batch</h4>
+            <form id="productBatchAdd">
+                <div class="row" data-source-id="">
+                    <div class="input-field col s12">
+                        <input id="recipe_id" type="text" class="validate" value="">
+                        <label for="recipe_id" class="active">Recipe ID</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-add-productbatch waves-effect waves-green btn-flat">Add</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="productBatchComponentsTemplate">
+        <table class="striped centered responsive-table">
+            <thead>
+            <tr>
+                <th>Produce Batch ID</th>
+                <th>Produce Name</th>
+                <th>Nom. Netto</th>
+                <th>Opr. ID</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--{{#productbatchcomponents}}-->
+            <tr id="productbatch-component-{{rbId}}">
+                <td class="producebatch_id">{{rbId}}</td>
+                <td class="produce_name">{{produceName}}</td>
+                <td class="nom_netto">{{netto}}</td>
+                <td class="oprId">{{oprId}}</td>
+            </tr>
+            <!--{{/productbatchcomponents}}-->
+            </tbody>
+        </table>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipecomp" data-productbatch-id="{{pbId}}"><i class="material-icons">add</i></a>
+    </script>
+
+    <script type="text/html" id="productBatchComponentInsertTemplate">
+        <div class="modal-content">
+            <h4>Add Produce</h4>
+            <form id="recipeComponentAdd" data-recipe-id="{{recipeId}}">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="produce_id" type="text" class="validate" value="">
+                        <label for="produce_id" class="active">Produce ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="nom_netto" type="text" class="validate" value="">
+                        <label for="nom_netto" class="active">Nom. Netto</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="tolerance" type="text" class="validate" value="">
+                        <label for="tolerance" class="active">Tolerance</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-add-recipecomp waves-effect waves-green btn-flat">Add</a>
+        </div>
+    </script>
+
+    <!--
+        ** Produce Administration Templates
+    -->
+    <script type="text/html" id="ProduceAdministrationTemplate">
+        <table class="striped centered responsive-table" id="produceList">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Supplier</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="produceListRows">
+            <!--{{#produce}}-->
+            <tr id="produce-row-{{produceId}}">
+                <td class="id">{{produceId}}</td>
+                <td class="name">{{produceName}}</td>
+                <td class="supplier">{{supplier}}</td>
+                <td>
+                    <!--<a class="btn-floating btn waves-effect waves-light red darken-2 delete-produce" data-id="{{produceId}}"><i class="material-icons">delete</i></a>-->
+                    <a class="btn-floating btn waves-effect waves-light blue darken-1 edit-produce" data-id="{{produceId}}"><i class="material-icons">edit</i></a>
+                </td>
+            </tr>
+            <!--{{/produce}}-->
+            </tbody>
+        </table>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-produce"><i class="material-icons">add</i></a>
+    </script>
+
+    <script type="text/html" id="produceEditTemplate">
+        <div class="modal-content">
+            <h4>Edit Produce</h4>
+            <form id="produceEdit" data-source-id="{{produceId}}">
+                <!--{{#produce}}-->
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="produce_name" type="text" class="validate" value="{{produceName}}">
+                        <label for="produce_name" class="active">Produce Name</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="produce_supplier" type="text" class="validate" value="{{supplier}}">
+                        <label for="produce_supplier" class="active">Supplier</label>
+                    </div>
+                </div>
+                <!--{{/produce}}-->
+            </form>
+
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-save-produce waves-effect waves-green btn-flat">Save</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="produceInsertTemplate">
+        <div class="modal-content">
+            <h4>Add Produce</h4>
+            <form id="produceAdd">
+                <div class="row" data-source-id="{{produceId}}">
+                    <div class="input-field col s12">
+                        <input id="produce_name" type="text" class="validate" value="{{produceName}}">
+                        <label for="produce_name" class="active">Produce Name</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="produce_supplier" type="text" class="validate" value="{{supplier}}">
+                        <label for="produce_supplier" class="active">Supplier</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-add-produce waves-effect waves-green btn-flat">Add</a>
+        </div>
+    </script>
+
+    <!--
+        ** ProduceBatch Administration Templates
+    -->
+    <script type="text/html" id="ProduceBatchAdministrationTemplate">
+        <h6 class="center">Produce Batch Overview</h6>
+        <table class="striped centered responsive-table" id="produceBatchList">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Supplier</th>
+                <th>Amount</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="produceBatchListRows">
+            <!--{{#producebatch}}-->
+            <tr id="produce-batch-row-{{produceId}}/{{rbId}}">
+                <td class="id">{{rbId}}</td>
+                <td class="name">{{produceName}}</td>
+                <td class="supplier">{{supplier}}</td>
+                <td class="supplier">{{amount}}</td>
+                <td>
+                    <!--<a class="btn-floating btn waves-effect waves-light red darken-2 delete-producebatch" data-id="{{rb_id}}"><i class="material-icons">delete</i></a>-->
+                    <a class="btn-floating btn waves-effect waves-light edit-producebatch blue darken-1" data-rb-id="{{rbId}}" data-produce-id="{{produceId}}"><i class="material-icons">edit</i></a>
+                </td>
+            </tr>
+            <!--{{/producebatch}}-->
+            </tbody>
+        </table>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-producebatch"><i class="material-icons">add</i></a>
+    </script>
+
+    <script type="text/html" id="produceBatchEditTemplate">
+        <div class="modal-content">
+            <h4>Edit Produce Batch</h4>
+            <!--{{#producebatch}}-->
+            <form id="produceBatchEdit" data-source-id="{{rbId}}">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input disabled id="produceId" type="text" class="validate" value="{{produceId}}">
+                        <label for="produceId" class="disabled">Produce Batch ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="amount" type="text" class="validate" value="{{amount}}">
+                        <label for="amount" class="active">Amount</label>
+                    </div>
+                </div>
+            </form>
+            <!--{{/producebatch}}-->
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-save-producebatch waves-effect waves-green btn-flat">Save</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="produceBatchInsertTemplate">
+        <div class="modal-content">
+            <h4>Add Produce Batch</h4>
+            <form id="produceBatchAdd">
+                <div class="row" data-source-id="">
+                    <div class="input-field col s12">
+                        <input id="produce_id" type="text" class="validate">
+                        <label for="produce_id" class="active">Produce ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="amount" type="text" class="validate">
+                        <label for="amount" class="active">Amount</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-add-producebatch waves-effect waves-green btn-flat">Add</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="ProduceBatchStockAdministrationTemplate">
+        <h6 class="center">Produce Stock Overview</h6>
+        <table class="striped centered responsive-table" id="produceBatchStockList">
+            <thead>
+            <tr>
+                <th>Produce Name</th>
+                <th>Current Stock</th>
+            </tr>
+            </thead>
+            <tbody id="produceBatchStockListRows">
+            <!--{{#producebatchstock}}-->
+            <tr id="produce-batch-stock-row-{{rb_id}}">
+                <td class="name">{{produceName}}</td>
+                <td class="supplier">{{currentStock}}</td>
+            </tr>
+            <!--{{/producebatchstock}}-->
+            </tbody>
+        </table>
+    </script>
+
+    <!--
+        ** Recipe Administration Templates
+    -->
+    <script type="text/html" id="RecipeAdministrationTemplate">
+        <div class="container-fluid">
+            <table class="striped centered responsive-table" id="recipeHeader">
+                <thead>
+                <tr>
+                    <th class="col s2">ID</th>
+                    <th class="col s10">Recipe Name</th>
+                </tr>
+                </thead>
+            </table>
+        <ul class="collapsible" data-collapsible="accordion">
+            <!--{{#recipies}}-->
+            <li>
+                <div class="recipe collapsible-header" data-id="{{ recipeId }}">
+                    <span class="center col s2">{{ recipeId }}</span>
+                    <span class="center col s10">{{ recipeName }}</span>
+                </div>
+                <div class="collapsible-body"></div>
+            </li>
+            <!--{{/recipies}}-->
+        </ul>
+            <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipe"><i class="material-icons">add</i></a>
+        </div>
+    </script>
+
+    <script type="text/html" id="recipeInsertTemplate">
+        <div class="modal-content">
+            <h4>Add Produce</h4>
+            <form id="recipeAdd">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="recipe_name" type="text" class="validate" value="">
+                        <label for="recipe_name" class="active">Recipe Name</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-add-recipe waves-effect waves-green btn-flat">Add</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="RecipeComponentsTemplate">
+        <table class="striped centered responsive-table">
+            <thead>
+            <tr>
+                <th>Produce ID</th>
+                <th>Nom. Netto</th>
+                <th>Tolerance</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--{{#recipecomponents}}-->
+            <tr id="recipe-component-{{produceId}}">
+                <td class="produce_id">{{produceId}}</td>
+                <td class="nom_netto">{{nomNetto}}</td>
+                <td class="nom_netto">{{tolerance}}</td>
+                <td>
+                <a class="btn-floating btn waves-effect waves-light red darken-2 delete-recipecomp" data-produce-id="{{produceId}}" data-recipe-id="{{recipeId}}"><i class="material-icons">delete</i></a>
+                <a class="btn-floating btn waves-effect waves-light blue darken-1 edit-recipecomp" data-produce-id="{{produceId}}" data-recipe-id="{{recipeId}}"><i class="material-icons">edit</i></a>
+            </td>
+            </tr>
+            <!--{{/recipecomponents}}-->
+            </tbody>
+        </table>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipecomp" data-recipe-id="{{recipeId}}"><i class="material-icons">add</i></a>
+    </script>
+
+    <script type="text/html" id="recipeComponentEditTemplate">
+        <div class="modal-content">
+            <h4>Edit Recipe Component</h4>
+            <form id="recipeComponentEdit" data-recipe-id="{{recipeId}}" data-produce-id="{{produceId}}">
+                <!--{{#recipecomponents}}-->
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="nom_netto" type="text" class="validate" value="{{nomNetto}}">
+                        <label for="nom_netto" class="active">Nom. Netto</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="tolerance" type="text" class="validate" value="{{tolerance}}">
+                        <label for="tolerance" class="active">Tolerance</label>
+                    </div>
+                </div>
+                <!--{{/recipecomponents}}-->
+            </form>
+
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-save-recipecomp waves-effect waves-green btn-flat">Save</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="recipeComponentTableRow">
+        <!--{{#produce}}-->
+        <tr id="produce-row-{{produceId}}">
+            <td class="id">{{produceId}}</td>
+            <td class="name">{{produceName}}</td>
+            <td class="ini">{{supplier}}</td>
+            <td>
+                <a class="btn-floating btn waves-effect waves-light red darken-2 delete-user" data-id="{{produceId}}"><i class="material-icons">delete</i></a>
+                <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1" data-id="{{produceId}}"><i class="material-icons">edit</i></a>
+            </td>
+        </tr>
+        <!--{{/produce}}-->
+    </script>
+
+    <script type="text/html" id="recipeComponentInsertTemplate">
+        <div class="modal-content">
+            <h4>Add Produce</h4>
+            <form id="recipeComponentAdd" data-recipe-id="{{recipeId}}">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="produce_id" type="text" class="validate" value="">
+                        <label for="produce_id" class="active">Produce ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="nom_netto" type="text" class="validate" value="">
+                        <label for="nom_netto" class="active">Nom. Netto</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="tolerance" type="text" class="validate" value="">
+                        <label for="tolerance" class="active">Tolerance</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-add-recipecomp waves-effect waves-green btn-flat">Add</a>
+        </div>
+    </script>
+
+    <!--
         ** User Administration Templates
     -->
     <script type="text/html" id="UserAdministrationTemplate">
@@ -63,7 +484,7 @@
             </tbody>
         </table>
         <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-user"><i class="material-icons">add</i></a>
-</script>
+    </script>
 
     <script type="text/html" id="userEditTemplate">
         <div class="modal-content">
@@ -265,276 +686,6 @@
         </div>
         <div class="modal-footer">
             <a href="#" class="modal-add-user waves-effect waves-green btn-flat">Add</a>
-        </div>
-    </script>
-
-    <!--
-        ** Produce Administration Templates
-    -->
-
-    <script type="text/html" id="ProduceAdministrationTemplate">
-        <table class="striped centered responsive-table" id="produceList">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Supplier</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody id="produceListRows">
-            <!--{{#produce}}-->
-            <tr id="produce-row-{{produceId}}">
-                <td class="id">{{produceId}}</td>
-                <td class="name">{{produceName}}</td>
-                <td class="supplier">{{supplier}}</td>
-                <td>
-                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-produce" data-id="{{produceId}}"><i class="material-icons">delete</i></a>
-                    <a class="btn-floating btn waves-effect waves-light blue darken-1 edit-produce" data-id="{{produceId}}"><i class="material-icons">edit</i></a>
-                </td>
-            </tr>
-            <!--{{/produce}}-->
-            </tbody>
-        </table>
-        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-produce"><i class="material-icons">add</i></a>
-    </script>
-
-    <script type="text/html" id="produceEditTemplate">
-        <div class="modal-content">
-            <h4>Edit Produce</h4>
-            <form id="produceEdit" data-source-id="{{produceId}}">
-                <!--{{#produce}}-->
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="produce_name" type="text" class="validate" value="{{produceName}}">
-                        <label for="produce_name" class="active">Produce Name</label>
-                    </div>
-                    <div class="input-field col s12">
-                        <input id="produce_supplier" type="text" class="validate" value="{{supplier}}">
-                        <label for="produce_supplier" class="active">Supplier</label>
-                    </div>
-                </div>
-                <!--{{/produce}}-->
-            </form>
-
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="modal-save-produce waves-effect waves-green btn-flat">Save</a>
-        </div>
-    </script>
-
-    <script type="text/html" id="produceTableRow">
-        <!--{{#produce}}-->
-        <tr id="produce-row-{{produceId}}">
-            <td class="id">{{produceId}}</td>
-            <td class="name">{{produceName}}</td>
-            <td class="ini">{{supplier}}</td>
-            <td>
-                <a class="btn-floating btn waves-effect waves-light red darken-2 delete-user" data-id="{{produceId}}"><i class="material-icons">delete</i></a>
-                <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1" data-id="{{produceId}}"><i class="material-icons">edit</i></a>
-            </td>
-        </tr>
-        <!--{{/produce}}-->
-    </script>
-
-    <script type="text/html" id="produceInsertTemplate">
-        <div class="modal-content">
-            <h4>Add Produce</h4>
-            <form id="produceAdd">
-                <div class="row" data-source-id="{{produceId}}">
-                    <div class="input-field col s12">
-                        <input id="produce_name" type="text" class="validate" value="{{produceName}}">
-                        <label for="produce_name" class="active">Produce Name</label>
-                    </div>
-                    <div class="input-field col s12">
-                        <input id="produce_supplier" type="text" class="validate" value="{{supplier}}">
-                        <label for="produce_supplier" class="active">Supplier</label>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="modal-add-produce waves-effect waves-green btn-flat">Add</a>
-        </div>
-    </script>
-
-    <!--
-        ** ProduceBatch Administration Templates
-    -->
-    <script type="text/html" id="ProduceBatchAdministrationTemplate">
-        <h6 class="center">Produce Batch Overview</h6>
-        <table class="striped centered responsive-table" id="produceBatchList">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Supplier</th>
-                <th>Amount</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody id="produceBatchListRows">
-            <!--{{#producebatch}}-->
-            <tr id="produce-batch-row-{{rb_id}}">
-                <td class="id">{{rbId}}</td>
-                <td class="name">{{produceName}}</td>
-                <td class="supplier">{{supplier}}</td>
-                <td class="supplier">{{amount}}</td>
-                <td>
-                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-user" data-id="{{rb_id}}"><i class="material-icons">delete</i></a>
-                    <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1" data-id="{{rb_id}}"><i class="material-icons">edit</i></a>
-                </td>
-            </tr>
-            <!--{{/producebatch}}-->
-            </tbody>
-        </table>
-        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-user"><i class="material-icons">add</i></a>
-    </script>
-
-    <script type="text/html" id="ProduceBatchStockAdministrationTemplate">
-        <h6 class="center">Produce Stock Overview</h6>
-        <table class="striped centered responsive-table" id="produceBatchStockList">
-            <thead>
-            <tr>
-                <th>Produce Name</th>
-                <th>Current Stock</th>
-            </tr>
-            </thead>
-            <tbody id="produceBatchStockListRows">
-            <!--{{#producebatchstock}}-->
-            <tr id="produce-batch-stock-row-{{rb_id}}">
-                <td class="name">{{produceName}}</td>
-                <td class="supplier">{{currentStock}}</td>
-            </tr>
-            <!--{{/producebatchstock}}-->
-            </tbody>
-        </table>
-    </script>
-
-    <!--
-        ** Recipe Administration Templates
-    -->
-    <script type="text/html" id="RecipeAdministrationTemplate">
-        <div class="container-fluid">
-            <div class="row">
-                <h6 class="center col s2">ID</h6><h6 class="center col s10">Recipe Name</h6>
-            </div>
-        <ul class="collapsible" data-collapsible="accordion">
-            <!--{{#recipies}}-->
-            <li>
-                <div class="recipe collapsible-header" data-id="{{ recipeId }}"><span class="center col s2">{{ recipeId }}</span><span class="center col s10">{{ recipeName }}</span></div>
-                <div class="collapsible-body"></div>
-            </li>
-            <!--{{/recipies}}-->
-        </ul>
-            <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipe"><i class="material-icons">add</i></a>
-        </div>
-    </script>
-
-    <script type="text/html" id="recipeInsertTemplate">
-        <div class="modal-content">
-            <h4>Add Produce</h4>
-            <form id="recipeAdd">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="recipe_name" type="text" class="validate" value="">
-                        <label for="recipe_name" class="active">Recipe Name</label>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="modal-add-recipe waves-effect waves-green btn-flat">Add</a>
-        </div>
-    </script>
-
-    <script type="text/html" id="RecipeComponentsTemplate">
-        <table class="striped centered responsive-table">
-            <thead>
-            <tr>
-                <th>Produce ID</th>
-                <th>Nom. Netto</th>
-                <th>Tolerance</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!--{{#recipecomponents}}-->
-            <tr id="recipe-component-{{produceId}}">
-                <td class="produce_id">{{produceId}}</td>
-                <td class="nom_netto">{{nomNetto}}</td>
-                <td class="nom_netto">{{tolerance}}</td>
-                <td>
-                <a class="btn-floating btn waves-effect waves-light red darken-2 delete-recipecomp" data-produce-id="{{produceId}}" data-recipe-id="{{recipeId}}"><i class="material-icons">delete</i></a>
-                <a class="btn-floating btn waves-effect waves-light blue darken-1 edit-recipecomp" data-produce-id="{{produceId}}" data-recipe-id="{{recipeId}}"><i class="material-icons">edit</i></a>
-            </td>
-            </tr>
-            <!--{{/recipecomponents}}-->
-            </tbody>
-        </table>
-        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipecomp" data-recipe-id="{{recipeId}}"><i class="material-icons">add</i></a>
-    </script>
-
-    <script type="text/html" id="recipeComponentEditTemplate">
-        <div class="modal-content">
-            <h4>Edit Recipe Component</h4>
-            <form id="recipeComponentEdit" data-recipe-id="{{recipeId}}" data-produce-id="{{produceId}}">
-                <!--{{#recipecomponents}}-->
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="nom_netto" type="text" class="validate" value="{{nomNetto}}">
-                        <label for="nom_netto" class="active">Nom. Netto</label>
-                    </div>
-                    <div class="input-field col s12">
-                        <input id="tolerance" type="text" class="validate" value="{{tolerance}}">
-                        <label for="tolerance" class="active">Tolerance</label>
-                    </div>
-                </div>
-                <!--{{/recipecomponents}}-->
-            </form>
-
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="modal-save-recipecomp waves-effect waves-green btn-flat">Save</a>
-        </div>
-    </script>
-
-    <script type="text/html" id="recipeComponentTableRow">
-        <!--{{#produce}}-->
-        <tr id="produce-row-{{produceId}}">
-            <td class="id">{{produceId}}</td>
-            <td class="name">{{produceName}}</td>
-            <td class="ini">{{supplier}}</td>
-            <td>
-                <a class="btn-floating btn waves-effect waves-light red darken-2 delete-user" data-id="{{produceId}}"><i class="material-icons">delete</i></a>
-                <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1" data-id="{{produceId}}"><i class="material-icons">edit</i></a>
-            </td>
-        </tr>
-        <!--{{/produce}}-->
-    </script>
-
-    <script type="text/html" id="recipeComponentInsertTemplate">
-        <div class="modal-content">
-            <h4>Add Produce</h4>
-            <form id="recipeComponentAdd" data-recipe-id="{{recipeId}}">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="produce_id" type="text" class="validate" value="">
-                        <label for="produce_id" class="active">Produce ID</label>
-                    </div>
-                    <div class="input-field col s12">
-                        <input id="nom_netto" type="text" class="validate" value="">
-                        <label for="nom_netto" class="active">Nom. Netto</label>
-                    </div>
-                    <div class="input-field col s12">
-                        <input id="tolerance" type="text" class="validate" value="">
-                        <label for="tolerance" class="active">Tolerance</label>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="modal-add-recipecomp waves-effect waves-green btn-flat">Add</a>
         </div>
     </script>
 

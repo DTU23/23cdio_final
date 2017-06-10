@@ -17,16 +17,15 @@ import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
-import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLProduceDAO;
 import dk.dtu.model.dto.ProduceDTO;
 import dk.dtu.model.dto.ProduceOverviewDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.ProduceDAO;
 
 @Path("v1/produce")
 @Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class ProduceService {
 
 	// This class implements the methods from MySQLProduceDAO
@@ -34,6 +33,7 @@ public class ProduceService {
 	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Pharmacist })
 	public void createProduce(ProduceDTO produce) throws DALException, ValidationException {
 		controller.createProduceValidation(produce);
@@ -48,6 +48,7 @@ public class ProduceService {
 	}
 	
 	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Pharmacist })
 	public void updateProduce(ProduceDTO produce) throws DALException, ValidationException {
 		controller.updateProduceValidation(produce);

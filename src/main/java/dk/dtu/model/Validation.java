@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dk.dtu.control.api.Role;
+import dk.dtu.model.exceptions.ValidationException;
 
 public class Validation {
 

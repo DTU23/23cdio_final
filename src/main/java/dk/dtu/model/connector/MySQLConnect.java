@@ -4,10 +4,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import dk.dtu.model.exceptions.DALException;
+
 import java.sql.Connection;
-
-
-import dk.dtu.model.interfaces.DALException;
 
 public final class MySQLConnect {
 

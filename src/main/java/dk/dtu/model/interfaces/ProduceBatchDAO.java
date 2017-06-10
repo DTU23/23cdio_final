@@ -4,6 +4,7 @@ import java.util.List;
 
 import dk.dtu.model.dto.ProduceBatchDTO;
 import dk.dtu.model.dto.StockDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public interface ProduceBatchDAO {
 	void createProduceBatch(int produce_id, double amount) throws DALException;

@@ -8,8 +8,36 @@ import java.sql.SQLException;
 
 import dk.dtu.model.exceptions.DALException;
 
-public final class Connector
-{
+public final class Connector {
+	
+	public static Connection getConnection(String server, int port, String database, String username, String password) throws DALException {
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			return (Connection) DriverManager.getConnection("jdbc:mysql://"+server+":"+port+"/"+database+"?verifyServerCertificate=false&useSSL=true", username, password);
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			throw new DALException(e);
+		}	
+	}
+	
+	public static Connection getConnection() throws DALException {
+		return getConnection(Constant.server, Constant.port, Constant.database, Constant.username, Constant.password);	
+	}
+	
+	public static int resetData() throws DALException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement("CALL reset_data();");
+			return statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (statement != null) statement.close(); } catch (SQLException e) {};
+			try { if (connection != null) connection.close(); } catch (SQLException e) {};
+		}
+	}
+	
 	private static Connector instance;
 	private Connection connection;
 	private PreparedStatement statement;
@@ -60,18 +88,6 @@ public final class Connector
 		connectToDatabase();
 		try {
 			statement = connection.prepareStatement(cmd);
-			return statement.executeUpdate();
-		} catch (SQLException e) {
-			throw new DALException(e);
-		} finally {
-			closeResources();
-		}
-	}
-
-	public int resetData() throws DALException {
-		connectToDatabase();
-		try {
-			statement = connection.prepareStatement("CALL reset_data();");
 			return statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new DALException(e);

@@ -96,6 +96,18 @@ public final class Connector {
 		}
 	}
 
+	public int oldResetData() throws DALException {
+		connectToDatabase();
+		try {
+			statement = connection.prepareStatement("CALL reset_data();");
+			return statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			closeResources();
+		}
+	}
+
 	public void closeResources() {
 		try { if (resultSet != null) resultSet.close(); } catch (SQLException e) {};
 		try { if (statement != null) statement.close(); } catch (SQLException e) {};

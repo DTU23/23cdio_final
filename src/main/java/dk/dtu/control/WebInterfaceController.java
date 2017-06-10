@@ -71,8 +71,6 @@ public class WebInterfaceController implements IWebInterfaceController {
 		Validation.isPositiveInteger(produceBatch.getProduceId());
 		Validation.isPositiveInteger(produceBatch.getRbId());
 		Validation.isPositiveDouble(produceBatch.getAmount());
-		Validation.isValidUserName(produceBatch.getProduceName());
-		Validation.isValidUserName(produceBatch.getSupplier());
 		ProduceBatchDAO dao = new MySQLProduceBatchDAO();
 		dao.updateProduceBatch(produceBatch.getProduceId(), produceBatch.getAmount());
 	}
@@ -90,7 +88,7 @@ public class WebInterfaceController implements IWebInterfaceController {
 	public void updateProduceValidation(ProduceDTO produce) throws DALException, ValidationException {
 		Validation.isPositiveInteger(produce.getProduceId());
 		Validation.isValidUserName(produce.getProduceName());
-		Validation.isValidUserName(produce.getSupplier());
+			Validation.isValidUserName(produce.getSupplier());
 		ProduceDAO dao = new MySQLProduceDAO();
 		dao.updateProduce(produce);		
 	}

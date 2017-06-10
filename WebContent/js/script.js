@@ -26,7 +26,7 @@ $(document).ready(function () {
             contentType: "application/json",
             processData: false,
             crossDomain: true,
-            url: "./api/v1/productbatch/list/"+$(this).attr('data-id'),
+            url: "./api/v1/product/list/"+$(this).attr('data-id'),
             headers : {
                 Authorization: Cookies.get("auth")
             },
@@ -79,12 +79,10 @@ $(document).ready(function () {
         console.log($('#productBatchAdd').find('#recipe_id').val());
         $.ajax({
             type: "POST",
-            contentType: "application/json",
             context: $('#productBatchAdd').find('#recipe_id').val(),
             processData: false,
-            data: JSON.stringify({
-                    recipeId: $('#productBatchAdd').find('#recipe_id').val()
-            }),
+            contentType: "text/plain",
+            data: $('#productBatchAdd').find('#recipe_id').val(),
             headers : {
                 Authorization: Cookies.get("auth")
             },

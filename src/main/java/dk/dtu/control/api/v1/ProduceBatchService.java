@@ -2,13 +2,7 @@ package dk.dtu.control.api.v1;
 
 import java.util.List;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import dk.dtu.control.IWebInterfaceController;
@@ -32,7 +26,7 @@ public class ProduceBatchService {
 	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
-	@Path("/{id};{amount}")
+	@Path("/{id}/{amount}")
 	@Secured( roles = { Role.Foreman })
 	public void createProduceBatch(@PathParam("id") int produceId, @PathParam("amount") double amount) throws DALException, ValidationException {
 		controller.createProduceBatchValidation(produceId, amount);
@@ -47,6 +41,7 @@ public class ProduceBatchService {
 	}
 	
 	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Foreman })
 	public void updateProduceBatch(ProduceBatchDTO produceBatch) throws DALException, ValidationException {
 		controller.updateProduceBatchValidation(produceBatch);

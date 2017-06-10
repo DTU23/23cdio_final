@@ -2,8 +2,9 @@ package dk.dtu.control;
 
 import javax.ws.rs.core.Response;
 
-import dk.dtu.model.ValidationException;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.AuthException;
+import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.ValidationException;
 
 public interface ILoginController {
 

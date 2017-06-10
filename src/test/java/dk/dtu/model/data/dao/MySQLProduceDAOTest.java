@@ -16,7 +16,7 @@ import dk.dtu.model.connector.Connector;
 import dk.dtu.model.dao.MySQLProduceDAO;
 import dk.dtu.model.dto.ProduceDTO;
 import dk.dtu.model.dto.ProduceOverviewDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 
 /**
  * This JUnit class tests the MySQLProduceDAO class.

@@ -22,7 +22,7 @@ import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
 import dk.dtu.model.dto.ProductBatchDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 
 public class MySQLProductBatchCompDAOTest {
     private MySQLProductBatchCompDAO pbcdao;

@@ -4,6 +4,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dk.dtu.model.exceptions.ValidationException;
+
 public class ValidationTest {
 
 	@Before

@@ -3,6 +3,7 @@ package dk.dtu.model.interfaces;
 import java.util.List;
 
 import dk.dtu.model.dto.RecipeCompDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public interface RecipeCompDAO {
 	void createRecipeComp(RecipeCompDTO recipecomponent) throws DALException;

@@ -3,7 +3,6 @@ package dk.dtu.control;
 import java.util.Random;
 
 import dk.dtu.model.Validation;
-import dk.dtu.model.ValidationException;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dao.MySQLProduceBatchDAO;
 import dk.dtu.model.dao.MySQLProduceDAO;
@@ -16,7 +15,8 @@ import dk.dtu.model.dto.ProduceDTO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.dto.RecipeCompDTO;
 import dk.dtu.model.dto.RecipeDTO;
-import dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.OperatorDAO;
 import dk.dtu.model.interfaces.ProduceBatchDAO;
 import dk.dtu.model.interfaces.ProduceDAO;

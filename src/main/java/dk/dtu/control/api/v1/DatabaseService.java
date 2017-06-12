@@ -4,7 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 import dk.dtu.control.api.Secured;
-import dk.dtu.model.connector.Connector;
+import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.exceptions.DALException;
 import dk.dtu.control.api.Role;
 
@@ -15,7 +15,7 @@ public class DatabaseService {
 	@GET
 	@Path("/reset")
 	public void resetDatabase() throws DALException {
-		if (Connector.getInstance().resetData() == 0) {
+		if (DataSource.getInstance().resetData() == 0) {
 			throw new DALException("No rows affected!");
 		}
 	}

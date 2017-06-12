@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dk.dtu.model.connector.Connector;
+import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dao.MySQLRecipeDAO;
 import dk.dtu.model.dto.RecipeDTO;
 import dk.dtu.model.exceptions.DALException;
@@ -22,13 +22,13 @@ public class MySQLRecipeDAOTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Connector.getInstance().resetData();
+		DataSource.getInstance().resetData();
 		recipe = new MySQLRecipeDAO();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		Connector.getInstance().resetData();
+		DataSource.getInstance().resetData();
 		recipe = null;
 	}
 

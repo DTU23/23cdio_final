@@ -13,7 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dk.dtu.model.connector.Connector;
+import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dao.MySQLRecipeCompDAO;
 import dk.dtu.model.dto.RecipeCompDTO;
 import dk.dtu.model.exceptions.DALException;
@@ -24,13 +24,13 @@ public class MySQLRecipeCompDaoTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Connector.getInstance().resetData();
+		DataSource.getInstance().resetData();
 		recipeComp = new MySQLRecipeCompDAO();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		Connector.getInstance().resetData();
+		DataSource.getInstance().resetData();
 		recipeComp = null;
 	}
 

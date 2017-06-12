@@ -13,7 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dk.dtu.model.connector.Connector;
+import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
@@ -25,13 +25,13 @@ public class MySQLOperatorDAOTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Connector.getInstance().resetData();
+		DataSource.getInstance().resetData();
 		opr = new MySQLOperatorDAO();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		Connector.getInstance().resetData();
+		DataSource.getInstance().resetData();
 		opr = null;
 	}
 
@@ -55,9 +55,9 @@ public class MySQLOperatorDAOTest {
 	public void testGetOperatorByIDThatDoesntExist() {
 		String errorMsg = null;
 		try {
-			opr.readOperator(6);
+			opr.readOperator(10);
 		} catch (DALException e) { errorMsg = e.getMessage(); }
-		assertThat(errorMsg, is(equalTo("Operator with id 6 does not exist")));
+		assertThat(errorMsg, is(equalTo("Operator with id 10 does not exist")));
 	}
 
 	/**
@@ -65,11 +65,11 @@ public class MySQLOperatorDAOTest {
 	 */
 	@Test
 	public void testCreateOperator() {
-		OperatorDTO newOpr = new OperatorDTO(5,"Don Juan","DJ","000000-0000","iloveyou", false, "Operator");
+		OperatorDTO newOpr = new OperatorDTO(10,"Don Juan","DJ","000000-0000","iloveyou", false, "Operator");
 		OperatorDTO OprCheck = null;
 		try {
 			opr.createOperator(newOpr);
-			OprCheck = opr.readOperator(5);
+			OprCheck = opr.readOperator(10);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(OprCheck.toString(), is(equalTo(newOpr.toString())));
 	}
@@ -100,13 +100,13 @@ public class MySQLOperatorDAOTest {
 	public void testCreateOperatorInvalidRole() {
 		String errorMsg = null;
 		String errorMsg2 = null;
-		OperatorDTO newOpr = new OperatorDTO(5,"Don Juan","DJ","000000-0000","iloveyou", false, "Admin");
+		OperatorDTO newOpr = new OperatorDTO(10,"Don Juan","DJ","000000-0000","iloveyou", false, "Admin");
 		OperatorDTO OprCheck = null;
 		try {
 			opr.createOperator(newOpr);
 		} catch (DALException e) { errorMsg = e.getMessage(); }
 		try {
-			OprCheck = opr.readOperator(5);
+			OprCheck = opr.readOperator(10);
 		} catch (DALException e) { errorMsg2 = e.getMessage(); }
 		assertThat(OprCheck, nullValue());
 		assertThat(errorMsg, notNullValue());
@@ -118,22 +118,22 @@ public class MySQLOperatorDAOTest {
 	 */
 	@Test
 	public void testUpdateOperator() {
-		OperatorDTO newOpr = new OperatorDTO(5,"Don Juan","DJ","000000-0000","iloveyou",false,"Operator");
-		OperatorDTO editObject = new OperatorDTO(5,"Don Juan","DoJu","000000-0000","iloveyou",false,"Operator");
+		OperatorDTO newOpr = new OperatorDTO(10,"Don Juan","DJ","000000-0000","iloveyou",false,"Operator");
+		OperatorDTO editObject = new OperatorDTO(10,"Don Juan","DoJu","000000-0000","iloveyou",false,"Operator");
 		OperatorDTO OprCheckBeforeEdit = null;
 		OperatorDTO OprCheckAfterEdit = null;
 		try {
 			opr.createOperator(newOpr);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		try {
-			OprCheckBeforeEdit = opr.readOperator(5);
+			OprCheckBeforeEdit = opr.readOperator(10);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(OprCheckBeforeEdit.toString(), is(equalTo(newOpr.toString())));
 		try {
 			opr.updateOperator(editObject);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		try {
-			OprCheckAfterEdit = opr.readOperator(5);
+			OprCheckAfterEdit = opr.readOperator(10);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(OprCheckBeforeEdit, notNullValue());
 		assertThat(OprCheckAfterEdit, notNullValue());
@@ -148,8 +148,8 @@ public class MySQLOperatorDAOTest {
 	public void testUpdateOperatorCantChangeID() {
 		String updateErrorMsg = null;
 		String getOperatorErrorMsg = null;
-		OperatorDTO newOpr = new OperatorDTO(5,"Don Juan","DJ","000000-0000","iloveyou", false, "Operator");
-		OperatorDTO editedID = new OperatorDTO(6,"Don Juan","DJ","000000-0000","iloveyou", false, "Operator");
+		OperatorDTO newOpr = new OperatorDTO(10,"Don Juan","DJ","000000-0000","iloveyou", false, "Operator");
+		OperatorDTO editedID = new OperatorDTO(11,"Don Juan","DJ","000000-0000","iloveyou", false, "Operator");
 		OperatorDTO OprCheckBeforeEdit = null;
 		OperatorDTO Opr5AfterEdit = null;
 		OperatorDTO Opr6AfterEdit = null;
@@ -157,17 +157,17 @@ public class MySQLOperatorDAOTest {
 			opr.createOperator(newOpr);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		try {
-			OprCheckBeforeEdit = opr.readOperator(5);
+			OprCheckBeforeEdit = opr.readOperator(10);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(OprCheckBeforeEdit.toString(), is(equalTo(newOpr.toString())));
 		try {
 			opr.updateOperator(editedID);
 		} catch (DALException e) { updateErrorMsg = e.getMessage(); }
 		try {
-			Opr5AfterEdit = opr.readOperator(5);
+			Opr5AfterEdit = opr.readOperator(10);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		try {
-			Opr6AfterEdit = opr.readOperator(6);
+			Opr6AfterEdit = opr.readOperator(11);
 		} catch (DALException e) { getOperatorErrorMsg = e.getMessage(); }
 		assertThat(OprCheckBeforeEdit, notNullValue());
 		assertThat(Opr5AfterEdit, notNullValue());
@@ -183,22 +183,22 @@ public class MySQLOperatorDAOTest {
 	@Test
 	public void testUpdateOperatorInvalidRole() {
 		String errorMsg = null;
-		OperatorDTO newOpr = new OperatorDTO(5,"Don Juan","DJ","000000-0000","iloveyou", false, "Operator");
-		OperatorDTO editedRole = new OperatorDTO(5,"Don Juan","DJ","000000-0000","iloveyou", false, "CEO");
+		OperatorDTO newOpr = new OperatorDTO(10,"Don Juan","DJ","000000-0000","iloveyou", false, "Operator");
+		OperatorDTO editedRole = new OperatorDTO(10,"Don Juan","DJ","000000-0000","iloveyou", false, "CEO");
 		OperatorDTO OprCheckBeforeEdit = null;
 		OperatorDTO OprCheckAfterEdit = null;
 		try {
 			opr.createOperator(newOpr);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		try {
-			OprCheckBeforeEdit = opr.readOperator(5);
+			OprCheckBeforeEdit = opr.readOperator(10);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(OprCheckBeforeEdit.toString(), is(equalTo(newOpr.toString())));
 		try {
 			opr.updateOperator(editedRole);
 		} catch (DALException e) { errorMsg = e.getMessage(); }
 		try {
-			OprCheckAfterEdit = opr.readOperator(5);
+			OprCheckAfterEdit = opr.readOperator(10);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(OprCheckBeforeEdit, notNullValue());
 		assertThat(OprCheckAfterEdit, notNullValue());

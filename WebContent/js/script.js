@@ -1,3 +1,5 @@
+var notice = true;
+
 $(document).ready(function () {
 
     $('.modal').modal({
@@ -18,7 +20,8 @@ $(document).ready(function () {
      * ProductBatch Listeners
      */
     // Recipe Opening/closing
-    $(document).on('click', '.product.collapsible-header', function (e) {
+    $(document).on('click', ".product.collapsible-header", function (e) {
+        if(!$(this).hasClass('active')){return;} //Only continue if accordion isn't active
         var TargetId = $(this).attr('data-id');
         $.ajax({
             context: TargetId,
@@ -26,7 +29,7 @@ $(document).ready(function () {
             contentType: "application/json",
             processData: false,
             crossDomain: true,
-            url: "./api/v1/product/list/"+$(this).attr('data-id'),
+            url: "./api/v1/productbatchcomp/list/"+$(this).attr('data-id'),
             headers : {
                 Authorization: Cookies.get("auth")
             },
@@ -81,7 +84,7 @@ $(document).ready(function () {
             headers : {
                 Authorization: Cookies.get("auth")
             },
-            url: "./api/v1/product/",
+            url: "./api/v1/productbatch/",
             success: function( msg ) {
                 populateProductAdmin(false);
                 $('#EditModal').modal('close');
@@ -341,21 +344,19 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on("click", '.delete-produce', function (e) {
+    $(document).on("click", '.delete-producebatch', function (e) {
         $.ajax({
             type: "DELETE",
             processData: false,
             headers : {
                 Authorization: Cookies.get("auth")
             },
-            url: "./api/v1/operator/"+$(this).attr('data-id'),
+            url: "./api/v1/producebatch/"+$(this).attr('data-id'),
             success: function( response ) {
-                Materialize.toast("User with ID: "+ row.children(".id").text() +" was deleted!", 4000);
-                populateProduceAdmin(false);
+                Materialize.toast("Producebatch deleted!", 4000);
+                populateProduceBatchAdmin(false);
             },
-            error: function ( msg ) {
-                Materialize.toast("Unable to delete produce!", 4000);
-            }
+            error: ajaxErrorHandler
         });
     });
 
@@ -397,6 +398,7 @@ $(document).ready(function () {
                 Authorization: Cookies.get("auth")
             },
             data: JSON.stringify({
+                produceId: "",
                 produceName: $('#produceAdd').find('input#produce_name').val(),
                 supplier: $('#produceAdd').find('input#produce_supplier').val()
             }),
@@ -452,6 +454,22 @@ $(document).ready(function () {
             error: function ( msg ) {
                 Materialize.toast("Error in loading data!", 4000);
             }
+        });
+    });
+
+    $(document).on("click", '.delete-produce', function (e) {
+        $.ajax({
+            type: "DELETE",
+            processData: false,
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            url: "./api/v1/produce/"+$(this).attr('data-id'),
+            success: function( response ) {
+                Materialize.toast("Produce deleted!", 4000);
+                populateProduceAdmin(false);
+            },
+            error: ajaxErrorHandler
         });
     });
 
@@ -547,6 +565,7 @@ $(document).ready(function () {
 
     // Recipe Opening/closing
     $(document).on('click', '.recipe.collapsible-header', function (e) {
+        if(!$(this).hasClass('active')){return;} //Only continue if accordion isn't active
         var TargetId = $(this).attr('data-id');
         $.ajax({
             context: TargetId,
@@ -865,10 +884,11 @@ $(document).ready(function () {
         $('#loginForm').hide();
         $('main').removeClass('valign-wrapper');
         $('#Administration').show();
+        $("nav ul.right").show();
         populateUsersAdmin(false);
         populateProduceAdmin(false);
-        //populateProduceBatchAdmin(false);
-        //populateProductAdmin(false);
+        populateProduceBatchAdmin(false);
+        populateProductAdmin(false);
         populateRecipeAdmin(false);
     }
 });
@@ -997,7 +1017,7 @@ function populateProductAdmin(notice) {
         contentType: "application/json",
         processData: false,
         crossDomain: true,
-        url: "./api/v1/product",
+        url: "./api/v1/productbatch",
         headers : {
             Authorization: Cookies.get("auth")
         },
@@ -1080,9 +1100,9 @@ function populateRecipeAdmin(notice){
 
 function ajaxErrorHandler(msg) {
     if(notice){
-        switch(msg.status, notice) {
-            case 403:
-                Materialize.toast(msg, 4000);
+        switch(msg.status) {
+            case 500:
+                Materialize.toast("An unexpected error ocurred!", 4000);
                 break;
             default:
                 Materialize.toast(msg, 4000);

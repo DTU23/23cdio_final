@@ -24,7 +24,7 @@
     -->
     <script type="text/html" id="ProductBatchAdministrationTemplate">
         <div class="container-fluid">
-            <table class="striped centered responsive-table" id="productBatchHeader">
+            <table class="striped centered" id="productBatchHeader">
                 <thead>
                 <tr>
                     <th class="col s3">ID</th>
@@ -73,7 +73,7 @@
             <form id="productBatchAdd">
                 <div class="row" data-source-id="">
                     <div class="input-field col s12">
-                        <input id="recipe_id" type="text" class="validate" value="">
+                        <input id="recipe_id" type="number" class="validate" value="">
                         <label for="recipe_id" class="active">Recipe ID</label>
                     </div>
                 </div>
@@ -114,15 +114,15 @@
             <form id="recipeComponentAdd" data-recipe-id="{{recipeId}}">
                 <div class="row">
                     <div class="input-field col s12">
-                        <input id="produce_id" type="text" class="validate" value="">
+                        <input id="produce_id" type="number" class="validate" value="">
                         <label for="produce_id" class="active">Produce ID</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="nom_netto" type="text" class="validate" value="">
+                        <input id="nom_netto" type="number" class="validate" value="">
                         <label for="nom_netto" class="active">Nom. Netto</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="tolerance" type="text" class="validate" value="">
+                        <input id="tolerance" type="number" class="validate" value="">
                         <label for="tolerance" class="active">Tolerance</label>
                     </div>
                 </div>
@@ -231,7 +231,7 @@
                 <td class="supplier">{{supplier}}</td>
                 <td class="supplier">{{amount}}</td>
                 <td>
-                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-producebatch" data-id="{{rb_id}}"><i class="material-icons">delete</i></a>
+                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-producebatch" data-id="{{rbId}}"><i class="material-icons">delete</i></a>
                     <a class="btn-floating btn waves-effect waves-light edit-producebatch blue darken-1" data-rb-id="{{rbId}}" data-produce-id="{{produceId}}"><i class="material-icons">edit</i></a>
                 </td>
             </tr>
@@ -270,11 +270,11 @@
             <form id="produceBatchAdd">
                 <div class="row" data-source-id="">
                     <div class="input-field col s12">
-                        <input id="produce_id" type="text" class="validate">
+                        <input id="produce_id" type="number" class="validate">
                         <label for="produce_id" class="active">Produce ID</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="amount" type="text" class="validate">
+                        <input id="amount" type="number" class="validate">
                         <label for="amount" class="active">Amount</label>
                     </div>
                 </div>
@@ -310,7 +310,7 @@
     -->
     <script type="text/html" id="RecipeAdministrationTemplate">
         <div class="container-fluid">
-            <table class="striped centered responsive-table" id="recipeHeader">
+            <table class="striped centered" id="recipeHeader">
                 <thead>
                 <tr>
                     <th class="col s2">ID</th>

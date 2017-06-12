@@ -322,7 +322,6 @@ $(document).ready(function () {
             context: TargetId,
             contentType: "application/json",
             processData: false,
-            async: false,
             crossDomain: true,
             url: "./api/v1/produce/"+$(this).attr('data-id'),
             headers : {
@@ -436,7 +435,6 @@ $(document).ready(function () {
             type: "GET",
             contentType: "application/json",
             processData: false,
-            async: false,
             crossDomain: true,
             url: "./api/v1/producebatch/"+$(this).attr('data-rb-id'),
             headers : {
@@ -617,7 +615,6 @@ $(document).ready(function () {
             type: "GET",
             contentType: "application/json",
             processData: false,
-            async: false,
             context: recipeId,
             crossDomain: true,
             url: "./api/v1/recipecomp/"+$(this).attr('data-recipe-id')+'/'+$(this).attr('data-produce-id'),
@@ -650,7 +647,6 @@ $(document).ready(function () {
             contentType: "application/json",
             processData: false,
             context: TargetId,
-            async: false,
             crossDomain: true,
             url: "./api/v1/recipecomp/"+$(this).attr('data-recipe-id')+'/'+$(this).attr('data-produce-id'),
             headers : {
@@ -963,7 +959,6 @@ function populateProduceBatchAdmin(notice) {
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        async: false,
         processData: false,
         crossDomain: true,
         url: "./api/v1/producebatch/",
@@ -1032,8 +1027,31 @@ function populateProductAdmin(notice) {
 
             $('#ProductAdminTab').html(rendered).promise().done(function () {
                 $('.collapsible').collapsible();
-                $('.collapsible-header').each(function () {
+                $('.product.collapsible-header').each(function () {
                     var TargetId = $(this).attr('data-id');
+                    $.ajax({
+                        context: TargetId,
+                        type: "GET",
+                        contentType: "application/json",
+                        processData: false,
+                        crossDomain: true,
+                        url: "./api/v1/productbatchcomp/list/"+$(this).attr('data-id'),
+                        headers : {
+                            Authorization: Cookies.get("auth")
+                        },
+                        success: function( response ) {
+                            var template = $('#productBatchComponentsTemplate').html();
+                            var data = {};
+                            data['productbatchcomponents'] = response;
+                            Mustache.parse(template);   // optional, speeds up future uses
+                            var rendered = Mustache.render(template, data);
+                            $('div.product[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
+
+                            });
+                        },
+                        error: function ( msg ) {
+                        }
+                    });
                 })
             });
         },
@@ -1064,7 +1082,7 @@ function populateRecipeAdmin(notice){
 
             $('#RecipeAdminTab').html(rendered).promise().done(function () {
                 $('.collapsible').collapsible();
-                $('.collapsible-header').each(function () {
+                $('.recipe.collapsible-header').each(function () {
                     var TargetId = $(this).attr('data-id');
                     $.ajax({
                         context: TargetId,
@@ -1083,7 +1101,7 @@ function populateRecipeAdmin(notice){
                             Mustache.parse(template);   // optional, speeds up future uses
                             var rendered = Mustache.render(template, data);
 
-                            $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
+                            $('div.recipe[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
                             });
                         },
                         error: function ( msg ) {

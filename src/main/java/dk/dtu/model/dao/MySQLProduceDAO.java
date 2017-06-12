@@ -1,5 +1,7 @@
 package dk.dtu.model.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,18 +17,34 @@ public class MySQLProduceDAO implements ProduceDAO {
 
 	@Override
 	public void createProduce(ProduceDTO produce) throws DALException {
-		if(DataSource.getInstance().doUpdate("CALL create_produce('"
-				+ produce.getProduceName() + "','"
-				+ produce.getSupplier() + "');") == 0) 
-		{
-			throw new DALException("No rows affected!");
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL create_produce(?,?);");
+			stm.setString(1, produce.getProduceName());
+			stm.setString(2, produce.getSupplier());
+			if(stm.executeUpdate() == 0) {
+				throw new DALException("No rows affected");
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public ProduceDTO readProduce(int produceId) throws DALException {
-		ResultSet rs = DataSource.getInstance().doQuery("CALL read_produce('" + produceId + "');");
-		try {
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL read_produce(?);");
+			stm.setInt(1, produceId);
+			rs = stm.executeQuery();
 			if (!rs.first()) {
 				throw new DALException("Produce with id " + produceId + " does not exist");
 			}
@@ -37,71 +55,102 @@ public class MySQLProduceDAO implements ProduceDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			DataSource.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public void updateProduce(ProduceDTO produce) throws DALException {
-		if(DataSource.getInstance().doUpdate("CALL update_produce('"
-				+ produce.getProduceId() + "','"
-				+ produce.getProduceName() + "','"
-				+ produce.getSupplier() + "');") == 0) 
-		{
-			throw new DALException("No rows affected!");
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL update_produce(?,?,?);");
+			stm.setInt(1, produce.getProduceId());
+			stm.setString(2, produce.getProduceName());
+			stm.setString(3, produce.getSupplier());
+			if(stm.executeUpdate() == 0) {
+				throw new DALException("No rows affected");
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public void deleteProduce(int produceId) throws DALException {
-		if(DataSource.getInstance().doUpdate("CALL delete_produce(" + produceId + ");") == 0)
-		{
-			throw new DALException("No rows affected");
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL delete_produce(?);");
+			stm.setInt(1, produceId);
+			if(stm.executeUpdate() == 0) {
+				throw new DALException("No rows affected");
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public List<ProduceDTO> getProduceList() throws DALException {
 		List<ProduceDTO> list = new ArrayList<ProduceDTO>();
-		ResultSet rs = DataSource.getInstance().doQuery("SELECT * FROM produce;");
-		try
-		{
-			while (rs.next())
-			{
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("SELECT * FROM produce;");
+			rs = stm.executeQuery();
+			while (rs.next()) {
 				list.add(new ProduceDTO(
 						rs.getInt("produce_id"),
 						rs.getString("produce_name"),
-						rs.getString("supplier")
-						));
+						rs.getString("supplier")));
 			}
 			return list;
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			DataSource.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public List<ProduceOverviewDTO> getProduceOverview() throws DALException{
 		List<ProduceOverviewDTO> list = new ArrayList<ProduceOverviewDTO>();
-		ResultSet rs = DataSource.getInstance().doQuery("SELECT * FROM produce_overview;");
-		try
-		{
-			while (rs.next())
-			{
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("SELECT * FROM produce_overview;");
+			rs = stm.executeQuery();
+			while (rs.next()) {
 				list.add(new ProduceOverviewDTO(
 						rs.getInt("produce_id"),
 						rs.getString("produce_name"),
 						rs.getString("supplier"),
-						rs.getDouble("amount")
-						));
+						rs.getDouble("amount")));
 			}
 			return list;
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			DataSource.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 }

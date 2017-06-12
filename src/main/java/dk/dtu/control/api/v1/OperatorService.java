@@ -18,15 +18,17 @@ import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dto.OperatorDTO;
+import dk.dtu.model.dto.OperatorNewPWDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
+import dk.dtu.model.exceptions.AuthException;
 import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.OperatorDAO;
+import dk.dtu.control.api.Role;
 
 @Path("v1/operator")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Secured( admin = true )
 public class OperatorService {
 
 	// This class implements the methods from MySQLOperatorDAO
@@ -34,11 +36,13 @@ public class OperatorService {
 	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
+	@Secured( admin = true )
 	public void createOperator(OperatorDTO opr) throws DALException, ValidationException {
 		controller.createOperatorValidation(opr);
 	}
 
 	@GET
+	@Secured( admin = true )
 	@Path("/{id}")
 	public OperatorDTO getOperator(@PathParam("id") String oprID) throws ValidationException, DALException {
 		Validation.isPositiveInteger(oprID);
@@ -46,11 +50,20 @@ public class OperatorService {
 	}
 
 	@PUT
+	@Secured( admin = true )
 	public void updateOperator(OperatorDTO opr) throws DALException, ValidationException {
 		controller.updateOperatorValidation(opr);
 	}
 
+	@PUT
+	@Secured( roles={Role.None} )
+	@Path("/changePassword")
+	public void updateOperator(OperatorNewPWDTO opr) throws DALException, ValidationException, AuthException {
+		controller.updateOperatorValidation(opr);
+	}
+
 	@DELETE
+	@Secured( admin = true )
 	@Path("/{id}")
 	public void deleteOperator(@PathParam("id") String oprID) throws DALException, ValidationException {
 		Validation.isPositiveInteger(oprID);
@@ -58,6 +71,7 @@ public class OperatorService {
 	}
 
 	@GET
+	@Secured( admin = true )
 	public List<OperatorNoPWDTO> getOperatorList() throws DALException {
 		return dao.getOperatorList();
 	}

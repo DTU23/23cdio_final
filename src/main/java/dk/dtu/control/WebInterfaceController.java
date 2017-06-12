@@ -12,13 +12,8 @@ import dk.dtu.model.dao.MySQLProductBatchCompDAO;
 import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dao.MySQLRecipeCompDAO;
 import dk.dtu.model.dao.MySQLRecipeDAO;
-import dk.dtu.model.dto.OperatorDTO;
-import dk.dtu.model.dto.ProduceBatchDTO;
-import dk.dtu.model.dto.ProduceDTO;
-import dk.dtu.model.dto.ProductBatchCompDTO;
-import dk.dtu.model.dto.ProductBatchDTO;
-import dk.dtu.model.dto.RecipeCompDTO;
-import dk.dtu.model.dto.RecipeDTO;
+import dk.dtu.model.dto.*;
+import dk.dtu.model.exceptions.AuthException;
 import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.OperatorDAO;
@@ -32,7 +27,7 @@ import dk.dtu.model.interfaces.RecipeDAO;
 public class WebInterfaceController implements IWebInterfaceController {
 
 	@Override
-	public void createOperatorValidation(OperatorDTO opr) throws DALException, ValidationException {
+	public OperatorDTO createOperatorValidation(OperatorDTO opr) throws DALException, ValidationException {
 		Validation.isValidID(opr.getOprId());
 		Validation.isValidUserName(opr.getOprName());
 		Validation.isValidInitials(opr.getIni());
@@ -49,6 +44,7 @@ public class WebInterfaceController implements IWebInterfaceController {
 		opr.setPassword(generatedPassword);
 		OperatorDAO dao = new MySQLOperatorDAO();
 		dao.createOperator(opr);
+		return opr;
 	}
 
 	@Override
@@ -61,6 +57,14 @@ public class WebInterfaceController implements IWebInterfaceController {
 		Validation.isValidPassword(opr.getPassword());
 		OperatorDAO dao = new MySQLOperatorDAO();
 		dao.updateOperator(opr);
+	}
+
+	@Override
+	public void updateOperatorValidation(OperatorNewPWDTO opr) throws DALException, ValidationException, AuthException {
+		ILoginController lc = new LoginController();
+		lc.authenticateUser(opr.getOprId(), opr.getPassword());
+		OperatorDTO updatedOpr = new OperatorDTO(opr);
+		updateOperatorValidation(updatedOpr);
 	}
 
 	@Override

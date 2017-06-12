@@ -1,20 +1,16 @@
 package dk.dtu.control;
 
-import dk.dtu.model.dto.OperatorDTO;
-import dk.dtu.model.dto.ProduceBatchDTO;
-import dk.dtu.model.dto.ProduceDTO;
-import dk.dtu.model.dto.ProductBatchCompDTO;
-import dk.dtu.model.dto.ProductBatchDTO;
-import dk.dtu.model.dto.RecipeCompDTO;
-import dk.dtu.model.dto.RecipeDTO;
+import dk.dtu.model.dto.*;
+import dk.dtu.model.exceptions.AuthException;
 import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.exceptions.ValidationException;
 
 public interface IWebInterfaceController {
 
 	// Operator
-	void createOperatorValidation(OperatorDTO opr) throws DALException, ValidationException;
+	OperatorDTO createOperatorValidation(OperatorDTO opr) throws DALException, ValidationException;
 	void updateOperatorValidation(OperatorDTO opr) throws DALException, ValidationException;
+	void updateOperatorValidation(OperatorNewPWDTO opr) throws DALException, ValidationException, AuthException;
 	// Produce Batch
 	void createProduceBatchValidation(int produce_id, double amount) throws DALException, ValidationException;
 	void updateProduceBatchValidation(ProduceBatchDTO produceBatch) throws DALException, ValidationException;

@@ -4,18 +4,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
 import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dto.RecipeCompDTO;
-import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.dal.ConnectivityException;
+import dk.dtu.model.exceptions.dal.IntegrityConstraintViolationException;
+import dk.dtu.model.exceptions.dal.NotFoundException;
 import dk.dtu.model.interfaces.RecipeCompDAO;
 
 public class MySQLRecipeCompDAO implements RecipeCompDAO {
 
 	@Override
-	public void createRecipeComp(RecipeCompDTO recipeComponent) throws DALException {
+	public void createRecipeComp(RecipeCompDTO recipeComponent) throws ConnectivityException, IntegrityConstraintViolationException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
@@ -26,10 +29,10 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 			stm.setDouble(3, recipeComponent.getNomNetto());
 			stm.setDouble(4, recipeComponent.getTolerance());
 			if(stm.executeUpdate() == 0) {
-				throw new DALException("No rows affected");
+				throw new IntegrityConstraintViolationException("No rows affected");
 			}
 		} catch (SQLException e) {
-			throw new DALException(e);
+			throw new ConnectivityException(e);
 		} finally {
 			try { if (stm != null) stm.close(); } catch (SQLException e) {};
 			try { if (conn != null) conn.close(); } catch (SQLException e) {};
@@ -37,7 +40,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 	}
 
 	@Override
-	public RecipeCompDTO readRecipeComp(int recipeId, int produceId) throws DALException {
+	public RecipeCompDTO readRecipeComp(int recipeId, int produceId) throws ConnectivityException, NotFoundException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		ResultSet rs = null;
@@ -48,7 +51,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 			stm.setInt(2, produceId);
 			rs = stm.executeQuery();
 			if (!rs.first()) {
-				throw new DALException("Recipe component with recipe id " + recipeId + " and produce id " + produceId + " does not exist");
+				throw new NotFoundException("Recipe component with recipe id " + recipeId + " and produce id " + produceId + " does not exist");
 			}
 			return new RecipeCompDTO(
 					rs.getInt("recipe_id"),
@@ -56,7 +59,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 					rs.getDouble("nom_netto"),
 					rs.getDouble("tolerance"));
 		} catch (SQLException e) {
-			throw new DALException(e);
+			throw new ConnectivityException(e);
 		} finally {
 			try { if (rs != null) rs.close(); } catch (SQLException e) {};
 			try { if (stm != null) stm.close(); } catch (SQLException e) {};
@@ -65,7 +68,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 	}
 
 	@Override
-	public void updateRecipeComp(RecipeCompDTO recipeComponent) throws DALException {
+	public void updateRecipeComp(RecipeCompDTO recipeComponent) throws ConnectivityException, NotFoundException, IntegrityConstraintViolationException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
@@ -76,10 +79,12 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 			stm.setDouble(3, recipeComponent.getNomNetto());
 			stm.setDouble(4, recipeComponent.getTolerance());
 			if(stm.executeUpdate() == 0) {
-				throw new DALException("No rows affected");
+				throw new NotFoundException("Recipe component with recipe id " + recipeComponent.getRecipeId() + " and produce id " + recipeComponent.getProduceId() + " does not exist");
 			}
+		} catch (SQLIntegrityConstraintViolationException e) {
+			throw new IntegrityConstraintViolationException(e);
 		} catch (SQLException e) {
-			throw new DALException(e);
+			throw new ConnectivityException(e);
 		} finally {
 			try { if (stm != null) stm.close(); } catch (SQLException e) {};
 			try { if (conn != null) conn.close(); } catch (SQLException e) {};
@@ -87,7 +92,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 	}
 
 	@Override
-	public void deleteRecipeComp(int recipeId, int produceId) throws DALException {
+	public void deleteRecipeComp(int recipeId, int produceId) throws ConnectivityException, NotFoundException, IntegrityConstraintViolationException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
@@ -96,10 +101,12 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 			stm.setInt(1, recipeId);
 			stm.setInt(2, produceId);
 			if(stm.executeUpdate() == 0) {
-				throw new DALException("No rows affected");
+				throw new NotFoundException("Recipe component with recipe id " + recipeId + " and produce id " + produceId + " does not exist");
 			}
+		} catch (SQLIntegrityConstraintViolationException e) {
+			throw new IntegrityConstraintViolationException(e);
 		} catch (SQLException e) {
-			throw new DALException(e);
+			throw new ConnectivityException(e);
 		} finally {
 			try { if (stm != null) stm.close(); } catch (SQLException e) {};
 			try { if (conn != null) conn.close(); } catch (SQLException e) {};
@@ -107,7 +114,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 	}
 
 	@Override
-	public List<RecipeCompDTO> getRecipeCompList() throws DALException {
+	public List<RecipeCompDTO> getRecipeCompList() throws ConnectivityException, NotFoundException {
 		List<RecipeCompDTO> list = new ArrayList<RecipeCompDTO>();
 		Connection conn = null;
 		PreparedStatement stm = null;
@@ -116,16 +123,19 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 			conn = DataSource.getInstance().getConnection();
 			stm = conn.prepareStatement("SELECT * FROM recipecomponent;");
 			rs = stm.executeQuery();
-			while (rs.next()) {
+			if (!rs.first()) {
+				throw new NotFoundException("No recipe components found");
+			}
+			do {
 				list.add(new RecipeCompDTO(
 						rs.getInt("recipe_id"),
 						rs.getInt("produce_id"),
 						rs.getDouble("nom_netto"),
 						rs.getDouble("tolerance")));
-			}
+			} while (rs.next());
 			return list;
 		} catch (SQLException e) {
-			throw new DALException(e);
+			throw new ConnectivityException(e);
 		} finally {
 			try { if (rs != null) rs.close(); } catch (SQLException e) {};
 			try { if (stm != null) stm.close(); } catch (SQLException e) {};
@@ -134,7 +144,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 	}
 
 	@Override
-	public List<RecipeCompDTO> getRecipeCompByRecipeId(int recipeId) throws DALException {
+	public List<RecipeCompDTO> getRecipeCompByRecipeId(int recipeId) throws ConnectivityException, NotFoundException {
 		List<RecipeCompDTO> list = new ArrayList<RecipeCompDTO>();
 		Connection conn = null;
 		PreparedStatement stm = null;
@@ -145,23 +155,22 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 			stm.setInt(1, recipeId);
 			rs = stm.executeQuery();
 			if (!rs.first()) {
-				throw new DALException("Recipe with id " + recipeId + " does not exist");
+				throw new NotFoundException("Recipe with id " + recipeId + " does not exist");
 			}
-			while (rs.next()) {
+			do {
 				list.add(new RecipeCompDTO(
 						rs.getInt("recipe_id"),
 						rs.getInt("produce_id"),
 						rs.getDouble("nom_netto"),
 						rs.getDouble("tolerance")));
-			}
+			} while (rs.next());
 			return list;
 		} catch (SQLException e) {
-			throw new DALException(e);
+			throw new ConnectivityException(e);
 		} finally {
 			try { if (rs != null) rs.close(); } catch (SQLException e) {};
 			try { if (stm != null) stm.close(); } catch (SQLException e) {};
 			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
-
 }

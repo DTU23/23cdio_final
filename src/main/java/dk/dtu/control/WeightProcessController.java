@@ -100,6 +100,7 @@ public class WeightProcessController implements IWeightProcessController {
 				ILoginController controller = new LoginController();
 				controller.authenticateUser(oprId, oprPW);
 			} catch (Exception e) {
+				e.printStackTrace();
 				try {
 					weightAdaptor.loginResult(false);
 				} catch (AdaptorException e1) {}
@@ -183,8 +184,8 @@ public class WeightProcessController implements IWeightProcessController {
 					weightAdaptor.tara();
 					double tolerance = recipeDTO.getTolerance();
 					do {
-						netto = Double.parseDouble(weightAdaptor.placeNetto());
-					} while (Math.abs(recipeDTO.getNomNetto() - netto) > tolerance);
+						netto = Double.parseDouble(weightAdaptor.placeNetto(recipeDTO.getNomNetto()));
+					} while (Math.abs(recipeDTO.getNomNetto() - netto) >= tolerance);
 					weightAdaptor.clearSecondaryDisplay();
 
 					do {

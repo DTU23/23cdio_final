@@ -56,8 +56,7 @@ public class OperatorService {
 	}
 
 	@PUT
-	@Secured( roles={Role.None} )
-	@Path("/changePassword")
+	@Path("/update")
 	public void updateOperator(OperatorNewPWDTO opr) throws DALException, ValidationException, AuthException {
 		controller.updateOperatorValidation(opr);
 	}

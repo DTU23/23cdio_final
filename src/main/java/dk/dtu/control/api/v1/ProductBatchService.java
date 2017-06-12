@@ -21,7 +21,9 @@ import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.dto.ProductBatchListDTO;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.ValidationException;
+import dk.dtu.model.exceptions.validation.InvalidIDException;
+import dk.dtu.model.exceptions.validation.InvalidStatusException;
+import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
 import dk.dtu.model.interfaces.ProductBatchDAO;
 
 @Path("v1/productbatch")
@@ -35,14 +37,14 @@ public class ProductBatchService {
 	@POST
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Secured( roles = { Role.Foreman })
-	public void createProductBatch(int recipeId) throws DALException, ValidationException {
+	public void createProductBatch(int recipeId) throws DALException, InvalidIDException {
 		controller.createProductBatchValidation(recipeId);
 	}
 	
 	@GET
 	@Path("/{id}")
 	@Secured( roles = { Role.Foreman })
-	public ProductBatchDTO getProductBatch(@PathParam("id") int pbId) throws ValidationException, DALException {
+	public ProductBatchDTO getProductBatch(@PathParam("id") int pbId) throws DALException, PositiveIntegerValidationException {
 		Validation.isPositiveInteger(pbId);
 		return dao.readProductBatch(pbId);
 	}
@@ -50,13 +52,13 @@ public class ProductBatchService {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Foreman })
-	public void updateProductBatch(ProductBatchDTO productBatch) throws DALException, ValidationException {
+	public void updateProductBatch(ProductBatchDTO productBatch) throws DALException, InvalidIDException, InvalidStatusException {
 		controller.updateProductBatchValidation(productBatch);
 	}
 	
 	@DELETE
 	@Secured( roles = { Role.Foreman })
-	public void deleteProductBatch(int pbId) throws DALException, ValidationException {
+	public void deleteProductBatch(int pbId) throws DALException, PositiveIntegerValidationException {
 		Validation.isPositiveInteger(pbId);
 		dao.deleteProductBatch(pbId);
 	}

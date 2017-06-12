@@ -1,5 +1,7 @@
 package dk.dtu.model.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,16 +18,33 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 
 	@Override
 	public void createProductBatch(int recipe_id) throws DALException {
-		if(DataSource.getInstance().doUpdate("CALL create_product_batch('"+recipe_id+"');") == 0)
-		{
-			throw new DALException("No rows affected!");
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL create_product_batch(?);");
+			stm.setInt(1, recipe_id);
+			if(stm.executeUpdate() == 0) {
+				throw new DALException("No rows affected");
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public ProductBatchDTO readProductBatch(int pbId) throws DALException {
-		ResultSet rs = DataSource.getInstance().doQuery("CALL read_product_batch('"+pbId+"');");
-		try {
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL read_product_batch(?);");
+			stm.setInt(1, pbId);
+			rs = stm.executeQuery();
 			if (!rs.first()) {
 				throw new DALException("Product batch with id " + pbId + " does not exist");
 			}
@@ -36,37 +55,63 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			DataSource.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public void updateProductBatch(ProductBatchDTO productbatch) throws DALException {
-		if(DataSource.getInstance().doUpdate("CALL update_product_batch('"
-				+ productbatch.getPbId()+"','"
-				+ productbatch.getRecipeId()+"','"
-				+ productbatch.getStatus()+"');") == 0)
-		{
-			throw new DALException("No rows affected!");
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL update_product_batch(?,?,?);");
+			stm.setInt(1, productbatch.getPbId());
+			stm.setInt(2, productbatch.getRecipeId());
+			stm.setInt(3, productbatch.getStatus());
+			if(stm.executeUpdate() == 0) {
+				throw new DALException("No rows affected");
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public void deleteProductBatch(int pbId) throws DALException {
-		if(DataSource.getInstance().doUpdate("CALL delete_product_batch(" + pbId + ";") == 0)
-		{
-			throw new DALException("No rows affected");
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL delete_product_batch(?);");
+			stm.setInt(1, pbId);
+			if(stm.executeUpdate() == 0) {
+				throw new DALException("No rows affected");
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public List<ProductBatchListDTO> getProductBatchList() throws DALException {
 		List<ProductBatchListDTO> list = new ArrayList<ProductBatchListDTO>();
-		ResultSet rs = DataSource.getInstance().doQuery("SELECT * FROM product_batch_list;");
-		try
-		{
-			while (rs.next()) 
-			{
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("SELECT * FROM product_batch_list;");
+			rs = stm.executeQuery();
+			while (rs.next()) {
 				list.add(new ProductBatchListDTO(
 						rs.getInt("pb_id"),
 						rs.getInt("recipe_id"),
@@ -77,15 +122,23 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			DataSource.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public ProductBatchListDTO getProductBatchListDetailsByPbId(int pbId) throws DALException {
-		ResultSet rs = DataSource.getInstance().doQuery("CALL get_product_batch_list_details_by_pb_id("+pbId+");");
-		try {
-			if(!rs.first()) {
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL get_product_batch_list_details_by_pb_id(?);");
+			stm.setInt(1, pbId);
+			rs = stm.executeQuery();
+			if (!rs.first()) {
 				throw new DALException("Product batch with id " + pbId + " does not exist");
 			}
 			return new ProductBatchListDTO(
@@ -96,18 +149,27 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			DataSource.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public List<ProductBatchCompOverviewDTO> getProductBatchDetailsByPbId(int pbId) throws DALException {
 		List<ProductBatchCompOverviewDTO> list = new ArrayList<ProductBatchCompOverviewDTO>();
-		ResultSet rs = DataSource.getInstance().doQuery("CALL get_product_batch_details_by_pb_id("+pbId+");");
-
-		try {
-			while (rs.next())
-			{
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL get_product_batch_details_by_pb_id(?);");
+			stm.setInt(1, pbId);
+			rs = stm.executeQuery();
+			if (!rs.first()) {
+				throw new DALException("Product batch with id " + pbId + " does not exist");
+			}
+			while (rs.next()) {
 				list.add(new ProductBatchCompOverviewDTO(
 						rs.getInt("pb_id"),
 						rs.getInt("rb_id"),
@@ -122,7 +184,9 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			DataSource.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 }

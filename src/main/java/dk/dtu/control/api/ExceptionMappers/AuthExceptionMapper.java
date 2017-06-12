@@ -1,11 +1,10 @@
 package dk.dtu.control.api.ExceptionMappers;
 
-import dk.dtu.model.exceptions.AuthException;
-import dk.dtu.model.exceptions.ValidationException;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+
+import dk.dtu.model.exceptions.AuthException;
 
 @Provider
 public class AuthExceptionMapper implements ExceptionMapper<AuthException> {

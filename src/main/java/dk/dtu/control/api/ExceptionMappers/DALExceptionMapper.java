@@ -1,11 +1,10 @@
 package dk.dtu.control.api.ExceptionMappers;
 
-import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.ValidationException;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+
+import dk.dtu.model.exceptions.DALException;
 
 @Provider
 public class DALExceptionMapper implements ExceptionMapper<DALException> {

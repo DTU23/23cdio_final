@@ -142,7 +142,7 @@ public class Validation {
 		try {
 			isOnlyLetters(initials);
 		} catch (NotLettersException e) {
-			throw new InvalidInitialsException(e);
+			throw new InvalidInitialsException("Intials not filled out", e);
 		}
 		if(initials.length() < 2) {
 			throw new InvalidInitialsException("Too few initials");

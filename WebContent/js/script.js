@@ -136,6 +136,39 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", ".edit-profile", function (e) {
+        var TargetId = $(this).attr('data-id');
+        $.ajax({
+            type: "GET",
+            context: TargetId,
+            contentType: "application/json",
+            processData: false,
+            crossDomain: true,
+            url: "./api/v1/operator/me",
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            success: function( response ) {
+                data = {};
+                data["operator"] = response;
+                template = $('#userEditProfileTemplate').html();
+                Mustache.parse(template);   // optional, speeds up future uses
+                var rendered = Mustache.render(template, data);
+                $('#EditModal').html(rendered).promise().done(function () {
+                    var select_box = $('#EditModal').find('#user_role');
+                    var option = 'option[value='+select_box.attr('data-selected')+']';
+                    select_box.find(option).attr("selected", true);
+                    $('select').material_select();
+                    $('#EditModal').modal('open');
+                });
+                return response;
+            },
+            error: function ( msg ) {
+                Materialize.toast("Error in loading data!", 4000);
+            }
+        });
+    });
+
     $(document).on("click", '.delete-user', function (e) {
         var row = $(this).parent().parent();
         $.ajax({
@@ -229,14 +262,13 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '.modal-save-profile', function (e) {
+    $(document).on('click', '.modal-save-user-profile', function (e) {
         e.preventDefault();
-        $('#EditModal').find('.preloader-wrapper').removeClass('hide');
         var role;
-        if($('#userEdit').find("#user_role").find('li.active.selected').text() === ''){
-            role = $('#userEdit').find('input.select-dropdown').attr('value');
+        if($('#userEditProfile').find("#user_role").find('li.active.selected').text() === ''){
+            role = $('#userEditProfile').find('input.select-dropdown').attr('value');
         }else{
-            role = $('#userEdit').find("#user_role").find('li.active.selected').text()
+            role = $('#userEditProfile').find("#user_role").find('li.active.selected').text()
         }
         $.ajax({
             type: "PUT",
@@ -246,22 +278,21 @@ $(document).ready(function () {
                 Authorization: Cookies.get("auth")
             },
             data: JSON.stringify({
-                "oprId": $('#userEdit').find("#user_id").val(),
-                "oprName": $('#userEdit').find("#user_name").val(),
-                "ini": $('#userEdit').find("#user_ini").val(),
-                "cpr": $('#userEdit').find("#user_cpr").val(),
-                "admin": $('#userEdit').find("#user_admin").is(':checked'),
+                "oprId": $('#userEditProfile').find("#user_id").val(),
+                "oprName": $('#userEditProfile').find("#user_name").val(),
+                "ini": $('#userEditProfile').find("#user_ini").val(),
+                "cpr": $('#userEditProfile').find("#user_cpr").val(),
+                "password": $('#userEditProfile').find("#user_password").val(),
+                "newPassword": $('#userEditProfile').find("#user_new_password").val(),
+                "admin": $('#userEditProfile').find("#user_admin").is(':checked'),
                 "role": role
             }),
-            url: "./api/v1/operator/",
+            url: "./api/v1/operator/update",
             success: function( msg ) {
                 populateUsersAdmin();
                 $('#EditModal').modal('close');
             },
-            error: function ( msg ) {
-                Materialize.toast("Unable to update user!", 4000);
-                $('#EditModal').modal('close');
-            }
+            error: ajaxErrorHandler
         });
     });
 
@@ -773,6 +804,7 @@ $(document).ready(function () {
                 Cookies.set("auth", msg, { expires : 7 });
                 $('#loginForm').hide();
                 $('main').removeClass('valign-wrapper');
+                $("nav ul.right").show();
                 $('#Administration').show();
                 populateUsersAdmin(false);
                 populateProduceAdmin(false);
@@ -785,9 +817,11 @@ $(document).ready(function () {
             }
         });
     });
+
     $('.logout').on('click', function (e) {
         e.preventDefault();
         $('#Administration').hide();
+        $("nav ul.right").hide();
         $('#loginForm').show();
         $('main').addClass('valign-wrapper');
         Cookies.remove('auth');
@@ -1042,4 +1076,20 @@ function populateRecipeAdmin(notice){
             }
         }
     });
+}
+
+function ajaxErrorHandler(msg) {
+    if(notice){
+        switch(msg.status, notice) {
+            case 403:
+                Materialize.toast(msg, 4000);
+                break;
+            default:
+                Materialize.toast(msg, 4000);
+                break;
+        }
+    }
+    else{
+        console.log(msg);
+    }
 }

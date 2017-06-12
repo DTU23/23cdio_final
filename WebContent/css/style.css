@@ -16,6 +16,10 @@ ul.collapsible{
     transition: all ease 1s;
 }
 
+nav ul.right {
+    display: none;
+}
+
 .tabs{
     overflow-x: hidden;
 }

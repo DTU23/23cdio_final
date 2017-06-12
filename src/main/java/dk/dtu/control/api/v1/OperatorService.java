@@ -22,6 +22,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("v1/operator")
@@ -58,14 +59,16 @@ public class OperatorService {
 
 	@PUT
 	@Secured( admin = true )
-	public void updateOperator(OperatorDTO opr) throws DALException, ValidationException {
+	public Response updateOperator(OperatorDTO opr) throws DALException, ValidationException {
 		controller.updateOperatorValidation(opr);
+		return Response.status(200).build();
 	}
 
 	@PUT
 	@Path("/update")
-	public void updateOperator(OperatorNewPWDTO opr) throws DALException, ValidationException, AuthException {
+	public Response updateOperator(OperatorNewPWDTO opr) throws DALException, ValidationException, AuthException {
 		controller.updateOperatorValidation(opr);
+		return Response.status(200).build();
 	}
 
 	@DELETE

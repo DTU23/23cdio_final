@@ -13,6 +13,8 @@ $(document).ready(function () {
         }
     });
 
+    $(".button-collapse").sideNav();
+
     $('#MainTabs').tabs();
     $('#ProduceSubTabs').tabs();
 

@@ -105,9 +105,11 @@ public class WeightProcessController implements IWeightProcessController {
 					}
 				}
 
-			if (operatorDTO.getRole().equals(Role.None)) {
+			if (operatorDTO.getRole().equals(Role.None.toString())) {
 				try {
 					weightAdaptor.writeInSecondaryDisplay("Operator must have a role!");
+					weightAdaptor.clearSecondaryDisplay();
+					continue loginLoop;
 				} catch (AdaptorException e) {
 					System.out.println("Operator is not allowed to login with role \"None\"!");
 					e.printStackTrace();

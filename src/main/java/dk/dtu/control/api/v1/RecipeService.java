@@ -21,7 +21,9 @@ import dk.dtu.model.dao.MySQLRecipeDAO;
 import dk.dtu.model.dto.RecipeDTO;
 import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.ValidationException;
+import dk.dtu.model.exceptions.validation.InvalidIDException;
+import dk.dtu.model.exceptions.validation.InvalidNameException;
+import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
 import dk.dtu.model.interfaces.RecipeDAO;
 
 @Path("v1/recipe")
@@ -35,14 +37,14 @@ public class RecipeService {
 	
 	@POST
 	@Secured( roles = { Role.Pharmacist })
-	public void createRecipe(String recipeName) throws DALException, ValidationException {
+	public void createRecipe(String recipeName) throws DALException, InvalidNameException {
 		controller.createRecipeValidation(recipeName);
 	}
 	
 	@GET
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public RecipeDTO getRecipe(@PathParam("id") int recipeId) throws DALException, ValidationException {
+	public RecipeDTO getRecipe(@PathParam("id") int recipeId) throws DALException, PositiveIntegerValidationException {
 		Validation.isPositiveInteger(recipeId);
 		return dao.readRecipe(recipeId);
 	}
@@ -50,14 +52,14 @@ public class RecipeService {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Pharmacist })
-	public void updateRecipe(RecipeDTO recipe) throws DALException, ValidationException {
+	public void updateRecipe(RecipeDTO recipe) throws DALException, InvalidIDException, InvalidNameException {
 		controller.updateRecipeValidation(recipe);
 	}
 	
 	@DELETE
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public void deleteRecipe(@PathParam("id") int recipeId) throws DALException, ValidationException {
+	public void deleteRecipe(@PathParam("id") int recipeId) throws DALException, PositiveIntegerValidationException {
 		Validation.isPositiveInteger(recipeId);
 		dao.deleteRecipe(recipeId);
 	}

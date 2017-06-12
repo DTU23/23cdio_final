@@ -2,7 +2,14 @@ package dk.dtu.control.api.v1;
 
 import java.util.List;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import dk.dtu.control.IWebInterfaceController;
@@ -14,7 +21,9 @@ import dk.dtu.model.dao.MySQLProduceBatchDAO;
 import dk.dtu.model.dto.ProduceBatchDTO;
 import dk.dtu.model.dto.StockDTO;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.ValidationException;
+import dk.dtu.model.exceptions.validation.InvalidIDException;
+import dk.dtu.model.exceptions.validation.PositiveDoubleValidationException;
+import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
 import dk.dtu.model.interfaces.ProduceBatchDAO;
 
 @Path("v1/producebatch")
@@ -28,14 +37,14 @@ public class ProduceBatchService {
 	@POST
 	@Path("/{id}/{amount}")
 	@Secured( roles = { Role.Foreman })
-	public void createProduceBatch(@PathParam("id") int produceId, @PathParam("amount") double amount) throws DALException, ValidationException {
+	public void createProduceBatch(@PathParam("id") int produceId, @PathParam("amount") double amount) throws DALException, PositiveDoubleValidationException, InvalidIDException {
 		controller.createProduceBatchValidation(produceId, amount);
 	}
 	
 	@GET
 	@Path("/{id}")
 	@Secured( roles = { Role.Foreman })
-	public ProduceBatchDTO getProduceBatch(@PathParam("id") int pbId) throws ValidationException, DALException {
+	public ProduceBatchDTO getProduceBatch(@PathParam("id") int pbId) throws DALException, PositiveIntegerValidationException {
 		Validation.isPositiveInteger(pbId);
 		return dao.readProduceBatch(pbId);
 	}
@@ -43,7 +52,7 @@ public class ProduceBatchService {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Foreman })
-	public void updateProduceBatch(ProduceBatchDTO produceBatch) throws DALException, ValidationException {
+	public void updateProduceBatch(ProduceBatchDTO produceBatch) throws DALException, PositiveDoubleValidationException, InvalidIDException {
 		controller.updateProduceBatchValidation(produceBatch);
 	}
 	

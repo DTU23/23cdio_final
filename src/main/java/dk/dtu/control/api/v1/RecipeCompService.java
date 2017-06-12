@@ -20,7 +20,9 @@ import dk.dtu.model.Validation;
 import dk.dtu.model.dao.MySQLRecipeCompDAO;
 import dk.dtu.model.dto.RecipeCompDTO;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.ValidationException;
+import dk.dtu.model.exceptions.validation.InvalidIDException;
+import dk.dtu.model.exceptions.validation.PositiveDoubleValidationException;
+import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
 import dk.dtu.model.interfaces.RecipeCompDAO;
 
 @Path("v1/recipecomp")
@@ -34,14 +36,14 @@ public class RecipeCompService {
 
 	@POST
 	@Secured( roles = { Role.Pharmacist })
-	public void createRecipeComp(RecipeCompDTO recipeComp) throws DALException, ValidationException {
+	public void createRecipeComp(RecipeCompDTO recipeComp) throws DALException, PositiveDoubleValidationException, InvalidIDException {
 		controller.createRecipeCompValidation(recipeComp);
 	}
 	
 	@GET
 	@Path("/{recipeId}/{produceId}")
 	@Secured( roles = { Role.Pharmacist })
-	public RecipeCompDTO getRecipeComp(@PathParam("recipeId") int recipeId, @PathParam("produceId") int produceId) throws DALException, ValidationException {
+	public RecipeCompDTO getRecipeComp(@PathParam("recipeId") int recipeId, @PathParam("produceId") int produceId) throws DALException, PositiveIntegerValidationException {
 		Validation.isPositiveInteger(recipeId);
 		Validation.isPositiveInteger(produceId);
 		return dao.readRecipeComp(recipeId, produceId);
@@ -49,14 +51,14 @@ public class RecipeCompService {
 	
 	@PUT
 	@Secured( roles = { Role.Pharmacist })
-	public void updateRecipeComp(RecipeCompDTO recipeComp) throws DALException, ValidationException {
+	public void updateRecipeComp(RecipeCompDTO recipeComp) throws DALException, PositiveDoubleValidationException, InvalidIDException {
 		controller.updateRecipeCompValidation(recipeComp);
 	}
 	
 	@DELETE
 	@Path("/{recipeId}/{produceId}")
 	@Secured( roles = { Role.Pharmacist })
-	public void deleteProduce(@PathParam("recipeId") int recipeId, @PathParam("produceId") int produceId) throws DALException, ValidationException {
+	public void deleteProduce(@PathParam("recipeId") int recipeId, @PathParam("produceId") int produceId) throws DALException, PositiveIntegerValidationException {
 		Validation.isPositiveInteger(recipeId);
 		Validation.isPositiveInteger(produceId);
 		dao.deleteRecipeComp(recipeId, produceId);

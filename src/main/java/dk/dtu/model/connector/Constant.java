@@ -9,7 +9,10 @@ public abstract class Constant
 			password				= "gSk7j57~"; 		// dit password som du har valgt til din database
 
 	public static final boolean
-			usePoolSettings         = true;             // whether or not to use the custom pool settings
+			useMinPoolSizeSettings      = true,         // whether or not to use the custom pool settings
+			useAcquireIncrementSettings = true,         // whether or not to use the custom pool settings
+			useMaxPoolSizeSettings      = true,         // whether or not to use the custom pool settings
+			useMaxStatementsSettings    = true;         // whether or not to use the custom pool settings
 	
 	public static final int
 			port                    = 3306,

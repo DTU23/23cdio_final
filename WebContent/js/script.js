@@ -1125,7 +1125,7 @@ function ajaxErrorHandler(msg, notice) {
                 Materialize.toast("An unexpected error ocurred!", 4000);
                 break;
             default:
-                Materialize.toast(msg.statusText, 4000);
+                Materialize.toast(msg.responseText, 4000);
                 break;
         }
     }

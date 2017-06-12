@@ -160,11 +160,11 @@ public class Validation {
 		try {
 			isPositiveInteger(cpr);
 		} catch (PositiveIntegerValidationException e) {
-			throw new InvalidCprException(e);
+			throw new InvalidCprException("CPR is not a positive integer", e);
 		}
 		// checks the length
 		if(cpr.length() != 10) {
-			throw new InvalidCprException("Not ten digits");
+			throw new InvalidCprException("CPR is Not ten digits");
 		}
 		// checks for valid date
 		for (int i = 1900; i < 2100; i += 100) {
@@ -176,7 +176,7 @@ public class Validation {
 			try {
 				cprDate.getTime();
 			} catch (Exception e1) {
-				throw new InvalidCprException("Not a valid date");
+				throw new InvalidCprException("CPR has invalid date");
 			}
 			// checks if date is in the future
 			Calendar currentDate = new GregorianCalendar();

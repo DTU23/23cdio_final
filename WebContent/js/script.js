@@ -229,6 +229,42 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on('click', '.modal-save-profile', function (e) {
+        e.preventDefault();
+        $('#EditModal').find('.preloader-wrapper').removeClass('hide');
+        var role;
+        if($('#userEdit').find("#user_role").find('li.active.selected').text() === ''){
+            role = $('#userEdit').find('input.select-dropdown').attr('value');
+        }else{
+            role = $('#userEdit').find("#user_role").find('li.active.selected').text()
+        }
+        $.ajax({
+            type: "PUT",
+            contentType: "application/json",
+            processData: false,
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            data: JSON.stringify({
+                "oprId": $('#userEdit').find("#user_id").val(),
+                "oprName": $('#userEdit').find("#user_name").val(),
+                "ini": $('#userEdit').find("#user_ini").val(),
+                "cpr": $('#userEdit').find("#user_cpr").val(),
+                "admin": $('#userEdit').find("#user_admin").is(':checked'),
+                "role": role
+            }),
+            url: "./api/v1/operator/",
+            success: function( msg ) {
+                populateUsersAdmin();
+                $('#EditModal').modal('close');
+            },
+            error: function ( msg ) {
+                Materialize.toast("Unable to update user!", 4000);
+                $('#EditModal').modal('close');
+            }
+        });
+    });
+
     /**
      * Produce Listeners
      */

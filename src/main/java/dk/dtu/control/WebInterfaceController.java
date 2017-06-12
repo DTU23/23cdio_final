@@ -42,7 +42,7 @@ public class WebInterfaceController implements IWebInterfaceController {
 	public OperatorDTO createOperatorValidation(OperatorDTO opr) throws InvalidIDException, InvalidNameException,
 	InvalidInitialsException, InvalidCprException, InvalidRoleException, DALException {
 		Validation.isValidID(opr.getOprId());
-		Validation.isValidUserName(opr.getOprName());
+		Validation.isValidName(opr.getOprName());
 		Validation.isValidInitials(opr.getIni());
 		Validation.isValidCpr(opr.getCpr());
 		Validation.isValidRole(opr.getRole());
@@ -64,7 +64,7 @@ public class WebInterfaceController implements IWebInterfaceController {
 	public void updateOperatorValidation(OperatorDTO opr) throws InvalidIDException, InvalidNameException,
 	InvalidInitialsException, InvalidCprException, InvalidRoleException, InvalidPasswordException, DALException {
 		Validation.isValidID(opr.getOprId());
-		Validation.isValidUserName(opr.getOprName());
+		Validation.isValidName(opr.getOprName());
 		Validation.isValidInitials(opr.getIni());
 		Validation.isValidCpr(opr.getCpr());
 		Validation.isValidRole(opr.getRole());
@@ -104,8 +104,8 @@ public class WebInterfaceController implements IWebInterfaceController {
 	@Override
 	public void createProduceValidation(ProduceDTO produce) throws InvalidIDException, InvalidNameException, DALException {
 		Validation.isValidID(produce.getProduceId());
-		Validation.isValidUserName(produce.getProduceName());
-		Validation.isValidUserName(produce.getSupplier());
+		Validation.isValidName(produce.getProduceName());
+		Validation.isValidName(produce.getSupplier());
 		ProduceDAO dao = new MySQLProduceDAO();
 		dao.createProduce(produce);
 	}
@@ -113,8 +113,8 @@ public class WebInterfaceController implements IWebInterfaceController {
 	@Override
 	public void updateProduceValidation(ProduceDTO produce) throws InvalidIDException, InvalidNameException, DALException {
 		Validation.isValidID(produce.getProduceId());
-		Validation.isValidUserName(produce.getProduceName());
-		Validation.isValidUserName(produce.getSupplier());
+		Validation.isValidName(produce.getProduceName());
+		Validation.isValidName(produce.getSupplier());
 		ProduceDAO dao = new MySQLProduceDAO();
 		dao.updateProduce(produce);		
 	}
@@ -183,7 +183,7 @@ public class WebInterfaceController implements IWebInterfaceController {
 
 	@Override
 	public void createRecipeValidation(String recipeName) throws InvalidNameException, DALException {
-		Validation.isValidUserName(recipeName);
+		Validation.isValidName(recipeName);
 		RecipeDAO dao = new MySQLRecipeDAO();
 		dao.createRecipe(recipeName);
 	}
@@ -191,7 +191,7 @@ public class WebInterfaceController implements IWebInterfaceController {
 	@Override
 	public void updateRecipeValidation(RecipeDTO recipe) throws InvalidIDException, InvalidNameException, DALException {
 		Validation.isValidID(recipe.getRecipeId());
-		Validation.isValidUserName(recipe.getRecipeName());
+		Validation.isValidName(recipe.getRecipeName());
 		RecipeDAO dao = new MySQLRecipeDAO();
 		dao.updateRecipe(recipe);
 	}

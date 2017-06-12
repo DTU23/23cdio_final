@@ -55,12 +55,12 @@ public class ValidationTest {
 
 	@Test
 	public void testIsValidUserName() throws InvalidNameException {
-		Validation.isValidUserName("Peter Madsen");
+		Validation.isValidName("Peter Madsen");
 	}
 
 	@Test(expected = InvalidNameException.class)
 	public void testIsInvalidUserName() throws InvalidNameException {
-		Validation.isValidUserName("P3t3r M4ds3n");
+		Validation.isValidName("P3t3r M4ds3n");
 	}
 
 	@Test

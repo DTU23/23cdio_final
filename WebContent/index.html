@@ -249,7 +249,7 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <input disabled id="produceId" type="text" class="validate" value="{{produceId}}">
-                        <label for="produceId" class="disabled">Produce Batch ID</label>
+                        <label for="produceId" class="active disabled">Produce Batch ID</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="amount" type="text" class="validate" value="{{amount}}">
@@ -492,16 +492,16 @@
             <form id="userEdit">
                 <div class="row" data-source-id="{{oprId}}">
                     <div class="input-field col m6 s12">
-                        <input id="user_id" type="text" class="validate" value="{{oprId}}" data-length="10" disabled>
+                        <input id="user_id" type="text" class="active validate" value="{{oprId}}" data-length="10" disabled>
                         <label for="user_id" class="active" data-error="User ID must be provided!" data-length="10">User ID</label>
+                    </div>
+                    <div class="input-field col m6 s12">
+                        <input id="user_ini" type="text" class="validate" value="{{ini}}">
+                        <label for="user_ini">User Initials</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="user_password" type="password" class="validate" value="">
                         <label for="user_password">Password</label>
-                    </div>
-                    <div class="input-field col s6">
-                        <input id="user_ini" type="text" class="validate" value="{{ini}}">
-                        <label for="user_ini">User Initials</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="user_name" type="text" class="validate" value="{{oprName}}">
@@ -585,7 +585,7 @@
                 <!--{{#operator}}-->
                 <div class="row" data-source-id="{{oprId}}">
                     <div class="input-field col m6 s12">
-                        <input id="user_id" type="text" class="validate" value="{{oprId}}" data-length="10" disabled>
+                        <input id="user_id" type="text" class="validate active" value="{{oprId}}" data-length="10" disabled>
                         <label for="user_id" class="active" data-error="User ID must be provided!" data-length="10">User ID</label>
                     </div>
 

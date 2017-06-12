@@ -28,6 +28,8 @@ public final class DataSource {
 		connectionPool.setUser(username);
 		connectionPool.setPassword(password);
 
+		if(Constant.useInitialPoolSizeSettings)
+			connectionPool.setInitialPoolSize(Constant.initialPoolSize);
 		if(Constant.useMinPoolSizeSettings)
 			connectionPool.setMinPoolSize(Constant.minPoolSize);
 		if(Constant.useAcquireIncrementSettings)

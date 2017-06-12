@@ -120,16 +120,16 @@ public class Validation {
 
 	/**
 	 * Method to validate if a user name is a valid choice.
-	 * @param userName
+	 * @param name
 	 * @throws ValidationException
 	 */
-	public static void isValidUserName(String userName) throws InvalidNameException {
-		if(!userName.matches("[a-zA-Z ]+"))
+	public static void isValidName(String name) throws InvalidNameException {
+		if(!name.matches("[a-zA-Z ]+"))
 			throw new InvalidNameException("Input contains non-letter characters");
-		if(userName.length() < 2) {
-			throw new InvalidNameException("User name too short");
-		} else if (userName.length() > 20) {
-			throw new InvalidNameException("User name too long");
+		if(name.length() < 2) {
+			throw new InvalidNameException("Name too short");
+		} else if (name.length() > 20) {
+			throw new InvalidNameException("Name too long");
 		}
 	}
 

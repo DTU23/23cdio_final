@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dk.dtu.model.connector.Connector;
+import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dto.RecipeCompDTO;
 import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.interfaces.RecipeCompDAO;
@@ -14,7 +14,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 
 	@Override
 	public void createRecipeComp(RecipeCompDTO recipeComponent) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL create_recipe_component('" 
+		if(DataSource.getInstance().doUpdate("CALL create_recipe_component('" 
 				+ recipeComponent.getRecipeId() + "', '" 
 				+ recipeComponent.getProduceId() + "', '" 
 				+ recipeComponent.getNomNetto() + "', '" 
@@ -26,7 +26,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 
 	@Override
 	public RecipeCompDTO readRecipeComp(int recipeId, int produceId) throws DALException {
-		ResultSet rs = Connector.getInstance().doQuery("CALL read_recipe_component('"+recipeId+"', '"+produceId+"');");
+		ResultSet rs = DataSource.getInstance().doQuery("CALL read_recipe_component('"+recipeId+"', '"+produceId+"');");
 		try
 		{
 			if (!rs.first()) {
@@ -40,13 +40,13 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 
 	@Override
 	public void updateRecipeComp(RecipeCompDTO recipeComponent) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL update_recipe_component('" 
+		if(DataSource.getInstance().doUpdate("CALL update_recipe_component('" 
 				+ recipeComponent.getRecipeId() + "','"
 				+ recipeComponent.getProduceId() + "','" 
 				+ recipeComponent.getNomNetto() + "','" 
@@ -58,7 +58,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 
 	@Override
 	public void deleteRecipeComp(int recipeId, int produceId) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL delete_recipe_component('"+recipeId+"', '"+produceId+"');") == 0)
+		if(DataSource.getInstance().doUpdate("CALL delete_recipe_component('"+recipeId+"', '"+produceId+"');") == 0)
 		{
 			throw new DALException("No rows affected");
 		}
@@ -67,7 +67,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 	@Override
 	public List<RecipeCompDTO> getRecipeCompList() throws DALException {
 		List<RecipeCompDTO> list = new ArrayList<RecipeCompDTO>();
-		ResultSet rs = Connector.getInstance().doQuery("SELECT * FROM recipecomponent;");
+		ResultSet rs = DataSource.getInstance().doQuery("SELECT * FROM recipecomponent;");
 
 		try {
 			while (rs.next())
@@ -82,14 +82,14 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 
 	@Override
 	public List<RecipeCompDTO> getRecipeCompByRecipeId(int recipeId) throws DALException {
 		List<RecipeCompDTO> list = new ArrayList<RecipeCompDTO>();
-		ResultSet rs = Connector.getInstance().doQuery("CALL get_recipe_comp_by_recipe_id('"+recipeId+"');");
+		ResultSet rs = DataSource.getInstance().doQuery("CALL get_recipe_comp_by_recipe_id('"+recipeId+"');");
 		try {
 			while (rs.next())
 			{
@@ -103,7 +103,7 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 

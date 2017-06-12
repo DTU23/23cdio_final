@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dk.dtu.model.connector.Connector;
+import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
 import dk.dtu.model.exceptions.DALException;
@@ -20,7 +20,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
-			conn = Connector.getConnection();
+			conn = DataSource.getInstance().getConnection();
 			stm = conn.prepareStatement("CALL create_operator(?,?,?,?,?,?,?)");
 			stm.setInt(1, opr.getOprId());
 			stm.setString(2, opr.getOprName());
@@ -46,7 +46,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 		PreparedStatement stm = null;
 		ResultSet rs = null;
 		try	{
-			conn = Connector.getConnection();
+			conn = DataSource.getInstance().getConnection();
 			stm = conn.prepareStatement("CALL read_operator(?);");
 			stm.setInt(1, oprId);
 			rs = stm.executeQuery();
@@ -81,7 +81,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
-			conn = Connector.getConnection();
+			conn = DataSource.getInstance().getConnection();
 			stm = conn.prepareStatement("CALL update_operator(?,?,?,?,?,?,?)");
 			stm.setInt(1, opr.getOprId());
 			stm.setString(2, opr.getOprName());
@@ -106,7 +106,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try	{
-			conn = Connector.getConnection();
+			conn = DataSource.getInstance().getConnection();
 			stm = conn.prepareStatement("CALL delete_operator(?);");
 			stm.setInt(1, oprId);
 			if(stm.executeUpdate() == 0) {
@@ -118,10 +118,6 @@ public class MySQLOperatorDAO implements OperatorDAO {
 			try { if (stm != null) stm.close(); } catch (SQLException e) {};
 			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
-		if(Connector.getInstance().doUpdate("CALL delete_operator(" + oprId + ");") == 0) 
-		{
-			throw new DALException("No rows affected");
-		}
 	}
 
 	@Override
@@ -131,7 +127,7 @@ public class MySQLOperatorDAO implements OperatorDAO {
 		PreparedStatement stm = null;
 		ResultSet rs = null;
 		try	{
-			conn = Connector.getConnection();
+			conn = DataSource.getInstance().getConnection();
 			stm = conn.prepareStatement("SELECT * FROM operator_list;");
 			rs = stm.executeQuery();
 			while (rs.next()) {

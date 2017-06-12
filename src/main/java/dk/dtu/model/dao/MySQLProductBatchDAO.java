@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dk.dtu.model.connector.Connector;
+import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.dto.ProductBatchListDTO;
@@ -16,7 +16,7 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 
 	@Override
 	public void createProductBatch(int recipe_id) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL create_product_batch('"+recipe_id+"');") == 0)
+		if(DataSource.getInstance().doUpdate("CALL create_product_batch('"+recipe_id+"');") == 0)
 		{
 			throw new DALException("No rows affected!");
 		}
@@ -24,7 +24,7 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 
 	@Override
 	public ProductBatchDTO readProductBatch(int pbId) throws DALException {
-		ResultSet rs = Connector.getInstance().doQuery("CALL read_product_batch('"+pbId+"');");
+		ResultSet rs = DataSource.getInstance().doQuery("CALL read_product_batch('"+pbId+"');");
 		try {
 			if (!rs.first()) {
 				throw new DALException("Product batch with id " + pbId + " does not exist");
@@ -36,13 +36,13 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 
 	@Override
 	public void updateProductBatch(ProductBatchDTO productbatch) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL update_product_batch('"
+		if(DataSource.getInstance().doUpdate("CALL update_product_batch('"
 				+ productbatch.getPbId()+"','"
 				+ productbatch.getRecipeId()+"','"
 				+ productbatch.getStatus()+"');") == 0)
@@ -53,7 +53,7 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 
 	@Override
 	public void deleteProductBatch(int pbId) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL delete_product_batch(" + pbId + ";") == 0)
+		if(DataSource.getInstance().doUpdate("CALL delete_product_batch(" + pbId + ";") == 0)
 		{
 			throw new DALException("No rows affected");
 		}
@@ -62,7 +62,7 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 	@Override
 	public List<ProductBatchListDTO> getProductBatchList() throws DALException {
 		List<ProductBatchListDTO> list = new ArrayList<ProductBatchListDTO>();
-		ResultSet rs = Connector.getInstance().doQuery("SELECT * FROM product_batch_list;");
+		ResultSet rs = DataSource.getInstance().doQuery("SELECT * FROM product_batch_list;");
 		try
 		{
 			while (rs.next()) 
@@ -77,13 +77,13 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 
 	@Override
 	public ProductBatchListDTO getProductBatchListDetailsByPbId(int pbId) throws DALException {
-		ResultSet rs = Connector.getInstance().doQuery("CALL get_product_batch_list_details_by_pb_id("+pbId+");");
+		ResultSet rs = DataSource.getInstance().doQuery("CALL get_product_batch_list_details_by_pb_id("+pbId+");");
 		try {
 			if(!rs.first()) {
 				throw new DALException("Product batch with id " + pbId + " does not exist");
@@ -96,14 +96,14 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 
 	@Override
 	public List<ProductBatchCompOverviewDTO> getProductBatchDetailsByPbId(int pbId) throws DALException {
 		List<ProductBatchCompOverviewDTO> list = new ArrayList<ProductBatchCompOverviewDTO>();
-		ResultSet rs = Connector.getInstance().doQuery("CALL get_product_batch_details_by_pb_id("+pbId+");");
+		ResultSet rs = DataSource.getInstance().doQuery("CALL get_product_batch_details_by_pb_id("+pbId+");");
 
 		try {
 			while (rs.next())
@@ -122,7 +122,7 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 }

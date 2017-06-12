@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dk.dtu.model.connector.Connector;
+import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dto.ProduceDTO;
 import dk.dtu.model.dto.ProduceOverviewDTO;
 import dk.dtu.model.exceptions.DALException;
@@ -15,7 +15,7 @@ public class MySQLProduceDAO implements ProduceDAO {
 
 	@Override
 	public void createProduce(ProduceDTO produce) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL create_produce('"
+		if(DataSource.getInstance().doUpdate("CALL create_produce('"
 				+ produce.getProduceName() + "','"
 				+ produce.getSupplier() + "');") == 0) 
 		{
@@ -25,7 +25,7 @@ public class MySQLProduceDAO implements ProduceDAO {
 
 	@Override
 	public ProduceDTO readProduce(int produceId) throws DALException {
-		ResultSet rs = Connector.getInstance().doQuery("CALL read_produce('" + produceId + "');");
+		ResultSet rs = DataSource.getInstance().doQuery("CALL read_produce('" + produceId + "');");
 		try {
 			if (!rs.first()) {
 				throw new DALException("Produce with id " + produceId + " does not exist");
@@ -37,13 +37,13 @@ public class MySQLProduceDAO implements ProduceDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 
 	@Override
 	public void updateProduce(ProduceDTO produce) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL update_produce('"
+		if(DataSource.getInstance().doUpdate("CALL update_produce('"
 				+ produce.getProduceId() + "','"
 				+ produce.getProduceName() + "','"
 				+ produce.getSupplier() + "');") == 0) 
@@ -54,7 +54,7 @@ public class MySQLProduceDAO implements ProduceDAO {
 
 	@Override
 	public void deleteProduce(int produceId) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL delete_produce(" + produceId + ");") == 0)
+		if(DataSource.getInstance().doUpdate("CALL delete_produce(" + produceId + ");") == 0)
 		{
 			throw new DALException("No rows affected");
 		}
@@ -63,7 +63,7 @@ public class MySQLProduceDAO implements ProduceDAO {
 	@Override
 	public List<ProduceDTO> getProduceList() throws DALException {
 		List<ProduceDTO> list = new ArrayList<ProduceDTO>();
-		ResultSet rs = Connector.getInstance().doQuery("SELECT * FROM produce;");
+		ResultSet rs = DataSource.getInstance().doQuery("SELECT * FROM produce;");
 		try
 		{
 			while (rs.next())
@@ -78,14 +78,14 @@ public class MySQLProduceDAO implements ProduceDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 
 	@Override
 	public List<ProduceOverviewDTO> getProduceOverview() throws DALException{
 		List<ProduceOverviewDTO> list = new ArrayList<ProduceOverviewDTO>();
-		ResultSet rs = Connector.getInstance().doQuery("SELECT * FROM produce_overview;");
+		ResultSet rs = DataSource.getInstance().doQuery("SELECT * FROM produce_overview;");
 		try
 		{
 			while (rs.next())
@@ -101,7 +101,7 @@ public class MySQLProduceDAO implements ProduceDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 }

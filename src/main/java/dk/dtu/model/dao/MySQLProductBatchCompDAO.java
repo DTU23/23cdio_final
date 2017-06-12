@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dk.dtu.model.connector.Connector;
+import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
@@ -16,7 +16,7 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 
 	@Override
 	public void createProductBatchComp(ProductBatchCompDTO productBatchComponent) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL create_product_batch_component('" 
+		if(DataSource.getInstance().doUpdate("CALL create_product_batch_component('" 
 				+ productBatchComponent.getPbId() + "', '" 
 				+ productBatchComponent.getRbId() + "', '" 
 				+ productBatchComponent.getTara() + "', '" 
@@ -29,7 +29,7 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 
 	@Override
 	public ProductBatchCompDTO readProductBatchComp(int pbId, int rbId) throws DALException {
-		ResultSet rs = Connector.getInstance().doQuery("CALL read_product_batch_component('"+pbId+"', '"+rbId+"');");
+		ResultSet rs = DataSource.getInstance().doQuery("CALL read_product_batch_component('"+pbId+"', '"+rbId+"');");
 		try 
 		{
 			if (!rs.first()) {
@@ -44,13 +44,13 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 
 	@Override
 	public void updateProductBatchComp(ProductBatchCompDTO productBatchComponent) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL update_product_batch_component('" 
+		if(DataSource.getInstance().doUpdate("CALL update_product_batch_component('" 
 				+ productBatchComponent.getPbId() + "','" 
 				+ productBatchComponent.getRbId() + "','" 
 				+ productBatchComponent.getTara() + "','"
@@ -63,7 +63,7 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 
 	@Override
 	public void deleteProductBatchComp(int pbId, int rbId) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL delete_product_batch_component(" + pbId + "," + rbId + ";") == 0)
+		if(DataSource.getInstance().doUpdate("CALL delete_product_batch_component(" + pbId + "," + rbId + ";") == 0)
 		{
 			throw new DALException("No rows affected");
 		}
@@ -72,7 +72,7 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 	@Override
 	public List<ProductBatchCompDTO> getProductBatchCompList() throws DALException {
 		List<ProductBatchCompDTO> list = new ArrayList<ProductBatchCompDTO>();
-		ResultSet rs = Connector.getInstance().doQuery("SELECT * FROM productbatchcomponent;");
+		ResultSet rs = DataSource.getInstance().doQuery("SELECT * FROM productbatchcomponent;");
 		try
 		{
 			while (rs.next())
@@ -88,14 +88,14 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 
 	@Override
 	public List<ProductBatchCompOverviewDTO> getProductBatchCompOverview() throws DALException {
 		List<ProductBatchCompOverviewDTO> list = new ArrayList<ProductBatchCompOverviewDTO>();
-		ResultSet rs = Connector.getInstance().doQuery("SELECT * FROM product_batch_component_overview;");
+		ResultSet rs = DataSource.getInstance().doQuery("SELECT * FROM product_batch_component_overview;");
 		try
 		{
 			while (rs.next())
@@ -114,14 +114,14 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 
 	@Override
 	public List<ProductBatchCompSupplierDetailsDTO> getProductBatchComponentSupplierDetailsByPbId(int pbId) throws DALException{
 		List<ProductBatchCompSupplierDetailsDTO> list = new ArrayList<ProductBatchCompSupplierDetailsDTO>();
-		ResultSet rs = Connector.getInstance().doQuery("CALL get_product_batch_component_supplier_details_by_pb_id("+pbId+");");
+		ResultSet rs = DataSource.getInstance().doQuery("CALL get_product_batch_component_supplier_details_by_pb_id("+pbId+");");
 		try
 		{
 			if (!rs.first()) {
@@ -140,7 +140,7 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			DataSource.getInstance().closeResources();
 		}
 	}
 }

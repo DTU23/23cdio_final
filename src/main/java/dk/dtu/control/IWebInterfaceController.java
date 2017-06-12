@@ -3,6 +3,7 @@ package dk.dtu.control;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.ProduceBatchDTO;
 import dk.dtu.model.dto.ProduceDTO;
+import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.dto.RecipeCompDTO;
 import dk.dtu.model.dto.RecipeDTO;
@@ -20,6 +21,9 @@ public interface IWebInterfaceController {
 	// Produce
 	void createProduceValidation(ProduceDTO produce) throws DALException, ValidationException;
 	void updateProduceValidation(ProduceDTO produce) throws DALException, ValidationException;
+	// Product Batch Comp
+	void createProductBatchCompValidation(ProductBatchCompDTO productBatchComp)	throws DALException, ValidationException;
+	void updateProductBatchCompValidation(ProductBatchCompDTO productBatchComp) throws DALException, ValidationException;
 	// Product Batch
 	void createProductBatchValidation(int recipeId) throws DALException, ValidationException;
 	void updateProductBatchValidation(ProductBatchDTO productBatch) throws DALException, ValidationException;
@@ -29,5 +33,7 @@ public interface IWebInterfaceController {
 	// Recipe
 	void createRecipeValidation(String recipeName) throws DALException, ValidationException;
 	void updateRecipeValidation(RecipeDTO recipe) throws DALException, ValidationException;
+	
+
 	
 }

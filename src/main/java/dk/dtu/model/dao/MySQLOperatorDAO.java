@@ -71,6 +71,12 @@ public class MySQLOperatorDAO implements OperatorDAO {
 	}
 
 	@Override
+	public OperatorNoPWDTO readOperatorNoPW(int oprId) throws DALException{
+		OperatorDTO opr = readOperator(oprId);
+		return new OperatorNoPWDTO(opr);
+	}
+
+	@Override
 	public void updateOperator(OperatorDTO opr) throws DALException {
 		Connection conn = null;
 		PreparedStatement stm = null;

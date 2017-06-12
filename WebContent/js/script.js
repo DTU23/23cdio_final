@@ -1,3 +1,5 @@
+var notice = true;
+
 $(document).ready(function () {
 
     $('.modal').modal({
@@ -11,6 +13,8 @@ $(document).ready(function () {
         }
     });
 
+    $(".button-collapse").sideNav();
+
     $('#MainTabs').tabs();
     $('#ProduceSubTabs').tabs();
 
@@ -18,7 +22,8 @@ $(document).ready(function () {
      * ProductBatch Listeners
      */
     // Recipe Opening/closing
-    $(document).on('click', '.product.collapsible-header', function (e) {
+    $(document).on('click', ".product.collapsible-header", function (e) {
+        if(!$(this).hasClass('active')){return;} //Only continue if accordion isn't active
         var TargetId = $(this).attr('data-id');
         $.ajax({
             context: TargetId,
@@ -26,12 +31,11 @@ $(document).ready(function () {
             contentType: "application/json",
             processData: false,
             crossDomain: true,
-            url: "./api/v1/product/list/"+$(this).attr('data-id'),
+            url: "./api/v1/productbatchcomp/list/"+$(this).attr('data-id'),
             headers : {
                 Authorization: Cookies.get("auth")
             },
             success: function( response ) {
-                console.log(response);
                 var template = $('#productBatchComponentsTemplate').html();
                 var data = {};
                 data['productbatchcomponents'] = response;
@@ -40,11 +44,9 @@ $(document).ready(function () {
                 var rendered = Mustache.render(template, data);
 
                 $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
-                    console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
                 });
             },
             error: function ( msg ) {
-                console.log(msg);
                 Materialize.toast("Error in loading data!", 4000);
             }
         });
@@ -55,7 +57,6 @@ $(document).ready(function () {
         Mustache.parse(template);   // optional, speeds up future uses
         data = {};
         data["recipeId"] = $(this).attr('data-recipe-id');
-        console.log(data);
         var rendered = Mustache.render(template, data);
         $('#EditModal').html(rendered).promise().done(function () {
 
@@ -76,7 +77,6 @@ $(document).ready(function () {
 
     $(document).on('click', '.modal-add-productbatch', function (e) {
         e.preventDefault();
-        console.log($('#productBatchAdd').find('#recipe_id').val());
         $.ajax({
             type: "POST",
             context: $('#productBatchAdd').find('#recipe_id').val(),
@@ -86,9 +86,8 @@ $(document).ready(function () {
             headers : {
                 Authorization: Cookies.get("auth")
             },
-            url: "./api/v1/product/",
+            url: "./api/v1/productbatch/",
             success: function( msg ) {
-                console.log("Response: " + msg);
                 populateProductAdmin(false);
                 $('#EditModal').modal('close');
             },
@@ -142,6 +141,39 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", ".edit-profile", function (e) {
+        var TargetId = $(this).attr('data-id');
+        $.ajax({
+            type: "GET",
+            context: TargetId,
+            contentType: "application/json",
+            processData: false,
+            crossDomain: true,
+            url: "./api/v1/operator/me",
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            success: function( response ) {
+                data = {};
+                data["operator"] = response;
+                template = $('#userEditProfileTemplate').html();
+                Mustache.parse(template);   // optional, speeds up future uses
+                var rendered = Mustache.render(template, data);
+                $('#EditModal').html(rendered).promise().done(function () {
+                    var select_box = $('#EditModal').find('#user_role');
+                    var option = 'option[value='+select_box.attr('data-selected')+']';
+                    select_box.find(option).attr("selected", true);
+                    $('select').material_select();
+                    $('#EditModal').modal('open');
+                });
+                return response;
+            },
+            error: function ( msg ) {
+                Materialize.toast("Error in loading data!", 4000);
+            }
+        });
+    });
+
     $(document).on("click", '.delete-user', function (e) {
         var row = $(this).parent().parent();
         $.ajax({
@@ -189,7 +221,6 @@ $(document).ready(function () {
             }),
             url: "./api/v1/operator/",
             success: function( msg ) {
-                console.log("Response: " + msg);
                 populateUsersAdmin(false);
                 $('#EditModal').modal('close');
             },
@@ -226,7 +257,6 @@ $(document).ready(function () {
             }),
             url: "./api/v1/operator/",
             success: function( msg ) {
-                console.log("Response: " + msg);
                 populateUsersAdmin();
                 $('#EditModal').modal('close');
             },
@@ -234,6 +264,40 @@ $(document).ready(function () {
                 Materialize.toast("Unable to update user!", 4000);
                 $('#EditModal').modal('close');
             }
+        });
+    });
+
+    $(document).on('click', '.modal-save-user-profile', function (e) {
+        e.preventDefault();
+        var role;
+        if($('#userEditProfile').find("#user_role").find('li.active.selected').text() === ''){
+            role = $('#userEditProfile').find('input.select-dropdown').attr('value');
+        }else{
+            role = $('#userEditProfile').find("#user_role").find('li.active.selected').text()
+        }
+        $.ajax({
+            type: "PUT",
+            contentType: "application/json",
+            processData: false,
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            data: JSON.stringify({
+                "oprId": $('#userEditProfile').find("#user_id").val(),
+                "oprName": $('#userEditProfile').find("#user_name").val(),
+                "ini": $('#userEditProfile').find("#user_ini").val(),
+                "cpr": $('#userEditProfile').find("#user_cpr").val(),
+                "password": $('#userEditProfile').find("#user_password").val(),
+                "newPassword": $('#userEditProfile').find("#user_new_password").val(),
+                "admin": $('#userEditProfile').find("#user_admin").is(':checked'),
+                "role": role
+            }),
+            url: "./api/v1/operator/update",
+            success: function( msg ) {
+                populateUsersAdmin();
+                $('#EditModal').modal('close');
+            },
+            error: ajaxErrorHandler
         });
     });
 
@@ -277,27 +341,24 @@ $(document).ready(function () {
                 return response;
             },
             error: function ( msg ) {
-                console.log(msg);
                 Materialize.toast("Error in loading data!", 4000);
             }
         });
     });
 
-    $(document).on("click", '.delete-produce', function (e) {
+    $(document).on("click", '.delete-producebatch', function (e) {
         $.ajax({
             type: "DELETE",
             processData: false,
             headers : {
                 Authorization: Cookies.get("auth")
             },
-            url: "./api/v1/operator/"+$(this).attr('data-id'),
+            url: "./api/v1/producebatch/"+$(this).attr('data-id'),
             success: function( response ) {
-                Materialize.toast("User with ID: "+ row.children(".id").text() +" was deleted!", 4000);
-                populateProduceAdmin(false);
+                Materialize.toast("Producebatch deleted!", 4000);
+                populateProduceBatchAdmin(false);
             },
-            error: function ( msg ) {
-                Materialize.toast("Unable to delete produce!", 4000);
-            }
+            error: ajaxErrorHandler
         });
     });
 
@@ -339,12 +400,12 @@ $(document).ready(function () {
                 Authorization: Cookies.get("auth")
             },
             data: JSON.stringify({
+                produceId: "",
                 produceName: $('#produceAdd').find('input#produce_name').val(),
                 supplier: $('#produceAdd').find('input#produce_supplier').val()
             }),
             url: "./api/v1/produce/",
             success: function( msg ) {
-                console.log("Response: " + msg);
                 populateProduceAdmin(false);
                 $('#EditModal').modal('close');
             },
@@ -382,7 +443,6 @@ $(document).ready(function () {
                 Authorization: Cookies.get("auth")
             },
             success: function( response ) {
-                console.log(response);
                 data = {};
                 data["producebatch"] = response;
                 template = $('#produceBatchEditTemplate').html();
@@ -394,9 +454,24 @@ $(document).ready(function () {
                 return response;
             },
             error: function ( msg ) {
-                console.log(msg);
                 Materialize.toast("Error in loading data!", 4000);
             }
+        });
+    });
+
+    $(document).on("click", '.delete-produce', function (e) {
+        $.ajax({
+            type: "DELETE",
+            processData: false,
+            headers : {
+                Authorization: Cookies.get("auth")
+            },
+            url: "./api/v1/produce/"+$(this).attr('data-id'),
+            success: function( response ) {
+                Materialize.toast("Produce deleted!", 4000);
+                populateProduceAdmin(false);
+            },
+            error: ajaxErrorHandler
         });
     });
 
@@ -441,7 +516,6 @@ $(document).ready(function () {
             },
             url: "./api/v1/producebatch/"+$('#produceBatchAdd').find('input#produce_id').val()+'/'+$('#produceBatchAdd').find('input#amount').val(),
             success: function( msg ) {
-                console.log("Response: " + msg);
                 populateProduceBatchAdmin(false);
                 $('#EditModal').modal('close');
             },
@@ -481,7 +555,6 @@ $(document).ready(function () {
             },
             url: "./api/v1/recipe/",
             success: function( msg ) {
-                console.log("Response: " + msg);
                 populateRecipeAdmin(true);
                 $('#EditModal').modal('close');
             },
@@ -494,6 +567,7 @@ $(document).ready(function () {
 
     // Recipe Opening/closing
     $(document).on('click', '.recipe.collapsible-header', function (e) {
+        if(!$(this).hasClass('active')){return;} //Only continue if accordion isn't active
         var TargetId = $(this).attr('data-id');
         $.ajax({
             context: TargetId,
@@ -506,7 +580,6 @@ $(document).ready(function () {
                 Authorization: Cookies.get("auth")
             },
             success: function( response ) {
-                console.log(response);
                 var template = $('#RecipeComponentsTemplate').html();
                 var data = {};
                 data['recipecomponents'] = response;
@@ -515,11 +588,9 @@ $(document).ready(function () {
                 var rendered = Mustache.render(template, data);
 
                 $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
-                    console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
                 });
             },
             error: function ( msg ) {
-                console.log(msg);
                 Materialize.toast("Error in loading data!", 4000);
             }
         });
@@ -533,7 +604,6 @@ $(document).ready(function () {
         Mustache.parse(template);   // optional, speeds up future uses
         data = {};
         data["recipeId"] = $(this).attr('data-recipe-id');
-        console.log(data);
         var rendered = Mustache.render(template, data);
         $('#EditModal').html(rendered).promise().done(function () {
 
@@ -568,7 +638,6 @@ $(document).ready(function () {
                 return response;
             },
             error: function ( msg ) {
-                console.log(msg);
                 Materialize.toast("Error in loading data!", 4000);
             }
         });
@@ -588,7 +657,6 @@ $(document).ready(function () {
                 Authorization: Cookies.get("auth")
             },
             success: function( response ) {
-                console.log(TargetId);
                 $.ajax({
                     context: TargetId,
                     type: "GET",
@@ -600,7 +668,6 @@ $(document).ready(function () {
                         Authorization: Cookies.get("auth")
                     },
                     success: function( response ) {
-                        console.log(response);
                         var template = $('#RecipeComponentsTemplate').html();
                         var data = {};
                         data['recipecomponents'] = response;
@@ -608,18 +675,15 @@ $(document).ready(function () {
                         var rendered = Mustache.render(template, data);
 
                         $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
-                            console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
                         });
                     },
                     error: function ( msg ) {
-                        console.log(msg);
                         Materialize.toast("Error in loading data!", 4000);
                     }
                 });
                 return response;
             },
             error: function ( msg ) {
-                console.log(msg);
                 Materialize.toast("Error in deleting recipe component!", 4000);
             }
         });
@@ -644,8 +708,6 @@ $(document).ready(function () {
             },
             url: "./api/v1/recipecomp/",
             success: function( msg ) {
-                console.log("Response: " + msg);
-                console.log(TargetId);
                 $.ajax({
                     context: TargetId,
                     type: "GET",
@@ -657,7 +719,6 @@ $(document).ready(function () {
                         Authorization: Cookies.get("auth")
                     },
                     success: function( response ) {
-                        console.log(response);
                         var template = $('#RecipeComponentsTemplate').html();
                         var data = {};
                         data['recipecomponents'] = response;
@@ -666,11 +727,9 @@ $(document).ready(function () {
                         var rendered = Mustache.render(template, data);
 
                         $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
-                            console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
                         });
                     },
                     error: function ( msg ) {
-                        console.log(msg);
                         Materialize.toast("Error in loading data!", 4000);
                     }
                 });
@@ -686,12 +745,6 @@ $(document).ready(function () {
     $(document).on('click', '.modal-add-recipecomp', function (e) {
         var TargetId = $('#recipeComponentAdd').attr('data-recipe-id');
         e.preventDefault();
-        console.log({
-            "produceId": $('#EditModal').find('#produce_id').val(),
-            "recipeId": $('#recipeComponentAdd').attr('data-recipe-id'),
-            "nomNetto": $('#EditModal').find('#nom_netto').val(),
-            "tolerance": $('#EditModal').find('#tolerance').val()
-        });
         $.ajax({
             type: "POST",
             context: TargetId,
@@ -708,8 +761,6 @@ $(document).ready(function () {
             },
             url: "./api/v1/recipecomp/",
             success: function( msg ) {
-                console.log("Response: " + msg);
-                console.log(TargetId);
                 $.ajax({
                     context: TargetId,
                     type: "GET",
@@ -721,7 +772,6 @@ $(document).ready(function () {
                         Authorization: Cookies.get("auth")
                     },
                     success: function( response ) {
-                        console.log(response);
                         var template = $('#RecipeComponentsTemplate').html();
                         var data = {};
                         data['recipecomponents'] = response;
@@ -730,11 +780,9 @@ $(document).ready(function () {
                         var rendered = Mustache.render(template, data);
 
                         $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
-                            console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
                         });
                     },
                     error: function ( msg ) {
-                        console.log(msg);
                         Materialize.toast("Error in loading data!", 4000);
                     }
                 });
@@ -774,10 +822,10 @@ $(document).ready(function () {
             contentType: "application/json",
             url: "./api/v1/login/",
             success: function( msg ) {
-                console.log("Response: " + msg);
                 Cookies.set("auth", msg, { expires : 7 });
                 $('#loginForm').hide();
                 $('main').removeClass('valign-wrapper');
+                $("nav ul.right").show();
                 $('#Administration').show();
                 populateUsersAdmin(false);
                 populateProduceAdmin(false);
@@ -787,13 +835,14 @@ $(document).ready(function () {
             },
             error: function ( msg ) {
                 Materialize.toast("Invalid login!", 4000);
-                console.log(msg);
             }
         });
     });
+
     $('.logout').on('click', function (e) {
         e.preventDefault();
         $('#Administration').hide();
+        $("nav ul.right").hide();
         $('#loginForm').show();
         $('main').addClass('valign-wrapper');
         Cookies.remove('auth');
@@ -837,10 +886,11 @@ $(document).ready(function () {
         $('#loginForm').hide();
         $('main').removeClass('valign-wrapper');
         $('#Administration').show();
+        $("nav ul.right").show();
         populateUsersAdmin(false);
         populateProduceAdmin(false);
-        //populateProduceBatchAdmin(false);
-        //populateProductAdmin(false);
+        populateProduceBatchAdmin(false);
+        populateProductAdmin(false);
         populateRecipeAdmin(false);
     }
 });
@@ -856,7 +906,6 @@ function populateUsersAdmin(notice) {
             Authorization: Cookies.get("auth")
         },
         success: function( response ) {
-            console.log(response);
             var template = $('#UserAdministrationTemplate').html();
             var data = {};
             data['users'] = response;
@@ -869,7 +918,6 @@ function populateUsersAdmin(notice) {
             });
         },
         error: function ( msg ) {
-            console.log(msg);
             switch(msg.status){
                 case 403:
                     if(notice){
@@ -893,7 +941,6 @@ function populateProduceAdmin(notice) {
             Authorization: Cookies.get("auth")
         },
         success: function( response ) {
-            console.log(response);
             var template = $('#ProduceAdministrationTemplate').html();
             var data = {};
             data['produce'] = response;
@@ -905,7 +952,6 @@ function populateProduceAdmin(notice) {
             });
         },
         error: function ( msg ) {
-            console.log(msg);
             if(notice){
                 Materialize.toast("Error in loading data!", 4000);
             }
@@ -925,7 +971,6 @@ function populateProduceBatchAdmin(notice) {
             Authorization: Cookies.get("auth")
         },
         success: function( response ) {
-            console.log(response);
             var template = $('#ProduceBatchAdministrationTemplate').html();
             var data = {};
             data['producebatch'] = response;
@@ -937,7 +982,6 @@ function populateProduceBatchAdmin(notice) {
             });
         },
         error: function ( msg ) {
-            console.log(msg);
             Materialize.toast("Error in loading data!", 4000);
         }
     });
@@ -951,7 +995,6 @@ function populateProduceBatchAdmin(notice) {
             Authorization: Cookies.get("auth")
         },
         success: function( response ) {
-            console.log(response);
             var template = $('#ProduceBatchStockAdministrationTemplate').html();
             var data = {};
             data['producebatchstock'] = response;
@@ -963,7 +1006,6 @@ function populateProduceBatchAdmin(notice) {
             });
         },
         error: function ( msg ) {
-            console.log(msg);
             if(notice){
                 Materialize.toast("Error in loading data!", 4000);
             }
@@ -977,12 +1019,11 @@ function populateProductAdmin(notice) {
         contentType: "application/json",
         processData: false,
         crossDomain: true,
-        url: "./api/v1/product",
+        url: "./api/v1/productbatch",
         headers : {
             Authorization: Cookies.get("auth")
         },
         success: function( response ) {
-            console.log(response);
             var template = $('#ProductBatchAdministrationTemplate').html();
             var data = {};
             data['productbatch'] = response;
@@ -997,7 +1038,6 @@ function populateProductAdmin(notice) {
             });
         },
         error: function ( msg ) {
-            console.log(msg);
             if(notice){
 
             }
@@ -1016,7 +1056,6 @@ function populateRecipeAdmin(notice){
             Authorization: Cookies.get("auth")
         },
         success: function( response ) {
-            console.log(response);
             var template = $('#RecipeAdministrationTemplate').html();
             var data = {};
             data['recipies'] = response;
@@ -1038,7 +1077,6 @@ function populateRecipeAdmin(notice){
                             Authorization: Cookies.get("auth")
                         },
                         success: function( response ) {
-                            console.log(response);
                             var template = $('#RecipeComponentsTemplate').html();
                             var data = {};
                             data['recipecomponents'] = response;
@@ -1046,21 +1084,34 @@ function populateRecipeAdmin(notice){
                             var rendered = Mustache.render(template, data);
 
                             $('div[data-id='+TargetId+']').parent().children('.collapsible-body').html(rendered).promise().done(function () {
-                                console.log($('div[data-id='+TargetId+']').parent().children('.collapsible-body'));
                             });
                         },
                         error: function ( msg ) {
-                            console.log(msg);
                         }
                     });
                 })
             });
         },
         error: function ( msg ) {
-            console.log(msg);
             if(notice){
 
             }
         }
     });
+}
+
+function ajaxErrorHandler(msg) {
+    if(notice){
+        switch(msg.status) {
+            case 500:
+                Materialize.toast("An unexpected error ocurred!", 4000);
+                break;
+            default:
+                Materialize.toast(msg, 4000);
+                break;
+        }
+    }
+    else{
+        console.log(msg);
+    }
 }

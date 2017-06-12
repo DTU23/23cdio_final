@@ -8,6 +8,16 @@ import java.util.regex.Pattern;
 
 import dk.dtu.control.api.Role;
 import dk.dtu.model.exceptions.ValidationException;
+import dk.dtu.model.exceptions.validation.PositiveDoubleValidationException;
+import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
+import dk.dtu.model.exceptions.validation.InvalidCprException;
+import dk.dtu.model.exceptions.validation.InvalidIDException;
+import dk.dtu.model.exceptions.validation.InvalidInitialsException;
+import dk.dtu.model.exceptions.validation.InvalidNameException;
+import dk.dtu.model.exceptions.validation.InvalidPasswordException;
+import dk.dtu.model.exceptions.validation.InvalidRoleException;
+import dk.dtu.model.exceptions.validation.InvalidStatusException;
+import dk.dtu.model.exceptions.validation.NotLettersException;
 
 public class Validation {
 
@@ -16,14 +26,14 @@ public class Validation {
 	 * @param input
 	 * @throws ValidationException
 	 */
-	public static void isPositiveInteger(String input) throws ValidationException {
+	public static void isPositiveInteger(String input) throws PositiveIntegerValidationException {
 		try {
 			long i = Long.parseLong(input);
 			if (i <= 0) {
-				throw new ValidationException("Input is not a positive integer");
+				throw new PositiveIntegerValidationException("Input is not a positive integer");
 			}
 		} catch (NumberFormatException e) {
-			throw new ValidationException("Input is not an integer");
+			throw new PositiveIntegerValidationException("Input is not an integer");
 		}
 	}
 
@@ -32,9 +42,9 @@ public class Validation {
 	 * @param input
 	 * @throws ValidationException
 	 */
-	public static void isPositiveInteger(int input) throws ValidationException {
+	public static void isPositiveInteger(int input) throws PositiveIntegerValidationException {
 		if (input <= 0) {
-			throw new ValidationException("Input is not a positive integer");
+			throw new PositiveIntegerValidationException("Input is not a positive integer");
 		}
 	}
 
@@ -43,14 +53,14 @@ public class Validation {
 	 * @param input
 	 * @throws ValidationException
 	 */
-	public static void isPositiveDouble(String input) throws ValidationException {
+	public static void isPositiveDouble(String input) throws PositiveDoubleValidationException {
 		try {
 			double i = Double.parseDouble(input);
 			if (i <= 0) {
-				throw new ValidationException("Input is not a positive number");
+				throw new PositiveDoubleValidationException("Input is not a positive number");
 			}
 		} catch (NumberFormatException e) {
-			throw new ValidationException("Input is not a double");
+			throw new PositiveDoubleValidationException("Input is not a double");
 		}
 	}
 
@@ -59,9 +69,9 @@ public class Validation {
 	 * @param input
 	 * @throws ValidationException
 	 */
-	public static void isPositiveDouble(double input) throws ValidationException {
+	public static void isPositiveDouble(double input) throws PositiveDoubleValidationException {
 		if (input <= 0) {
-			throw new ValidationException("Input is not a positive number");
+			throw new PositiveDoubleValidationException("Input is not a positive number");
 		}
 	}
 
@@ -70,9 +80,9 @@ public class Validation {
 	 * @param input
 	 * @throws ValidationException
 	 */
-	public static void isOnlyLetters(String input) throws ValidationException {
+	public static void isOnlyLetters(String input) throws NotLettersException {
 		if(!input.matches("[a-zA-Z]+"))
-			throw new ValidationException("Input contains non-letter characters.");
+			throw new NotLettersException("Input contains non-letter characters");
 	}
 
 	/**
@@ -80,11 +90,15 @@ public class Validation {
 	 * @param ID
 	 * @throws ValidationException
 	 */
-	public static void isValidID(String ID) throws ValidationException {
-		isPositiveInteger(ID);
+	public static void isValidID(String ID) throws InvalidIDException {
+		try {
+			isPositiveInteger(ID);
+		} catch (PositiveIntegerValidationException e) {
+			throw new InvalidIDException(e);
+		}
 		int i = Integer.parseInt(ID);
 		if(i > 99999999) {
-			throw new ValidationException("ID out of bounds.");
+			throw new InvalidIDException("ID out of bounds");
 		}
 	}
 	
@@ -93,25 +107,29 @@ public class Validation {
 	 * @param ID
 	 * @throws ValidationException
 	 */
-	public static void isValidID(int ID) throws ValidationException {
-		isPositiveInteger(ID);
+	public static void isValidID(int ID) throws InvalidIDException {
+		try {
+			isPositiveInteger(ID);
+		} catch (PositiveIntegerValidationException e) {
+			throw new InvalidIDException(e);
+		}
 		if(ID > 99999999) {
-			throw new ValidationException("ID out of bounds.");
+			throw new InvalidIDException("ID out of bounds");
 		}
 	}
 
 	/**
 	 * Method to validate if a user name is a valid choice.
-	 * @param userName
+	 * @param name
 	 * @throws ValidationException
 	 */
-	public static void isValidUserName(String userName) throws ValidationException {
-		if(!userName.matches("[a-zA-Z ]+"))
-			throw new ValidationException("Input contains non-letter characters.");
-		if(userName.length() < 2) {
-			throw new ValidationException("User name too short.");
-		} else if (userName.length() > 20) {
-			throw new ValidationException("User name too long.");
+	public static void isValidName(String name) throws InvalidNameException {
+		if(!name.matches("[a-zA-Z ]+"))
+			throw new InvalidNameException("Input contains non-letter characters");
+		if(name.length() < 2) {
+			throw new InvalidNameException("Name too short");
+		} else if (name.length() > 20) {
+			throw new InvalidNameException("Name too long");
 		}
 	}
 
@@ -120,12 +138,16 @@ public class Validation {
 	 * @param initials
 	 * @throws ValidationException
 	 */
-	public static void isValidInitials(String initials) throws ValidationException {
-		isOnlyLetters(initials);
+	public static void isValidInitials(String initials) throws InvalidInitialsException {
+		try {
+			isOnlyLetters(initials);
+		} catch (NotLettersException e) {
+			throw new InvalidInitialsException(e);
+		}
 		if(initials.length() < 2) {
-			throw new ValidationException("Too few initials.");
+			throw new InvalidInitialsException("Too few initials");
 		} else if (initials.length() > 4) {
-			throw new ValidationException("Too many initials.");
+			throw new InvalidInitialsException("Too many initials");
 		}
 	}
 
@@ -134,11 +156,15 @@ public class Validation {
 	 * @param cpr
 	 * @throws ValidationException
 	 */
-	public static void isValidCpr(String cpr) throws ValidationException {
-		isPositiveInteger(cpr);
+	public static void isValidCpr(String cpr) throws InvalidCprException {
+		try {
+			isPositiveInteger(cpr);
+		} catch (PositiveIntegerValidationException e) {
+			throw new InvalidCprException(e);
+		}
 		// checks the length
 		if(cpr.length() != 10) {
-			throw new ValidationException("Not ten digits.");
+			throw new InvalidCprException("Not ten digits");
 		}
 		// checks for valid date
 		for (int i = 1900; i < 2100; i += 100) {
@@ -149,13 +175,13 @@ public class Validation {
 			cprDate.setLenient(false);
 			try {
 				cprDate.getTime();
-			} catch (Exception e) {
-				throw new ValidationException("Not valid date.");
+			} catch (Exception e1) {
+				throw new InvalidCprException("Not a valid date");
 			}
 			// checks if date is in the future
 			Calendar currentDate = new GregorianCalendar();
 			if (cprDate.compareTo(currentDate) > 0) {
-				throw new ValidationException("Invalid cpr number.");
+				throw new InvalidCprException("Invalid cpr number");
 			}
 			// check if full cpr is valid
 			int CprProductSum = 0;
@@ -165,7 +191,7 @@ public class Validation {
 			}
 			if (CprProductSum % 11 != 0) {
 				if(year == 2000) {
-					throw new ValidationException("Invalid cpr number.");
+					throw new InvalidCprException("Invalid cpr number");
 				}
 			} else {
 				break;
@@ -181,11 +207,11 @@ public class Validation {
 	 * @param password
 	 * @throws ValidationException
 	 */
-	public static void isValidPassword(String password) throws ValidationException {
+	public static void isValidPassword(String password) throws InvalidPasswordException {
 		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?=.*[0-9])(?=.*[a-z].*[a-z]).{7,}$");
 		Matcher m = p.matcher(password);
 		if(!m.matches()) {
-			throw new ValidationException("Not a valid password");
+			throw new InvalidPasswordException("Not a valid password");
 		}
 	}
 
@@ -194,14 +220,25 @@ public class Validation {
 	 * @param role
 	 * @throws ValidationException
 	 */
-	public static void isValidRole(String role) throws ValidationException {
+	public static void isValidRole(String role) throws InvalidRoleException {
 		ArrayList<String> validRoles = new ArrayList<>();
 		for (Role validrole : Role.values()) {
 			validRoles.add(validrole.toString().toLowerCase());
 		}
 		// if its a valid role
 		if (!validRoles.contains(role.toLowerCase())) {
-			throw new ValidationException("Not a valid role");
+			throw new InvalidRoleException("Not a valid role");
+		}
+	}
+
+	public static void isValidStatus(int status) throws InvalidStatusException {
+		try {
+			isPositiveInteger(status);
+		} catch (PositiveIntegerValidationException e) {
+			throw new InvalidStatusException(e);
+		}
+		if(status > 2) {
+			throw new InvalidStatusException("Not a valid status");
 		}
 	}
 }

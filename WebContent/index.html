@@ -24,7 +24,7 @@
     -->
     <script type="text/html" id="ProductBatchAdministrationTemplate">
         <div class="container-fluid">
-            <table class="striped centered responsive-table" id="productBatchHeader">
+            <table class="striped centered" id="productBatchHeader">
                 <thead>
                 <tr>
                     <th class="col s3">ID</th>
@@ -73,7 +73,7 @@
             <form id="productBatchAdd">
                 <div class="row" data-source-id="">
                     <div class="input-field col s12">
-                        <input id="recipe_id" type="text" class="validate" value="">
+                        <input id="recipe_id" type="number" class="validate" value="">
                         <label for="recipe_id" class="active">Recipe ID</label>
                     </div>
                 </div>
@@ -114,15 +114,15 @@
             <form id="recipeComponentAdd" data-recipe-id="{{recipeId}}">
                 <div class="row">
                     <div class="input-field col s12">
-                        <input id="produce_id" type="text" class="validate" value="">
+                        <input id="produce_id" type="number" class="validate" value="">
                         <label for="produce_id" class="active">Produce ID</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="nom_netto" type="text" class="validate" value="">
+                        <input id="nom_netto" type="number" class="validate" value="">
                         <label for="nom_netto" class="active">Nom. Netto</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="tolerance" type="text" class="validate" value="">
+                        <input id="tolerance" type="number" class="validate" value="">
                         <label for="tolerance" class="active">Tolerance</label>
                     </div>
                 </div>
@@ -153,7 +153,7 @@
                 <td class="name">{{produceName}}</td>
                 <td class="supplier">{{supplier}}</td>
                 <td>
-                    <!--<a class="btn-floating btn waves-effect waves-light red darken-2 delete-produce" data-id="{{produceId}}"><i class="material-icons">delete</i></a>-->
+                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-produce" data-id="{{produceId}}"><i class="material-icons">delete</i></a>
                     <a class="btn-floating btn waves-effect waves-light blue darken-1 edit-produce" data-id="{{produceId}}"><i class="material-icons">edit</i></a>
                 </td>
             </tr>
@@ -231,7 +231,7 @@
                 <td class="supplier">{{supplier}}</td>
                 <td class="supplier">{{amount}}</td>
                 <td>
-                    <!--<a class="btn-floating btn waves-effect waves-light red darken-2 delete-producebatch" data-id="{{rb_id}}"><i class="material-icons">delete</i></a>-->
+                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-producebatch" data-id="{{rbId}}"><i class="material-icons">delete</i></a>
                     <a class="btn-floating btn waves-effect waves-light edit-producebatch blue darken-1" data-rb-id="{{rbId}}" data-produce-id="{{produceId}}"><i class="material-icons">edit</i></a>
                 </td>
             </tr>
@@ -270,11 +270,11 @@
             <form id="produceBatchAdd">
                 <div class="row" data-source-id="">
                     <div class="input-field col s12">
-                        <input id="produce_id" type="text" class="validate">
+                        <input id="produce_id" type="number" class="validate">
                         <label for="produce_id" class="active">Produce ID</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="amount" type="text" class="validate">
+                        <input id="amount" type="number" class="validate">
                         <label for="amount" class="active">Amount</label>
                     </div>
                 </div>
@@ -310,7 +310,7 @@
     -->
     <script type="text/html" id="RecipeAdministrationTemplate">
         <div class="container-fluid">
-            <table class="striped centered responsive-table" id="recipeHeader">
+            <table class="striped centered" id="recipeHeader">
                 <thead>
                 <tr>
                     <th class="col s2">ID</th>
@@ -491,13 +491,17 @@
             <h4>Edit User</h4>
             <form id="userEdit">
                 <div class="row" data-source-id="{{oprId}}">
-                    <div class="input-field col s6">
+                    <div class="input-field col m6 s12">
                         <input id="user_id" type="text" class="validate" value="{{oprId}}" data-length="10" disabled>
                         <label for="user_id" class="active" data-error="User ID must be provided!" data-length="10">User ID</label>
                     </div>
+                    <div class="input-field col s12">
+                        <input id="user_password" type="password" class="validate" value="">
+                        <label for="user_password">Password</label>
+                    </div>
                     <div class="input-field col s6">
                         <input id="user_ini" type="text" class="validate" value="{{ini}}">
-                        <label for="user_ini" class="active">User Initials</label>
+                        <label for="user_ini">User Initials</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="user_name" type="text" class="validate" value="{{oprName}}">
@@ -574,7 +578,66 @@
         </div>
     </script>
 
-    <script type="text/html" id=userTableRow">
+    <script type="text/html" id="userEditProfileTemplate">
+        <div class="modal-content">
+            <h4>Edit User</h4>
+            <form id="userEditProfile">
+                <!--{{#operator}}-->
+                <div class="row" data-source-id="{{oprId}}">
+                    <div class="input-field col m6 s12">
+                        <input id="user_id" type="text" class="validate" value="{{oprId}}" data-length="10" disabled>
+                        <label for="user_id" class="active" data-error="User ID must be provided!" data-length="10">User ID</label>
+                    </div>
+
+                    <div class="input-field col m6 s12">
+                        <input id="user_ini" type="text" class="validate" value="{{ini}}">
+                        <label for="user_ini" class="active">User Initials</label>
+                    </div>
+                    <div class="input-field col m6 s12">
+                        <input id="user_password" type="password" class="" data-length="2">
+                        <label for="user_password" class="" data-length="2">Old Password</label>
+                    </div>
+                    <div class="input-field col m6 s12">
+                        <input id="user_new_password" type="password" class="" data-length="2">
+                        <label for="user_new_password" class="" data-length="2">New Passsword</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="user_name" type="text" class="validate" value="{{oprName}}">
+                        <label for="user_name" class="active">Name</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="user_cpr" type="text" class="validate" value="{{cpr}}">
+                        <label for="user_cpr" class="active">User CPR</label>
+                    </div>
+                    <p class="col s4">
+                        <!--{{#admin}}-->
+                        <input type="checkbox" id="user_admin" checked="checked" />
+                        <!--{{/admin}}-->
+                        <!--{{^admin}}-->
+                        <input type="checkbox" id="user_admin"/>
+                        <!--{{/admin}}-->
+                        <label for="user_admin">Admin</label>
+                    </p>
+                    <!-- Dropdown Trigger -->
+                    <div id="user_role" class="input-field col s8" data-selected="{{role}}">
+                        <select>
+                            <option value="none">none</option>
+                            <option value="operator">operator</option>
+                            <option value="foreman">foreman</option>
+                            <option value="pharmacist">pharmacist</option>
+                        </select>
+                        <label>Role</label>
+                    </div>
+                </div>
+                <!--{{/operator}}-->
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-save-user-profile waves-effect waves-green btn-flat">Save</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="userTableRow">
         <!--{{#users}}-->
         <tr id="user-row-{{oprId}}">
             <td class="id">{{oprId}}</td>
@@ -691,21 +754,66 @@
 
 </head>
 <body>
+<div class="loading-box">
+    <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
 
+            <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+
+            <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+
+            <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+    </div>
+</div>
 <nav class="blue-grey darken-3">
     <div class="nav-wrapper container">
         <a href="/" class="brand-logo">DTU Gruppe 23</a>
-        <ul id="nav-mobile" class="right">
-            <li><a href="#" class="logout">Logout</a></li>
+        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="#" class="edit-profile"><i class="material-icons left">edit</i>Edit Profile</a></li>
+            <li><a href="#" class="logout"><i class="material-icons left">clear</i>Logout</a></li>
+        </ul>
+        <ul class="side-nav" id="mobile-demo">
+            <li><a href="#" class="edit-profile"><i class="material-icons blue-grey-text text-darken-3 left">edit</i>Edit Profile</a></li>
+            <li><a href="#" class="logout"><i class="material-icons blue-grey-text text-darken-3 left">clear</i>Logout</a></li>
         </ul>
     </div>
 </nav>
 <!-- Modal -->
 <div class="modal modal-fixed-footer" id="EditModal" tabindex="-1"></div>
 <!-- END Modal -->
-<div>
-
-</div>
 <main class="valign-wrapper">
     <div id="loginForm" class="container">
         <div class="row">
@@ -765,7 +873,7 @@
     <div class="container">
         <div class="row">
             <div class="col offset-l10 offset-m10 offset-s8 l2 m2 s4 right-align">
-                <img width="100%" src="./img/dtulogo.png">
+                <img alt="DTU Logo" src="./img/dtulogo.png">
             </div>
         </div>
     </div>

@@ -1,23 +1,24 @@
 package dk.dtu.model.dto;
 
-public class OperatorDTO
+public class OperatorNewPWDTO
 {
 	/** Operatoer-identifikationsnummer (opr_id) i omraadet 1-99999999. Vaelges af brugerne */
-	private int oprId;                     
+	private int oprId;
 	/** Operatoernavn (opr_navn) min. 2 max. 20 karakterer */
-	private String oprName;                
+	private String oprName;
 	/** Operatoer-initialer min. 2 max. 3 karakterer */
-	private String ini;                 
+	private String ini;
 	/** Operatoer cpr-nr 10 karakterer */
-	private String cpr;                 
+	private String cpr;
 	/** Operatoer password min. 7 max. 8 karakterer */
 	private String password;
+	private String newPassword;
 	private boolean admin;
 	private String role;
-	
-	public OperatorDTO(){}
 
-	public OperatorDTO(int oprId, String oprName, String ini, String cpr, String password, boolean admin, String role)
+	public OperatorNewPWDTO(){}
+
+	public OperatorNewPWDTO(int oprId, String oprName, String ini, String cpr, String password, boolean admin, String role)
 	{
 		this.oprId = oprId;
 		this.oprName = oprName;
@@ -27,8 +28,8 @@ public class OperatorDTO
 		this.admin = admin;
 		this.role = role;
 	}
-	
-    public OperatorDTO(OperatorDTO opr)
+
+    public OperatorNewPWDTO(OperatorNewPWDTO opr)
     {
     	this.oprId = opr.getOprId();
     	this.oprName = opr.getOprName();
@@ -38,17 +39,6 @@ public class OperatorDTO
     	this.admin = opr.isAdmin();
     	this.role = opr.getRole();
     }
-
-	public OperatorDTO(OperatorNewPWDTO opr)
-	{
-		this.oprId = opr.getOprId();
-		this.oprName = opr.getOprName();
-		this.ini = opr.getIni();
-		this.cpr = opr.getCpr();
-		this.password = opr.getNewPassword();
-		this.admin = opr.isAdmin();
-		this.role = opr.getRole();
-	}
 
 	public int getOprId() {
 		return oprId;
@@ -88,6 +78,14 @@ public class OperatorDTO
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
 	}
 
 	public boolean isAdmin() {

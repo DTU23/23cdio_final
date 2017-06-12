@@ -5,9 +5,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
-import dk.dtu.control.api.v1.IWeightAdaptor;
 import dk.dtu.model.exceptions.AdaptorException;
 
 public class WeightAdaptor implements IWeightAdaptor {
@@ -180,9 +180,9 @@ public class WeightAdaptor implements IWeightAdaptor {
 	}
 
 	@Override
-	public String placeNetto() throws AdaptorException {
+	public String placeNetto(double nomNetto) throws AdaptorException {
 		try {
-			sendCommand("P111 \"Place netto [->\"");
+			sendCommand("P111 \"Place netto, " + new DecimalFormat("0.000").format(nomNetto).replace(',', '.') +" kg [->\"");
 			waitResponse();
 			waitResponse();
 			sendCommand("S");

@@ -21,7 +21,9 @@ import dk.dtu.model.dao.MySQLProduceDAO;
 import dk.dtu.model.dto.ProduceDTO;
 import dk.dtu.model.dto.ProduceOverviewDTO;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.ValidationException;
+import dk.dtu.model.exceptions.validation.InvalidIDException;
+import dk.dtu.model.exceptions.validation.InvalidNameException;
+import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
 import dk.dtu.model.interfaces.ProduceDAO;
 
 @Path("v1/produce")
@@ -35,14 +37,14 @@ public class ProduceService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Pharmacist })
-	public void createProduce(ProduceDTO produce) throws DALException, ValidationException {
+	public void createProduce(ProduceDTO produce) throws DALException, InvalidIDException, InvalidNameException {
 		controller.createProduceValidation(produce);
 	}
 	
 	@GET
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public ProduceDTO getProduce(@PathParam("id") int produceId) throws DALException, ValidationException {
+	public ProduceDTO getProduce(@PathParam("id") int produceId) throws DALException, PositiveIntegerValidationException {
 		Validation.isPositiveInteger(produceId);
 		return dao.readProduce(produceId);
 	}
@@ -50,14 +52,14 @@ public class ProduceService {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Pharmacist })
-	public void updateProduce(ProduceDTO produce) throws DALException, ValidationException {
+	public void updateProduce(ProduceDTO produce) throws DALException, InvalidIDException, InvalidNameException {
 		controller.updateProduceValidation(produce);
 	}
 	
 	@DELETE
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public void deleteProduce(@PathParam("id") int produceId) throws DALException, ValidationException {
+	public void deleteProduce(@PathParam("id") int produceId) throws DALException, PositiveIntegerValidationException {
 		Validation.isPositiveInteger(produceId);
 		dao.deleteProduce(produceId);
 	}

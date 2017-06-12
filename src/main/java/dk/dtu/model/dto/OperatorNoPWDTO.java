@@ -29,7 +29,7 @@ public class OperatorNoPWDTO
 	 * Creates a DTO without password, from a DTO with password.
 	 * @param opr
 	 */
-    public OperatorNoPWDTO(OperatorNoPWDTO opr)
+    public OperatorNoPWDTO(OperatorDTO opr)
     {
     	this.oprId = opr.getOprId();
     	this.oprName = opr.getOprName();

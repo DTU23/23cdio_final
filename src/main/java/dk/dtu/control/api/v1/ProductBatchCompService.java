@@ -1,24 +1,27 @@
 package dk.dtu.control.api.v1;
 
+import java.util.List;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import dk.dtu.control.IWebInterfaceController;
 import dk.dtu.control.WebInterfaceController;
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
 import dk.dtu.model.dao.MySQLProductBatchCompDAO;
-import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
-import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.ProductBatchCompDAO;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.List;
 
-@Path("v1/product")
+@Path("v1/productbatchcomp")
 @Produces(MediaType.APPLICATION_JSON)
-public class ProductCompService {
+public class ProductBatchCompService {
 
 	// This class implements all MySQLProductBatchDAO methods
 	private ProductBatchCompDAO dao = new MySQLProductBatchCompDAO();

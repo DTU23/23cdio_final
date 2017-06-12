@@ -24,9 +24,9 @@ import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.ProductBatchDAO;
 
-@Path("v1/product")
+@Path("v1/productbatch")
 @Produces(MediaType.APPLICATION_JSON)
-public class ProductService {
+public class ProductBatchService {
 
 	// This class implements all MySQLProductBatchDAO methods
 	private ProductBatchDAO dao = new MySQLProductBatchDAO();

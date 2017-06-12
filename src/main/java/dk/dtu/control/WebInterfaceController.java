@@ -2,16 +2,20 @@ package dk.dtu.control;
 
 import java.util.Random;
 
+import javax.validation.Valid;
+
 import dk.dtu.model.Validation;
 import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dao.MySQLProduceBatchDAO;
 import dk.dtu.model.dao.MySQLProduceDAO;
+import dk.dtu.model.dao.MySQLProductBatchCompDAO;
 import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dao.MySQLRecipeCompDAO;
 import dk.dtu.model.dao.MySQLRecipeDAO;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.dto.ProduceBatchDTO;
 import dk.dtu.model.dto.ProduceDTO;
+import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.dto.RecipeCompDTO;
 import dk.dtu.model.dto.RecipeDTO;
@@ -20,6 +24,7 @@ import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.OperatorDAO;
 import dk.dtu.model.interfaces.ProduceBatchDAO;
 import dk.dtu.model.interfaces.ProduceDAO;
+import dk.dtu.model.interfaces.ProductBatchCompDAO;
 import dk.dtu.model.interfaces.ProductBatchDAO;
 import dk.dtu.model.interfaces.RecipeCompDAO;
 import dk.dtu.model.interfaces.RecipeDAO;
@@ -36,9 +41,9 @@ public class WebInterfaceController implements IWebInterfaceController {
 		String generatedPassword;
 		while(true) {
 			try {
-			generatedPassword = generatePassword(7);
-			Validation.isValidPassword(generatedPassword);
-			break;
+				generatedPassword = generatePassword(7);
+				Validation.isValidPassword(generatedPassword);
+				break;
 			} catch (ValidationException e) {}
 		}
 		opr.setPassword(generatedPassword);
@@ -88,9 +93,26 @@ public class WebInterfaceController implements IWebInterfaceController {
 	public void updateProduceValidation(ProduceDTO produce) throws DALException, ValidationException {
 		Validation.isPositiveInteger(produce.getProduceId());
 		Validation.isValidUserName(produce.getProduceName());
-			Validation.isValidUserName(produce.getSupplier());
+		Validation.isValidUserName(produce.getSupplier());
 		ProduceDAO dao = new MySQLProduceDAO();
 		dao.updateProduce(produce);		
+	}
+
+	@Override
+	public void createProductBatchCompValidation(ProductBatchCompDTO productBatchComp) throws DALException, ValidationException {
+		Validation.isPositiveInteger(productBatchComp.getPbId());
+		Validation.isPositiveInteger(productBatchComp.getRbId());
+		Validation.isPositiveInteger(productBatchComp.getOprId());
+		Validation.isPositiveDouble(productBatchComp.getTara());
+		Validation.isPositiveDouble(productBatchComp.getNetto());
+		ProductBatchCompDAO dao = new MySQLProductBatchCompDAO();
+		dao.createProductBatchComp(productBatchComp);
+	}
+
+	@Override
+	public void updateProductBatchCompValidation(ProductBatchCompDTO productBatchComp) throws DALException, ValidationException {
+		ProductBatchCompDAO dao = new MySQLProductBatchCompDAO();
+		dao.updateProductBatchComp(productBatchComp);
 	}
 
 	@Override
@@ -143,7 +165,7 @@ public class WebInterfaceController implements IWebInterfaceController {
 		RecipeDAO dao = new MySQLRecipeDAO();
 		dao.updateRecipe(recipe);
 	}
-	
+
 	/**
 	 * Method taken from CDIO2.1
 	 * Generates a random password with listed characters and symbols

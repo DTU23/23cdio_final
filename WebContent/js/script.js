@@ -1,5 +1,3 @@
-var notice = true;
-
 $(document).ready(function () {
 
     $('.modal').modal({
@@ -297,7 +295,9 @@ $(document).ready(function () {
                 populateUsersAdmin();
                 $('#EditModal').modal('close');
             },
-            error: ajaxErrorHandler
+            error: function (msg) {
+                ajaxErrorHandler(msg, true);
+            }
         });
     });
 
@@ -849,7 +849,7 @@ $(document).ready(function () {
     });
 
     // Tab Switching
-    $(document).on('click', 'li.tab', function (e) {
+    $(document).on('click', 'li.tab:not(.disabled)', function (e) {
         e.preventDefault();
         switch($(this).children("a").attr("href"))
         {
@@ -1118,14 +1118,14 @@ function populateRecipeAdmin(notice){
     });
 }
 
-function ajaxErrorHandler(msg) {
+function ajaxErrorHandler(msg, notice) {
     if(notice){
         switch(msg.status) {
             case 500:
                 Materialize.toast("An unexpected error ocurred!", 4000);
                 break;
             default:
-                Materialize.toast(msg, 4000);
+                Materialize.toast(msg.statusText, 4000);
                 break;
         }
     }

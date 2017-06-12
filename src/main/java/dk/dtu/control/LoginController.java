@@ -14,7 +14,7 @@ import dk.dtu.model.dao.MySQLOperatorDAO;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.exceptions.AuthException;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.ValidationException;
+import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
 import dk.dtu.model.interfaces.OperatorDAO;
 
 public class LoginController implements ILoginController {
@@ -37,7 +37,7 @@ public class LoginController implements ILoginController {
 	}
 
 	@Override
-	public void authenticateUser(String oprId, String password) throws ValidationException, AuthException, DALException {
+	public void authenticateUser(String oprId, String password) throws PositiveIntegerValidationException, AuthException, DALException {
 		Validation.isPositiveInteger(oprId);
 		passwordCheck(Integer.parseInt(oprId), password);
 	}

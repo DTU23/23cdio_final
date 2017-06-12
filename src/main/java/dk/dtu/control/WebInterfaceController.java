@@ -86,7 +86,6 @@ public class WebInterfaceController implements IWebInterfaceController {
 
 	@Override
 	public void createProduceValidation(ProduceDTO produce) throws DALException, ValidationException {
-		Validation.isPositiveInteger(produce.getProduceId());
 		Validation.isValidUserName(produce.getProduceName());
 		Validation.isValidUserName(produce.getSupplier());
 		ProduceDAO dao = new MySQLProduceDAO();

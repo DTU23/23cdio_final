@@ -20,7 +20,14 @@ import dk.dtu.model.dto.RecipeCompDTO;
 import dk.dtu.model.dto.RecipeDTO;
 import dk.dtu.model.exceptions.AuthException;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.ValidationException;
+import dk.dtu.model.exceptions.validation.InvalidCprException;
+import dk.dtu.model.exceptions.validation.InvalidIDException;
+import dk.dtu.model.exceptions.validation.InvalidInitialsException;
+import dk.dtu.model.exceptions.validation.InvalidNameException;
+import dk.dtu.model.exceptions.validation.InvalidPasswordException;
+import dk.dtu.model.exceptions.validation.InvalidRoleException;
+import dk.dtu.model.exceptions.validation.InvalidStatusException;
+import dk.dtu.model.exceptions.validation.PositiveDoubleValidationException;
 import dk.dtu.model.interfaces.OperatorDAO;
 import dk.dtu.model.interfaces.ProduceBatchDAO;
 import dk.dtu.model.interfaces.ProduceDAO;
@@ -32,7 +39,8 @@ import dk.dtu.model.interfaces.RecipeDAO;
 public class WebInterfaceController implements IWebInterfaceController {
 
 	@Override
-	public OperatorDTO createOperatorValidation(OperatorDTO opr) throws DALException, ValidationException {
+	public OperatorDTO createOperatorValidation(OperatorDTO opr) throws InvalidIDException, InvalidNameException,
+	InvalidInitialsException, InvalidCprException, InvalidRoleException, DALException {
 		Validation.isValidID(opr.getOprId());
 		Validation.isValidUserName(opr.getOprName());
 		Validation.isValidInitials(opr.getIni());
@@ -44,7 +52,7 @@ public class WebInterfaceController implements IWebInterfaceController {
 				generatedPassword = generatePassword(7);
 				Validation.isValidPassword(generatedPassword);
 				break;
-			} catch (ValidationException e) {}
+			} catch (InvalidPasswordException e) {}
 		}
 		opr.setPassword(generatedPassword);
 		OperatorDAO dao = new MySQLOperatorDAO();
@@ -53,7 +61,8 @@ public class WebInterfaceController implements IWebInterfaceController {
 	}
 
 	@Override
-	public void updateOperatorValidation(OperatorDTO opr) throws DALException, ValidationException {
+	public void updateOperatorValidation(OperatorDTO opr) throws InvalidIDException, InvalidNameException,
+	InvalidInitialsException, InvalidCprException, InvalidRoleException, InvalidPasswordException, DALException {
 		Validation.isValidID(opr.getOprId());
 		Validation.isValidUserName(opr.getOprName());
 		Validation.isValidInitials(opr.getIni());
@@ -65,7 +74,8 @@ public class WebInterfaceController implements IWebInterfaceController {
 	}
 
 	@Override
-	public void updateOperatorValidation(OperatorNewPWDTO opr) throws DALException, ValidationException, AuthException {
+	public void updateOperatorValidation(OperatorNewPWDTO opr) throws InvalidIDException, InvalidNameException, InvalidInitialsException,
+	InvalidCprException, InvalidRoleException, InvalidPasswordException, DALException, AuthException {
 		ILoginController lc = new LoginController();
 		lc.authenticateUser(opr.getOprId(), opr.getPassword());
 		OperatorDTO updatedOpr = new OperatorDTO(opr);
@@ -73,25 +83,27 @@ public class WebInterfaceController implements IWebInterfaceController {
 	}
 
 	@Override
-	public void createProduceBatchValidation(int produceId, double amount) throws DALException, ValidationException {
+	public void createProduceBatchValidation(int produceId, double amount) throws PositiveDoubleValidationException,
+	InvalidIDException, DALException {
 		Validation.isPositiveDouble(amount);
-		Validation.isPositiveInteger(produceId);
+		Validation.isValidID(produceId);
 		ProduceBatchDAO dao = new MySQLProduceBatchDAO();
 		dao.createProduceBatch(produceId, amount);
 	}
 
 	@Override
-	public void updateProduceBatchValidation(ProduceBatchDTO produceBatch) throws DALException, ValidationException {
-		Validation.isPositiveInteger(produceBatch.getProduceId());
-		Validation.isPositiveInteger(produceBatch.getRbId());
+	public void updateProduceBatchValidation(ProduceBatchDTO produceBatch) throws PositiveDoubleValidationException,
+	InvalidIDException, DALException {
+		Validation.isValidID(produceBatch.getProduceId());
+		Validation.isValidID(produceBatch.getRbId());
 		Validation.isPositiveDouble(produceBatch.getAmount());
 		ProduceBatchDAO dao = new MySQLProduceBatchDAO();
 		dao.updateProduceBatch(produceBatch.getProduceId(), produceBatch.getAmount());
 	}
 
 	@Override
-	public void createProduceValidation(ProduceDTO produce) throws DALException, ValidationException {
-		Validation.isPositiveInteger(produce.getProduceId());
+	public void createProduceValidation(ProduceDTO produce) throws InvalidIDException, InvalidNameException, DALException {
+		Validation.isValidID(produce.getProduceId());
 		Validation.isValidUserName(produce.getProduceName());
 		Validation.isValidUserName(produce.getSupplier());
 		ProduceDAO dao = new MySQLProduceDAO();
@@ -99,8 +111,8 @@ public class WebInterfaceController implements IWebInterfaceController {
 	}
 
 	@Override
-	public void updateProduceValidation(ProduceDTO produce) throws DALException, ValidationException {
-		Validation.isPositiveInteger(produce.getProduceId());
+	public void updateProduceValidation(ProduceDTO produce) throws InvalidIDException, InvalidNameException, DALException {
+		Validation.isValidID(produce.getProduceId());
 		Validation.isValidUserName(produce.getProduceName());
 		Validation.isValidUserName(produce.getSupplier());
 		ProduceDAO dao = new MySQLProduceDAO();
@@ -108,10 +120,11 @@ public class WebInterfaceController implements IWebInterfaceController {
 	}
 
 	@Override
-	public void createProductBatchCompValidation(ProductBatchCompDTO productBatchComp) throws DALException, ValidationException {
-		Validation.isPositiveInteger(productBatchComp.getPbId());
-		Validation.isPositiveInteger(productBatchComp.getRbId());
-		Validation.isPositiveInteger(productBatchComp.getOprId());
+	public void createProductBatchCompValidation(ProductBatchCompDTO productBatchComp) throws PositiveDoubleValidationException,
+	InvalidIDException, DALException {
+		Validation.isValidID(productBatchComp.getPbId());
+		Validation.isValidID(productBatchComp.getRbId());
+		Validation.isValidID(productBatchComp.getOprId());
 		Validation.isPositiveDouble(productBatchComp.getTara());
 		Validation.isPositiveDouble(productBatchComp.getNetto());
 		ProductBatchCompDAO dao = new MySQLProductBatchCompDAO();
@@ -119,31 +132,38 @@ public class WebInterfaceController implements IWebInterfaceController {
 	}
 
 	@Override
-	public void updateProductBatchCompValidation(ProductBatchCompDTO productBatchComp) throws DALException, ValidationException {
+	public void updateProductBatchCompValidation(ProductBatchCompDTO productBatchComp) throws PositiveDoubleValidationException,
+	InvalidIDException, DALException {
+		Validation.isValidID(productBatchComp.getPbId());
+		Validation.isValidID(productBatchComp.getRbId());
+		Validation.isValidID(productBatchComp.getOprId());
+		Validation.isPositiveDouble(productBatchComp.getTara());
+		Validation.isPositiveDouble(productBatchComp.getNetto());
 		ProductBatchCompDAO dao = new MySQLProductBatchCompDAO();
 		dao.updateProductBatchComp(productBatchComp);
 	}
 
 	@Override
-	public void createProductBatchValidation(int recipeId) throws DALException, ValidationException {
-		Validation.isPositiveInteger(recipeId);
+	public void createProductBatchValidation(int recipeId) throws InvalidIDException, DALException {
+		Validation.isValidID(recipeId);
 		ProductBatchDAO dao = new MySQLProductBatchDAO();
 		dao.createProductBatch(recipeId);
 	}
 
 	@Override
-	public void updateProductBatchValidation(ProductBatchDTO productBatch) throws DALException, ValidationException {
-		Validation.isPositiveInteger(productBatch.getPbId());
-		Validation.isPositiveInteger(productBatch.getRecipeId());
-		Validation.isPositiveInteger(productBatch.getStatus());
+	public void updateProductBatchValidation(ProductBatchDTO productBatch) throws InvalidIDException, InvalidStatusException, DALException {
+		Validation.isValidID(productBatch.getPbId());
+		Validation.isValidID(productBatch.getRecipeId());
+		Validation.isValidStatus(productBatch.getStatus());
 		ProductBatchDAO dao = new MySQLProductBatchDAO();
 		dao.updateProductBatch(productBatch);
 	}
 
 	@Override
-	public void createRecipeCompValidation(RecipeCompDTO recipeComp) throws DALException, ValidationException {
-		Validation.isPositiveInteger(recipeComp.getProduceId());
-		Validation.isPositiveInteger(recipeComp.getRecipeId());
+	public void createRecipeCompValidation(RecipeCompDTO recipeComp) throws PositiveDoubleValidationException,
+	InvalidIDException, DALException {
+		Validation.isValidID(recipeComp.getProduceId());
+		Validation.isValidID(recipeComp.getRecipeId());
 		Validation.isPositiveDouble(recipeComp.getNomNetto());
 		Validation.isPositiveDouble(recipeComp.getTolerance());
 		RecipeCompDAO dao = new MySQLRecipeCompDAO();
@@ -151,9 +171,10 @@ public class WebInterfaceController implements IWebInterfaceController {
 	}
 
 	@Override
-	public void updateRecipeCompValidation(RecipeCompDTO recipeComp) throws DALException, ValidationException {
-		Validation.isPositiveInteger(recipeComp.getProduceId());
-		Validation.isPositiveInteger(recipeComp.getRecipeId());
+	public void updateRecipeCompValidation(RecipeCompDTO recipeComp) throws PositiveDoubleValidationException,
+	InvalidIDException, DALException {
+		Validation.isValidID(recipeComp.getProduceId());
+		Validation.isValidID(recipeComp.getRecipeId());
 		Validation.isPositiveDouble(recipeComp.getNomNetto());
 		Validation.isPositiveDouble(recipeComp.getTolerance());
 		RecipeCompDAO dao = new MySQLRecipeCompDAO();		
@@ -161,15 +182,15 @@ public class WebInterfaceController implements IWebInterfaceController {
 	}
 
 	@Override
-	public void createRecipeValidation(String recipeName) throws DALException, ValidationException {
+	public void createRecipeValidation(String recipeName) throws InvalidNameException, DALException {
 		Validation.isValidUserName(recipeName);
 		RecipeDAO dao = new MySQLRecipeDAO();
 		dao.createRecipe(recipeName);
 	}
 
 	@Override
-	public void updateRecipeValidation(RecipeDTO recipe) throws DALException, ValidationException {
-		Validation.isPositiveInteger(recipe.getRecipeId());
+	public void updateRecipeValidation(RecipeDTO recipe) throws InvalidIDException, InvalidNameException, DALException {
+		Validation.isValidID(recipe.getRecipeId());
 		Validation.isValidUserName(recipe.getRecipeName());
 		RecipeDAO dao = new MySQLRecipeDAO();
 		dao.updateRecipe(recipe);

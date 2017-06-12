@@ -15,7 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dk.dtu.model.connector.Connector;
+import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dao.MySQLProductBatchCompDAO;
 import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dto.ProductBatchCompDTO;
@@ -29,14 +29,14 @@ public class MySQLProductBatchCompDAOTest {
     private MySQLProductBatchDAO pbdao;
     @Before
     public void setUp() throws Exception {
-    	Connector.getInstance().resetData();
+    	DataSource.getInstance().resetData();
         pbcdao = new MySQLProductBatchCompDAO();
         pbdao = new MySQLProductBatchDAO();
     }
 
     @After
     public void tearDown() throws Exception {
-    	Connector.getInstance().resetData();
+    	DataSource.getInstance().resetData();
         pbcdao = null;
     }
 

@@ -1,11 +1,13 @@
 package dk.dtu.model.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dk.dtu.model.connector.Connector;
+import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dto.ProduceBatchDTO;
 import dk.dtu.model.dto.StockDTO;
 import dk.dtu.model.exceptions.DALException;
@@ -15,17 +17,35 @@ public class MySQLProduceBatchDAO implements ProduceBatchDAO {
 
 	@Override
 	public void createProduceBatch(int produce_id, double amount) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL create_produce_batch('"+produce_id+"','"+amount+"');") == 0)
-		{
-			throw new DALException("No rows affected!");
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL create_produce_batch(?,?);");
+			stm.setInt(1, produce_id);
+			stm.setDouble(2, amount);
+			if(stm.executeUpdate() == 0) {
+				throw new DALException("No rows affected");
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 	
 	@Override
 	public ProduceBatchDTO readProduceBatch(int rbId) throws DALException {
-		ResultSet rs = Connector.getInstance().doQuery("CALL read_produce_batch('"+rbId+"');");
-		try {
-			if(!rs.first()) {
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL read_produce_batch(?);");
+			stm.setInt(1, rbId);
+			rs = stm.executeQuery();
+			if (!rs.first()) {
 				throw new DALException("Produce batch with id " + rbId + " does not exist");
 			}
 			return new ProduceBatchDTO(
@@ -37,34 +57,62 @@ public class MySQLProduceBatchDAO implements ProduceBatchDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
-	public void updateProduceBatch(int produce_id, double amount) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL update_produce_batch('"+produce_id+"','"+amount+"');") == 0) 
-		{
-			throw new DALException("No rows affected!");
+	public void updateProduceBatch(int rbId, double amount) throws DALException {
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL update_produce_batch(?,?);");
+			stm.setInt(1, rbId);
+			stm.setDouble(2, amount);
+			if(stm.executeUpdate() == 0) {
+				throw new DALException("No rows affected");
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 	
 	@Override
 	public void deleteProduceBatch(int rbId) throws DALException {
-		if(Connector.getInstance().doUpdate("CALL delete_produce_batch('"+rbId+"');") == 0) 
-		{
-			throw new DALException("No rows affected");
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL delete_produce_batch(?);");
+			stm.setInt(1, rbId);
+			if(stm.executeUpdate() == 0) {
+				throw new DALException("No rows affected");
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public List<ProduceBatchDTO> getProduceBatchList() throws DALException {
 		List<ProduceBatchDTO> list = new ArrayList<ProduceBatchDTO>();
-		ResultSet rs = Connector.getInstance().doQuery("SELECT * FROM produce_batch_list;");
-		try 
-		{
-			while (rs.next()) 
-			{
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("SELECT * FROM produce_batch_list;");
+			rs = stm.executeQuery();
+			while (rs.next()) {
 				list.add(new ProduceBatchDTO(
 						rs.getInt("rb_id"),
 						0,
@@ -76,15 +124,23 @@ public class MySQLProduceBatchDAO implements ProduceBatchDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 	
 	@Override
 	public ProduceBatchDTO getProduceBatchWithProduceName(int rbId) throws DALException {
-		ResultSet rs = Connector.getInstance().doQuery("CALL read_produce_batch_list('"+rbId+"');");
-		try {
-			if(!rs.first()) {
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL read_produce_batch(?);");
+			stm.setInt(1, rbId);
+			rs = stm.executeQuery();
+			if (!rs.first()) {
 				throw new DALException("Produce batch with id " + rbId + " does not exist");
 			}
 			return new ProduceBatchDTO(
@@ -92,23 +148,27 @@ public class MySQLProduceBatchDAO implements ProduceBatchDAO {
 					0,
 					rs.getString("produce_name"),
 					rs.getString("supplier"),
-					rs.getDouble("amount")
-			);
-		} catch (SQLException e){
+					rs.getDouble("amount"));
+		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 	
 	@Override
 	public List<StockDTO> getProduceInStock() throws DALException {
 		List<StockDTO> list = new ArrayList<StockDTO>();
-		ResultSet rs = Connector.getInstance().doQuery("SELECT * FROM produce_in_stock;");
-		try 
-		{
-			while (rs.next()) 
-			{
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("SELECT * FROM produce_in_stock;");
+			rs = stm.executeQuery();
+			while (rs.next()) {
 				list.add(new StockDTO(
 						rs.getString("produce_name"),
 						rs.getDouble("current_stock")));
@@ -117,7 +177,9 @@ public class MySQLProduceBatchDAO implements ProduceBatchDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			Connector.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 }

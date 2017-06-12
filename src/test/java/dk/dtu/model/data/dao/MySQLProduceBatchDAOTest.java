@@ -12,7 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dk.dtu.model.connector.Connector;
+import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dao.MySQLProduceBatchDAO;
 import dk.dtu.model.dao.MySQLProduceDAO;
 import dk.dtu.model.dto.ProduceBatchDTO;
@@ -31,13 +31,13 @@ public class MySQLProduceBatchDAOTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Connector.getInstance().resetData();
+		DataSource.getInstance().resetData();
 		produceBatch = new MySQLProduceBatchDAO();
 	}
 
 	@After
 	public void tearDown() throws Exception{
-		Connector.getInstance().resetData();
+		DataSource.getInstance().resetData();
 		produceBatch = null;
 	}
 

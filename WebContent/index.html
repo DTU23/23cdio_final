@@ -74,7 +74,7 @@
                 <div class="row" data-source-id="">
                     <div class="input-field col s12">
                         <input id="recipe_id" type="number" class="validate" value="">
-                        <label for="recipe_id" class="active">Recipe ID</label>
+                        <label for="recipe_id" class="">Recipe ID</label>
                     </div>
                 </div>
             </form>
@@ -194,11 +194,11 @@
                 <div class="row" data-source-id="{{produceId}}">
                     <div class="input-field col s12">
                         <input id="produce_name" type="text" class="validate" value="{{produceName}}">
-                        <label for="produce_name" class="active">Produce Name</label>
+                        <label for="produce_name" class="">Produce Name</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="produce_supplier" type="text" class="validate" value="{{supplier}}">
-                        <label for="produce_supplier" class="active">Supplier</label>
+                        <label for="produce_supplier" class="">Supplier</label>
                     </div>
                 </div>
             </form>
@@ -249,7 +249,7 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <input disabled id="produceId" type="text" class="validate" value="{{produceId}}">
-                        <label for="produceId" class="disabled">Produce Batch ID</label>
+                        <label for="produceId" class="active disabled">Produce Batch ID</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="amount" type="text" class="validate" value="{{amount}}">
@@ -271,11 +271,11 @@
                 <div class="row" data-source-id="">
                     <div class="input-field col s12">
                         <input id="produce_id" type="number" class="validate">
-                        <label for="produce_id" class="active">Produce ID</label>
+                        <label for="produce_id" class="">Produce ID</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="amount" type="number" class="validate">
-                        <label for="amount" class="active">Amount</label>
+                        <label for="amount" class="">Amount</label>
                     </div>
                 </div>
             </form>
@@ -340,7 +340,7 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <input id="recipe_name" type="text" class="validate" value="">
-                        <label for="recipe_name" class="active">Recipe Name</label>
+                        <label for="recipe_name" class="">Recipe Name</label>
                     </div>
                 </div>
             </form>
@@ -422,15 +422,15 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <input id="produce_id" type="text" class="validate" value="">
-                        <label for="produce_id" class="active">Produce ID</label>
+                        <label for="produce_id" class="">Produce ID</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="nom_netto" type="text" class="validate" value="">
-                        <label for="nom_netto" class="active">Nom. Netto</label>
+                        <label for="nom_netto" class="">Nom. Netto</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="tolerance" type="text" class="validate" value="">
-                        <label for="tolerance" class="active">Tolerance</label>
+                        <label for="tolerance" class="">Tolerance</label>
                     </div>
                 </div>
             </form>
@@ -492,16 +492,16 @@
             <form id="userEdit">
                 <div class="row" data-source-id="{{oprId}}">
                     <div class="input-field col m6 s12">
-                        <input id="user_id" type="text" class="validate" value="{{oprId}}" data-length="10" disabled>
+                        <input id="user_id" type="text" class="active validate" value="{{oprId}}" data-length="10" disabled>
                         <label for="user_id" class="active" data-error="User ID must be provided!" data-length="10">User ID</label>
+                    </div>
+                    <div class="input-field col m6 s12">
+                        <input id="user_ini" type="text" class="validate" value="{{ini}}">
+                        <label for="user_ini" class="active">User Initials</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="user_password" type="password" class="validate" value="">
-                        <label for="user_password">Password</label>
-                    </div>
-                    <div class="input-field col s6">
-                        <input id="user_ini" type="text" class="validate" value="{{ini}}">
-                        <label for="user_ini">User Initials</label>
+                        <label for="user_password">New  Password</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="user_name" type="text" class="validate" value="{{oprName}}">
@@ -585,7 +585,7 @@
                 <!--{{#operator}}-->
                 <div class="row" data-source-id="{{oprId}}">
                     <div class="input-field col m6 s12">
-                        <input id="user_id" type="text" class="validate" value="{{oprId}}" data-length="10" disabled>
+                        <input id="user_id" type="text" class="validate active" value="{{oprId}}" data-length="10" disabled>
                         <label for="user_id" class="active" data-error="User ID must be provided!" data-length="10">User ID</label>
                     </div>
 
@@ -671,19 +671,19 @@
                 <div class="row" data-source-id="{{oprId}}">
                     <div class="input-field col s6">
                         <input id="user_id" type="text" class="validate" value="{{oprId}}" data-length="10">
-                        <label for="user_id" class="active" data-error="User ID must be provided!" data-length="10">User ID</label>
+                        <label for="user_id" class="" data-error="User ID must be provided!" data-length="10">User ID</label>
                     </div>
                     <div class="input-field col s6">
                         <input id="user_ini" type="text" class="validate" value="{{ini}}">
-                        <label for="user_ini" class="active">User Initials</label>
+                        <label for="user_ini" class="">User Initials</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="user_name" type="text" class="validate" value="{{oprName}}">
-                        <label for="user_name" class="active">Name</label>
+                        <label for="user_name" class="">Name</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="user_cpr" type="text" class="validate" value="{{cpr}}">
-                        <label for="user_cpr" class="active">User CPR</label>
+                        <label for="user_cpr" class="">User CPR</label>
                     </div>
                     <p class="col s4">
                         <!--{{#admin}}-->

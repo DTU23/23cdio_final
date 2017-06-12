@@ -8,6 +8,14 @@ public abstract class Constant
 			username				= "group23", 		// dit brugernavn = dit studienummer
 			password				= "gSk7j57~"; 		// dit password som du har valgt til din database
 
+	public static final boolean
+			usePoolSettings         = true;             // whether or not to use the custom pool settings
+	
 	public static final int
-			port					= 3306;
+			port                    = 3306,
+			minPoolSize             = 3,                // this setting is optional -- c3p0 can work with defaults
+			acquireIncrement        = 5,                // this setting is optional -- c3p0 can work with defaults
+			maxPoolSize             = 20,               // this setting is optional -- c3p0 can work with defaults
+			maxStatements           = 180;              // this setting is optional -- c3p0 can work with defaults
+	
 }

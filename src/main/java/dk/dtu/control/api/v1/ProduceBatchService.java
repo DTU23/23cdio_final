@@ -48,8 +48,9 @@ public class ProduceBatchService {
 	}
 	
 	@DELETE
+	@Path("/{id}")
 	@Secured( roles = { Role.Foreman })
-	public void deleteProduceBatch(int rbId) throws DALException, ValidationException {
+	public void deleteProduceBatch(@PathParam("id") int rbId) throws DALException, ValidationException {
 		Validation.isPositiveInteger(rbId);
 		dao.deleteProduceBatch(rbId);
 	}

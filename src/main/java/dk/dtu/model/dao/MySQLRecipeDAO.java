@@ -1,5 +1,7 @@
 package dk.dtu.model.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,17 +17,33 @@ public class MySQLRecipeDAO implements RecipeDAO {
 
 	@Override
 	public void createRecipe(String recipeName) throws DALException {
-		if(DataSource.getInstance().doUpdate("CALL create_recipe('"+recipeName+"');") == 0)
-		{
-			throw new DALException("No rows affected!");
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL create_recipe(?);");
+			stm.setString(1, recipeName);
+			if(stm.executeUpdate() == 0) {
+				throw new DALException("No rows affected");
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 	
 	@Override
 	public RecipeDTO readRecipe(int recipeId) throws DALException {
-		ResultSet rs = DataSource.getInstance().doQuery("CALL read_recipe('"+recipeId+"');");
-		try
-		{
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL read_recipe(?);");
+			stm.setInt(1, recipeId);
+			rs = stm.executeQuery();
 			if (!rs.first()) {
 				throw new DALException("Recipe with id " + recipeId + " does not exist");
 			}
@@ -35,36 +53,62 @@ public class MySQLRecipeDAO implements RecipeDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			DataSource.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 	
 	@Override
 	public void updateRecipe(RecipeDTO recipe) throws DALException {
-		if(DataSource.getInstance().doUpdate("CALL update_recipe('" 
-				+ recipe.getRecipeId() + "','"
-				+ recipe.getRecipeName() + "');" ) == 0)
-		{
-			throw new DALException("No rows affected");
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL update_recipe(?,?);");
+			stm.setInt(1, recipe.getRecipeId());
+			stm.setString(2, recipe.getRecipeName());
+			if(stm.executeUpdate() == 0) {
+				throw new DALException("No rows affected");
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 	
 	@Override
 	public void deleteRecipe(int recipeId) throws DALException {
-		if(DataSource.getInstance().doUpdate("CALL delete_recipe('" + recipeId + "');") == 0)
-		{
-			throw new DALException("No rows affected!");
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL delete_recipe(?);");
+			stm.setInt(1, recipeId);
+			if(stm.executeUpdate() == 0) {
+				throw new DALException("No rows affected");
+			}
+		} catch (SQLException e) {
+			throw new DALException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 
 	@Override
 	public List<RecipeDTO> getRecipeList() throws DALException {
 		List<RecipeDTO> list = new ArrayList<RecipeDTO>();
-		ResultSet rs = DataSource.getInstance().doQuery("SELECT * FROM recipe;");
-		try 
-		{
-			while (rs.next())
-			{
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("SELECT * FROM recipe;");
+			rs = stm.executeQuery();
+			while (rs.next()) {
 				list.add(new RecipeDTO(
 						rs.getInt("recipe_id"),
 						rs.getString("recipe_name")));
@@ -73,19 +117,29 @@ public class MySQLRecipeDAO implements RecipeDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			DataSource.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 	
 	@Override
 	public List<RecipeListDTO> getRecipeDetailsByID(int recipeID) throws DALException {
 		List<RecipeListDTO> list = new ArrayList<RecipeListDTO>();
-		ResultSet rs = DataSource.getInstance().doQuery("CALL get_recipe_details_by_id("+recipeID+");");
-		try 
-		{
-			while(rs.next()) 
-			{
-				list.add(new RecipeListDTO(rs.getInt("recipe_id"),
+		Connection conn = null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try	{
+			conn = DataSource.getInstance().getConnection();
+			stm = conn.prepareStatement("CALL get_recipe_details_by_id(?);");
+			stm.setInt(1, recipeID);
+			rs = stm.executeQuery();
+			if (!rs.first()) {
+				throw new DALException("Recipe with id " + recipeID + " does not exist");
+			}
+			while (rs.next()) {
+				list.add(new RecipeListDTO(
+						rs.getInt("recipe_id"),
 						rs.getString("recipe_name"),
 						rs.getInt("produce_id"),
 						rs.getString("produce_name"),
@@ -96,7 +150,9 @@ public class MySQLRecipeDAO implements RecipeDAO {
 		} catch (SQLException e) {
 			throw new DALException(e);
 		} finally {
-			DataSource.getInstance().closeResources();
+			try { if (rs != null) rs.close(); } catch (SQLException e) {};
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
 	

@@ -14,10 +14,11 @@ public class DatabaseService {
 
 	@GET
 	@Path("/reset")
-	public void resetDatabase() throws DALException {
+	public String resetDatabase() throws DALException {
 		if (DataSource.getInstance().resetData() == 0) {
 			throw new DALException("No rows affected!");
 		}
+		return "Database reset successfully!";
 	}
 	
 }

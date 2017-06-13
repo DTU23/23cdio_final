@@ -35,7 +35,7 @@
                 </thead>
             </table>
             <ul class="collapsible" data-collapsible="accordion">
-                <!--{{#productbatch}}-->
+                <!--{{#.}}-->
                 <li>
                     <div class="center product collapsible-header" data-id="{{ pbId }}">
                         <span class="col s3 pbId">{{pbId}}</span>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="collapsible-body"></div>
                 </li>
-                <!--{{/productbatch}}-->
+                <!--{{/.}}-->
             </ul>
             <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-productbatch"><i class="material-icons">add</i></a>
         </div>
@@ -95,17 +95,17 @@
             </tr>
             </thead>
             <tbody>
-            <!--{{#productbatchcomponents}}-->
+            <!--{{#.}}-->
             <tr id="productbatch-component-{{rbId}}">
                 <td class="producebatch_id">{{rbId}}</td>
                 <td class="produce_name">{{produceName}}</td>
                 <td class="nom_netto">{{netto}}</td>
                 <td class="oprId">{{oprId}}</td>
             </tr>
-            <!--{{/productbatchcomponents}}-->
+            <!--{{/.}}-->
             </tbody>
         </table>
-        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipecomp" data-productbatch-id="{{pbId}}"><i class="material-icons">add</i></a>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-productbatchcomp" data-productbatch-id="{{pbId}}"><i class="material-icons">add</i></a>
     </script>
 
     <script type="text/html" id="productBatchComponentInsertTemplate">
@@ -147,7 +147,7 @@
             </tr>
             </thead>
             <tbody id="produceListRows">
-            <!--{{#produce}}-->
+            <!--{{#.}}-->
             <tr id="produce-row-{{produceId}}">
                 <td class="id">{{produceId}}</td>
                 <td class="name">{{produceName}}</td>
@@ -157,7 +157,7 @@
                     <a class="btn-floating btn waves-effect waves-light blue darken-1 edit-produce" data-id="{{produceId}}"><i class="material-icons">edit</i></a>
                 </td>
             </tr>
-            <!--{{/produce}}-->
+            <!--{{/.}}-->
             </tbody>
         </table>
         <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-produce"><i class="material-icons">add</i></a>
@@ -167,7 +167,7 @@
         <div class="modal-content">
             <h4>Edit Produce</h4>
             <form id="produceEdit" data-source-id="{{produceId}}">
-                <!--{{#produce}}-->
+                <!--{{#.}}-->
                 <div class="row">
                     <div class="input-field col s12">
                         <input id="produce_name" type="text" class="validate" value="{{produceName}}">
@@ -178,7 +178,7 @@
                         <label for="produce_supplier" class="active">Supplier</label>
                     </div>
                 </div>
-                <!--{{/produce}}-->
+                <!--{{/.}}-->
             </form>
 
         </div>
@@ -191,13 +191,13 @@
         <div class="modal-content">
             <h4>Add Produce</h4>
             <form id="produceAdd">
-                <div class="row" data-source-id="{{produceId}}">
+                <div class="row">
                     <div class="input-field col s12">
-                        <input id="produce_name" type="text" class="validate" value="{{produceName}}">
+                        <input id="produce_name" type="text" class="validate" value="">
                         <label for="produce_name" class="">Produce Name</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="produce_supplier" type="text" class="validate" value="{{supplier}}">
+                        <input id="produce_supplier" type="text" class="validate" value="">
                         <label for="produce_supplier" class="">Supplier</label>
                     </div>
                 </div>
@@ -224,7 +224,7 @@
             </tr>
             </thead>
             <tbody id="produceBatchListRows">
-            <!--{{#producebatch}}-->
+            <!--{{#.}}-->
             <tr id="produce-batch-row-{{produceId}}/{{rbId}}">
                 <td class="id">{{rbId}}</td>
                 <td class="name">{{produceName}}</td>
@@ -232,10 +232,10 @@
                 <td class="supplier">{{amount}}</td>
                 <td>
                     <a class="btn-floating btn waves-effect waves-light red darken-2 delete-producebatch" data-id="{{rbId}}"><i class="material-icons">delete</i></a>
-                    <a class="btn-floating btn waves-effect waves-light edit-producebatch blue darken-1" data-rb-id="{{rbId}}" data-produce-id="{{produceId}}"><i class="material-icons">edit</i></a>
+                    <a class="btn-floating btn waves-effect waves-light edit-producebatch blue darken-1" data-id="{{rbId}}"><i class="material-icons">edit</i></a>
                 </td>
             </tr>
-            <!--{{/producebatch}}-->
+            <!--{{/.}}-->
             </tbody>
         </table>
         <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-producebatch"><i class="material-icons">add</i></a>
@@ -244,9 +244,11 @@
     <script type="text/html" id="produceBatchEditTemplate">
         <div class="modal-content">
             <h4>Edit Produce Batch</h4>
-            <!--{{#producebatch}}-->
+            <!--{{#.}}-->
             <form id="produceBatchEdit" data-source-id="{{rbId}}">
                 <div class="row">
+                    <input disabled id="produceName" type="text" class="hide" value="{{produceName}}">
+                    <input disabled id="supplier" type="text" class="hide" value="{{supplier}}">
                     <div class="input-field col s12">
                         <input disabled id="produceId" type="text" class="validate" value="{{produceId}}">
                         <label for="produceId" class="active disabled">Produce Batch ID</label>
@@ -257,7 +259,7 @@
                     </div>
                 </div>
             </form>
-            <!--{{/producebatch}}-->
+            <!--{{/.}}-->
         </div>
         <div class="modal-footer">
             <a href="#" class="modal-save-producebatch waves-effect waves-green btn-flat">Save</a>
@@ -295,12 +297,12 @@
             </tr>
             </thead>
             <tbody id="produceBatchStockListRows">
-            <!--{{#producebatchstock}}-->
+            <!--{{#.}}-->
             <tr id="produce-batch-stock-row-{{rb_id}}">
                 <td class="name">{{produceName}}</td>
                 <td class="supplier">{{currentStock}}</td>
             </tr>
-            <!--{{/producebatchstock}}-->
+            <!--{{/.}}-->
             </tbody>
         </table>
     </script>
@@ -319,15 +321,27 @@
                 </thead>
             </table>
         <ul class="collapsible" data-collapsible="accordion">
-            <!--{{#recipies}}-->
+            <!--{{#.}}-->
             <li>
                 <div class="recipe collapsible-header" data-id="{{ recipeId }}">
                     <span class="center col s2">{{ recipeId }}</span>
                     <span class="center col s10">{{ recipeName }}</span>
                 </div>
-                <div class="collapsible-body"></div>
+                <div class="collapsible-body">
+                    <table class="striped centered responsive-table">
+                        <thead>
+                        <tr>
+                            <th>Produce ID</th>
+                            <th>Nom. Netto</th>
+                            <th>Tolerance</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipecomp" data-recipe-id="{{recipeId}}"><i class="material-icons">add</i></a>
+                </div>
             </li>
-            <!--{{/recipies}}-->
+            <!--{{/.}}-->
         </ul>
             <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipe"><i class="material-icons">add</i></a>
         </div>
@@ -361,8 +375,8 @@
             </tr>
             </thead>
             <tbody>
-            <!--{{#recipecomponents}}-->
-            <tr id="recipe-component-{{produceId}}">
+            <!--{{#.}}-->
+            <tr id="recipe-component-{{recipeId}}">
                 <td class="produce_id">{{produceId}}</td>
                 <td class="nom_netto">{{nomNetto}}</td>
                 <td class="nom_netto">{{tolerance}}</td>
@@ -371,7 +385,7 @@
                 <a class="btn-floating btn waves-effect waves-light blue darken-1 edit-recipecomp" data-produce-id="{{produceId}}" data-recipe-id="{{recipeId}}"><i class="material-icons">edit</i></a>
             </td>
             </tr>
-            <!--{{/recipecomponents}}-->
+            <!--{{/.}}-->
             </tbody>
         </table>
         <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipecomp" data-recipe-id="{{recipeId}}"><i class="material-icons">add</i></a>
@@ -380,8 +394,8 @@
     <script type="text/html" id="recipeComponentEditTemplate">
         <div class="modal-content">
             <h4>Edit Recipe Component</h4>
-            <form id="recipeComponentEdit" data-recipe-id="{{recipeId}}" data-produce-id="{{produceId}}">
-                <!--{{#recipecomponents}}-->
+            <form id="recipeComponentEdit" data-recipe-id="" data-produce-id="">
+                <!--{{#.}}-->
                 <div class="row">
                     <div class="input-field col s12">
                         <input id="nom_netto" type="text" class="validate" value="{{nomNetto}}">
@@ -392,7 +406,7 @@
                         <label for="tolerance" class="active">Tolerance</label>
                     </div>
                 </div>
-                <!--{{/recipecomponents}}-->
+                <!--{{/.}}-->
             </form>
 
         </div>
@@ -417,7 +431,7 @@
 
     <script type="text/html" id="recipeComponentInsertTemplate">
         <div class="modal-content">
-            <h4>Add Produce</h4>
+            <h4>Add Recipe Component</h4>
             <form id="recipeComponentAdd" data-recipe-id="{{recipeId}}">
                 <div class="row">
                     <div class="input-field col s12">
@@ -457,7 +471,7 @@
             </tr>
             </thead>
             <tbody id="userListRows">
-            <!--{{#users}}-->
+            <!--{{#.}}-->
             <tr id="user-row-{{oprId}}">
                 <td class="id">{{oprId}}</td>
                 <td class="name">{{oprName}}</td>
@@ -480,7 +494,7 @@
                     <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1" data-id="{{oprId}}"><i class="material-icons">edit</i></a>
                 </td>
             </tr>
-            <!--{{/users}}-->
+            <!--{{/.}}-->
             </tbody>
         </table>
         <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-user"><i class="material-icons">add</i></a>
@@ -490,6 +504,7 @@
         <div class="modal-content">
             <h4>Edit User</h4>
             <form id="userEdit">
+                <!--{{#.}}-->
                 <div class="row" data-source-id="{{oprId}}">
                     <div class="input-field col m6 s12">
                         <input id="user_id" type="text" class="active validate" value="{{oprId}}" data-length="10" disabled>
@@ -531,47 +546,8 @@
                         <label>Role</label>
                     </div>
                 </div>
+                <!--{{/.}}-->
             </form>
-            <div class="preloader-wrapper large center-align active hide">
-                <div class="spinner-layer spinner-blue">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-
-                <div class="spinner-layer spinner-red">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-
-                <div class="spinner-layer spinner-yellow">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-                <div class="spinner-layer spinner-green">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-            </div>
         </div>
         <div class="modal-footer">
             <a href="#" class="modal-save-user waves-effect waves-green btn-flat">Save</a>
@@ -582,7 +558,7 @@
         <div class="modal-content">
             <h4>Edit User</h4>
             <form id="userEditProfile">
-                <!--{{#operator}}-->
+                <!--{{#.}}-->
                 <div class="row" data-source-id="{{oprId}}">
                     <div class="input-field col m6 s12">
                         <input id="user_id" type="text" class="validate active" value="{{oprId}}" data-length="10" disabled>
@@ -629,7 +605,7 @@
                         <label>Role</label>
                     </div>
                 </div>
-                <!--{{/operator}}-->
+                <!--{{/.}}-->
             </form>
         </div>
         <div class="modal-footer">

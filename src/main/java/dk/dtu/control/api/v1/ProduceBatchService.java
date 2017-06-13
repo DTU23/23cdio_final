@@ -21,13 +21,12 @@ import dk.dtu.model.dao.MySQLProduceBatchDAO;
 import dk.dtu.model.dto.ProduceBatchDTO;
 import dk.dtu.model.dto.StockDTO;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.validation.InvalidIDException;
-import dk.dtu.model.exceptions.validation.PositiveDoubleValidationException;
-import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
+import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.ProduceBatchDAO;
 
 @Path("v1/producebatch")
 @Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ProduceBatchService {
 
 	// This class implements the methods from MySQLProduceBatchDAO
@@ -35,31 +34,29 @@ public class ProduceBatchService {
 	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
-	@Path("/{id}/{amount}")
 	@Secured( roles = { Role.Foreman })
-	public void createProduceBatch(@PathParam("id") int produceId, @PathParam("amount") double amount) throws DALException, PositiveDoubleValidationException, InvalidIDException {
-		controller.createProduceBatchValidation(produceId, amount);
+	public void createProduceBatch(ProduceBatchDTO produceBatch) throws ValidationException, DALException {
+		controller.createProduceBatchValidation(produceBatch);
 	}
 	
 	@GET
 	@Path("/{id}")
 	@Secured( roles = { Role.Foreman })
-	public ProduceBatchDTO getProduceBatch(@PathParam("id") int pbId) throws DALException, PositiveIntegerValidationException {
+	public ProduceBatchDTO getProduceBatch(@PathParam("id") int pbId) throws ValidationException, DALException {
 		Validation.isPositiveInteger(pbId);
 		return dao.readProduceBatch(pbId);
 	}
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Foreman })
-	public void updateProduceBatch(ProduceBatchDTO produceBatch) throws DALException, PositiveDoubleValidationException, InvalidIDException {
+	public void updateProduceBatch(ProduceBatchDTO produceBatch) throws ValidationException, DALException {
 		controller.updateProduceBatchValidation(produceBatch);
 	}
 	
 	@DELETE
 	@Path("/{id}")
 	@Secured( roles = { Role.Foreman })
-	public void deleteProduceBatch(@PathParam("id") int rbId) throws DALException, PositiveIntegerValidationException {
+	public void deleteProduceBatch(@PathParam("id") int rbId) throws ValidationException, DALException {
 		Validation.isPositiveInteger(rbId);
 		dao.deleteProduceBatch(rbId);
 	}
@@ -73,7 +70,8 @@ public class ProduceBatchService {
 	@GET
 	@Path("/list/{id}")
 	@Secured( roles = { Role.Foreman })
-	public ProduceBatchDTO getProduceBatchListWithProduceName(int rbId) throws DALException {
+	public ProduceBatchDTO getProduceBatchListWithProduceName(int rbId) throws ValidationException, DALException {
+		Validation.isPositiveInteger(rbId);
 		return dao.getProduceBatchWithProduceName(rbId);
 	}
 

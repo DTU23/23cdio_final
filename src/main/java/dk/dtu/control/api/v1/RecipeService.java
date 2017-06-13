@@ -21,9 +21,7 @@ import dk.dtu.model.dao.MySQLRecipeDAO;
 import dk.dtu.model.dto.RecipeDTO;
 import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.validation.InvalidIDException;
-import dk.dtu.model.exceptions.validation.InvalidNameException;
-import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
+import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.RecipeDAO;
 
 @Path("v1/recipe")
@@ -37,29 +35,28 @@ public class RecipeService {
 	
 	@POST
 	@Secured( roles = { Role.Pharmacist })
-	public void createRecipe(String recipeName) throws DALException, InvalidNameException {
-		controller.createRecipeValidation(recipeName);
+	public void createRecipe(RecipeDTO recipe) throws ValidationException, DALException {
+		controller.createRecipeValidation(recipe);
 	}
 	
 	@GET
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public RecipeDTO getRecipe(@PathParam("id") int recipeId) throws DALException, PositiveIntegerValidationException {
+	public RecipeDTO getRecipe(@PathParam("id") int recipeId) throws ValidationException, DALException {
 		Validation.isPositiveInteger(recipeId);
 		return dao.readRecipe(recipeId);
 	}
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Pharmacist })
-	public void updateRecipe(RecipeDTO recipe) throws DALException, InvalidIDException, InvalidNameException {
+	public void updateRecipe(RecipeDTO recipe) throws ValidationException, DALException {
 		controller.updateRecipeValidation(recipe);
 	}
 	
 	@DELETE
 	@Path("/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public void deleteRecipe(@PathParam("id") int recipeId) throws DALException, PositiveIntegerValidationException {
+	public void deleteRecipe(@PathParam("id") int recipeId) throws ValidationException, DALException {
 		Validation.isPositiveInteger(recipeId);
 		dao.deleteRecipe(recipeId);
 	}
@@ -73,8 +70,9 @@ public class RecipeService {
 	@GET
 	@Path("details/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public List<RecipeListDTO> getRecipeDetailsByID(int recipeID) throws DALException {
-		return dao.getRecipeDetailsByID(recipeID);
+	public List<RecipeListDTO> getRecipeDetailsByID(int recipeId) throws ValidationException, DALException {
+		Validation.isPositiveInteger(recipeId);
+		return dao.getRecipeDetailsByID(recipeId);
 	}
 
 }

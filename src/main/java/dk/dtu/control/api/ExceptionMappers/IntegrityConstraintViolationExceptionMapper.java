@@ -10,7 +10,7 @@ import javax.ws.rs.ext.Provider;
 public class IntegrityConstraintViolationExceptionMapper implements ExceptionMapper<IntegrityConstraintViolationException> {
     public Response toResponse(IntegrityConstraintViolationException e){
         return Response.status(405)
-                .entity(e.getMessage())
+                .entity("Integrity constraint, action not allowed")
                 .type("text/plain")
                 .build();
     }

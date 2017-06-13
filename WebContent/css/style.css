@@ -53,3 +53,17 @@ div.preloader-wrapper{
     margin-left: 50vw;
     margin-top: 40vh;
 }
+
+#recipeHeader th, #productBatchHeader th{
+    padding: 10px 5px;
+}
+
+#recipeHeader thead, #productBatchHeader thead{
+    border-bottom: none;
+}
+
+h6{
+    border-bottom: 1px black solid;
+    padding-bottom: 5px;
+    margin-top: 15px;
+}

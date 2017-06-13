@@ -27,6 +27,7 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 			conn = DataSource.getInstance().getConnection();
 			stm = conn.prepareStatement("CALL create_product_batch(?);");
 			stm.setInt(1, recipe_id);
+			stm.executeUpdate();
 		} catch (SQLIntegrityConstraintViolationException e) {
 			throw new IntegrityConstraintViolationException(e);
 		} catch (SQLException e) {

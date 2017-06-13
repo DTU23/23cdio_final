@@ -208,9 +208,16 @@ public class WeightProcessController implements IWeightProcessController {
 				tara = Double.parseDouble(weightAdaptor.placeTara());
 				weightAdaptor.tara();
 				double tolerance = recipeDTO.getTolerance();
-				do {
+				weighNettoLoop: do {
 					netto = Double.parseDouble(weightAdaptor.placeNetto(recipeDTO.getNomNetto()));
-				} while (Math.abs(recipeDTO.getNomNetto() - netto) >= tolerance);
+					if(Math.abs(recipeDTO.getNomNetto() - netto) > tolerance) {
+						weightAdaptor.writeInSecondaryDisplay("Netto too high or too low! Please place "+recipeDTO.getNomNetto()+" kg");
+						weightAdaptor.clearSecondaryDisplay();
+						continue weighNettoLoop;
+					} else {
+						break weighNettoLoop;
+					}
+				} while (true);
 				weightAdaptor.clearSecondaryDisplay();
 
 				rbIdLoop: do {

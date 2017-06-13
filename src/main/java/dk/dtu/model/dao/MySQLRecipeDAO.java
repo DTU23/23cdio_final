@@ -19,13 +19,14 @@ import dk.dtu.model.interfaces.RecipeDAO;
 public class MySQLRecipeDAO implements RecipeDAO {
 
 	@Override
-	public void createRecipe(String recipeName) throws ConnectivityException, IntegrityConstraintViolationException {
+	public void createRecipe(RecipeDTO recipe) throws ConnectivityException, IntegrityConstraintViolationException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
 			conn = DataSource.getInstance().getConnection();
-			stm = conn.prepareStatement("CALL create_recipe(?);");
-			stm.setString(1, recipeName);
+			stm = conn.prepareStatement("CALL create_recipe(?,?);");
+			stm.setInt(1, recipe.getRecipeId());
+			stm.setString(2, recipe.getRecipeName());
 			stm.executeUpdate();
 		} catch (SQLIntegrityConstraintViolationException e) {
 			throw new IntegrityConstraintViolationException(e);

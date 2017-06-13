@@ -19,14 +19,15 @@ import dk.dtu.model.interfaces.ProduceBatchDAO;
 public class MySQLProduceBatchDAO implements ProduceBatchDAO {
 
 	@Override
-	public void createProduceBatch(int produce_id, double amount) throws ConnectivityException, IntegrityConstraintViolationException {
+	public void createProduceBatch(ProduceBatchDTO produceBatchDTO) throws ConnectivityException, IntegrityConstraintViolationException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
 			conn = DataSource.getInstance().getConnection();
-			stm = conn.prepareStatement("CALL create_produce_batch(?,?);");
-			stm.setInt(1, produce_id);
-			stm.setDouble(2, amount);
+			stm = conn.prepareStatement("CALL create_produce_batch(?,?,?);");
+			stm.setInt(1, produceBatchDTO.getRbId());
+			stm.setInt(2, produceBatchDTO.getProduceId());
+			stm.setDouble(3, produceBatchDTO.getAmount());
 			stm.executeUpdate();
 		} catch (SQLIntegrityConstraintViolationException e) {
 			throw new IntegrityConstraintViolationException(e);
@@ -67,16 +68,16 @@ public class MySQLProduceBatchDAO implements ProduceBatchDAO {
 	}
 
 	@Override
-	public void updateProduceBatch(int rbId, double amount) throws ConnectivityException, NotFoundException, IntegrityConstraintViolationException {
+	public void updateProduceBatch(ProduceBatchDTO produceBatchDTO) throws ConnectivityException, NotFoundException, IntegrityConstraintViolationException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
 			conn = DataSource.getInstance().getConnection();
 			stm = conn.prepareStatement("CALL update_produce_batch(?,?);");
-			stm.setInt(1, rbId);
-			stm.setDouble(2, amount);
+			stm.setInt(1, produceBatchDTO.getRbId());
+			stm.setDouble(2, produceBatchDTO.getAmount());
 			if(stm.executeUpdate() == 0) {
-				throw new NotFoundException("Produce batch with id " + rbId + " does not exist");
+				throw new NotFoundException("Produce batch with id " + produceBatchDTO.getRbId() + " does not exist");
 			}
 		} catch (SQLIntegrityConstraintViolationException e) {
 			throw new IntegrityConstraintViolationException(e);

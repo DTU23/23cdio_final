@@ -20,14 +20,14 @@ import dk.dtu.model.interfaces.ProductBatchDAO;
 public class MySQLProductBatchDAO implements ProductBatchDAO {
 
 	@Override
-	public void createProductBatch(int recipe_id) throws ConnectivityException, IntegrityConstraintViolationException {
+	public void createProductBatch(ProductBatchDTO producBatchDTO) throws ConnectivityException, IntegrityConstraintViolationException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
 			conn = DataSource.getInstance().getConnection();
-			stm = conn.prepareStatement("CALL create_product_batch(?);");
-			stm.setInt(1, recipe_id);
-			stm.executeUpdate();
+			stm = conn.prepareStatement("CALL create_product_batch(?,?);");
+			stm.setInt(1, producBatchDTO.getPbId());
+			stm.setInt(2, producBatchDTO.getRecipeId());
 		} catch (SQLIntegrityConstraintViolationException e) {
 			throw new IntegrityConstraintViolationException(e);
 		} catch (SQLException e) {
@@ -65,17 +65,17 @@ public class MySQLProductBatchDAO implements ProductBatchDAO {
 	}
 
 	@Override
-	public void updateProductBatch(ProductBatchDTO productbatch) throws ConnectivityException, NotFoundException, IntegrityConstraintViolationException {
+	public void updateProductBatch(ProductBatchDTO producBatchDTO) throws ConnectivityException, NotFoundException, IntegrityConstraintViolationException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
 			conn = DataSource.getInstance().getConnection();
 			stm = conn.prepareStatement("CALL update_product_batch(?,?,?);");
-			stm.setInt(1, productbatch.getPbId());
-			stm.setInt(2, productbatch.getRecipeId());
-			stm.setInt(3, productbatch.getStatus());
+			stm.setInt(1, producBatchDTO.getPbId());
+			stm.setInt(2, producBatchDTO.getRecipeId());
+			stm.setInt(3, producBatchDTO.getStatus());
 			if(stm.executeUpdate() == 0) {
-				throw new NotFoundException("Product batch with id " + productbatch.getPbId() + " does not exist");
+				throw new NotFoundException("Product batch with id " + producBatchDTO.getPbId() + " does not exist");
 			}
 		} catch (SQLIntegrityConstraintViolationException e) {
 			throw new IntegrityConstraintViolationException(e);

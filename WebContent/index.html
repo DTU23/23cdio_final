@@ -43,7 +43,19 @@
                         <span class="col s3 recipeName">{{recipeName}}</span>
                         <span class="col s3 status">{{status}}</span>
                     </div>
-                    <div class="collapsible-body"></div>
+                    <div class="collapsible-body">
+                        <table class="striped centered responsive-table">
+                            <thead>
+                            <tr>
+                                <th>Produce Batch ID</th>
+                                <th>Produce Name</th>
+                                <th>Nom. Netto</th>
+                                <th>Opr. ID</th>
+                            </tr>
+                            </thead>
+                        </table>
+                        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-productbatchcomp" data-productbatch-id="{{pbId}}"><i class="material-icons">add</i></a>
+                    </div>
                 </li>
                 <!--{{/.}}-->
             </ul>

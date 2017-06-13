@@ -27,9 +27,8 @@ public class MySQLProduceBatchDAO implements ProduceBatchDAO {
 			stm = conn.prepareStatement("CALL create_produce_batch(?,?);");
 			stm.setInt(1, produce_id);
 			stm.setDouble(2, amount);
-			if(stm.executeUpdate() == 0) {
-				throw new IntegrityConstraintViolationException("No rows affected");
-			}
+		} catch (SQLIntegrityConstraintViolationException e) {
+			throw new IntegrityConstraintViolationException(e);
 		} catch (SQLException e) {
 			throw new ConnectivityException(e);
 		} finally {

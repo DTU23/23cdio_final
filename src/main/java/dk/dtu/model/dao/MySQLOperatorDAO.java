@@ -32,9 +32,8 @@ public class MySQLOperatorDAO implements OperatorDAO {
 			stm.setString(5, opr.getPassword());
 			stm.setBoolean(6, opr.isAdmin());
 			stm.setString(7, opr.getRole());
-			if(stm.executeUpdate() == 0) {
-				throw new IntegrityConstraintViolationException("No rows affected");
-			}
+		} catch (SQLIntegrityConstraintViolationException e) {
+			throw new IntegrityConstraintViolationException(e);
 		} catch (SQLException e) {
 			throw new ConnectivityException(e);
 		} finally {

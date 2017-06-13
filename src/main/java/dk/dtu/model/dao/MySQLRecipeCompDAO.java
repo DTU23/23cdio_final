@@ -28,9 +28,8 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 			stm.setInt(2, recipeComponent.getProduceId());
 			stm.setDouble(3, recipeComponent.getNomNetto());
 			stm.setDouble(4, recipeComponent.getTolerance());
-			if(stm.executeUpdate() == 0) {
-				throw new IntegrityConstraintViolationException("No rows affected");
-			}
+		} catch (SQLIntegrityConstraintViolationException e) {
+			throw new IntegrityConstraintViolationException(e);
 		} catch (SQLException e) {
 			throw new ConnectivityException(e);
 		} finally {

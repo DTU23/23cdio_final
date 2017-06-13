@@ -12,14 +12,14 @@ import dk.dtu.model.Validation;
 import dk.dtu.model.dto.OperatorDTO;
 import dk.dtu.model.exceptions.AuthException;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
+import dk.dtu.model.exceptions.ValidationException;
 
 @Path("/v1/login")
 public class LoginService {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response authorize(OperatorDTO opr) throws AuthException, DALException, PositiveIntegerValidationException {
+	public Response authorize(OperatorDTO opr) throws ValidationException, AuthException, DALException  {
 		ILoginController controller = new LoginController();
 		Validation.isPositiveInteger(opr.getOprId());
 		return controller.authenticateUser(opr.getOprId(), opr.getPassword());

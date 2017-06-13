@@ -172,7 +172,7 @@ public class WeightProcessController implements IWeightProcessController {
 				// Saves list of ProductBatchCompOverviewDTO's specified by the product batch number
 				try {
 					productBatchCompOverviewList = productBatchDAO.getProductBatchDetailsByPbId(Integer.parseInt(productBatchNumber));
-				} catch (NumberFormatException | DALException e) {
+				} catch (Exception e) {
 					productBatchCompOverviewList = null;
 					e.printStackTrace();
 				}
@@ -237,7 +237,7 @@ public class WeightProcessController implements IWeightProcessController {
 						productBatchCompDTO = new ProductBatchCompDTO(productBatchRequest.getPbId(), Integer.parseInt(rbId), tara, netto, Integer.parseInt(oprId));
 						try {
 							productBatchCompDAO.createProductBatchComp(productBatchCompDTO);
-						} catch (DALException e) {
+						} catch (Exception e) {
 							System.out.println("Product batch component couldn't be created in database!");
 							e.printStackTrace();
 							i--;

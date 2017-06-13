@@ -26,6 +26,7 @@ public class MySQLRecipeDAO implements RecipeDAO {
 			conn = DataSource.getInstance().getConnection();
 			stm = conn.prepareStatement("CALL create_recipe(?);");
 			stm.setString(1, recipeName);
+			stm.executeUpdate();
 		} catch (SQLIntegrityConstraintViolationException e) {
 			throw new IntegrityConstraintViolationException(e);
 		} catch (SQLException e) {

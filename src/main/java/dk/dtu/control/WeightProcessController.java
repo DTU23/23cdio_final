@@ -18,7 +18,6 @@ import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.exceptions.AdaptorException;
-import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.interfaces.OperatorDAO;
 import dk.dtu.model.interfaces.ProduceBatchDAO;
 import dk.dtu.model.interfaces.ProductBatchCompDAO;
@@ -177,10 +176,10 @@ public class WeightProcessController implements IWeightProcessController {
 					e.printStackTrace();
 				}
 
-
 				break;
 			}
 
+			if(productBatchCompOverviewList != null) {
 			// Put all produces in the recipe into ArrayList
 			ArrayList<String> producesAlreadyWeighed = new ArrayList<String>();
 			for(ProductBatchCompOverviewDTO dto : productBatchCompOverviewList ) {
@@ -188,7 +187,6 @@ public class WeightProcessController implements IWeightProcessController {
 			}
 
 			// Removes all the produces that has been weighed. Produces that needs to be weighed is left in the ArrayList
-			if(productBatchCompOverviewList != null) {
 				Iterator<RecipeListDTO> iterator = recipeList.iterator();
 				while(iterator.hasNext()) {
 					RecipeListDTO dto = iterator.next();

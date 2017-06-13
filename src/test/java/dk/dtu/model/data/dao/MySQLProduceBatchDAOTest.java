@@ -90,7 +90,7 @@ public class MySQLProduceBatchDAOTest {
 		System.out.println();
 
 		assertThat(pbList, notNullValue());
-		assertThat(pbList.get(1).toString(), is(produceBatchDTO.toString()));
+		assertThat(pbList.get(5).toString(), is(produceBatchDTO.toString()));
 	}
 
 	/**
@@ -103,9 +103,9 @@ public class MySQLProduceBatchDAOTest {
 		ProduceDTO produceDTO = produce.readProduce(4);
 		int ListLengthPre = produceBatch.getProduceBatchList().size();
 		// Define amount of produce
-		double amount = 500;
+		ProduceBatchDTO produceBatchDTO = new ProduceBatchDTO(8, produceDTO.getProduceId(), null, null, 500);
 
-		produceBatch.createProduceBatch(produceDTO.getProduceId(), amount);
+		produceBatch.createProduceBatch(produceBatchDTO);
 		int ListLengthPost = produceBatch.getProduceBatchList().size();
 
 		assertThat(ListLengthPost, is(not(ListLengthPre)));
@@ -116,15 +116,16 @@ public class MySQLProduceBatchDAOTest {
 	 */
 	@Test
 	public void testUpdateProduceBatch() throws Exception {
-		ProduceBatchDTO pbDTO = new ProduceBatchDTO(3, 0, "tomat", "Veaubais", 300);
+		ProduceBatchDTO prePbDTO = null;
+		ProduceBatchDTO expectedPbDTO = new ProduceBatchDTO(3, 3, null, null, 600);
 		ProduceBatchDTO actual = null;
-		double amount = 600;
 
-		produceBatch.updateProduceBatch(pbDTO.getRbId(), amount);
+		prePbDTO = produceBatch.readProduceBatch(3);
+		produceBatch.updateProduceBatch(expectedPbDTO);
 		actual = produceBatch.readProduceBatch(3);
 
-		assertThat(actual.toString(), is(not(pbDTO.toString())));
-		assertThat(actual.getAmount(), is(amount));
+		assertThat(actual.toString(), is(not(prePbDTO.toString())));
+		assertThat(actual.toString(), is(expectedPbDTO.toString()));
 	}
 
 	/**
@@ -132,14 +133,13 @@ public class MySQLProduceBatchDAOTest {
 	 */
 	@Test
 	public void testUpdateProduceBatchThatDoesntExist() throws Exception{
-		ProduceBatchDTO pbDTO = new ProduceBatchDTO(12, 0, "ketchup", "Heinz", 200);
+		ProduceBatchDTO pbDTO = new ProduceBatchDTO(12, 0, "ketchup", "Heinz", 400);
 		ProduceBatchDTO actual = null;
 		String error = null;
-		double amount = 400;
 
 		// We expect this won't work, and therefore we try-catch a DALException
 		try {
-			produceBatch.updateProduceBatch(pbDTO.getRbId(), amount);
+			produceBatch.updateProduceBatch(pbDTO);
 			actual = produceBatch.readProduceBatch(12);
 		} catch (DALException e) {
 			// e.printStackTrace();

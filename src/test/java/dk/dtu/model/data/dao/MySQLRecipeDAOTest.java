@@ -15,6 +15,8 @@ import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dao.MySQLRecipeDAO;
 import dk.dtu.model.dto.RecipeDTO;
 import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.dal.ConnectivityException;
+import dk.dtu.model.exceptions.dal.IntegrityConstraintViolationException;
 
 public class MySQLRecipeDAOTest {
 
@@ -83,32 +85,27 @@ public class MySQLRecipeDAOTest {
 		RecipeDTO expected = new RecipeDTO(4, "salami");
 		RecipeDTO actual = null;
 		try {
-			recipe.createRecipe(expected.getRecipeName());
+			recipe.createRecipe(expected);
 			actual = recipe.readRecipe(4);
 		} catch (DALException e) {	System.out.println(e.getMessage());}
 		assertThat(expected.toString(), is(equalTo(actual.toString())));
 	}
-	
+
 	/**
-	 * ## DEPRECATED BECAUSE OF DATABASE CHANGES ##
 	 * negative test for create recipe. 
 	 * Auto-generates an ID so cant create on existing. 
+	 * @throws IntegrityConstraintViolationException 
+	 * @throws ConnectivityException 
 	 */
-//	@Test
-//	public void createRecipeOnExistingID() {
-//		RecipeDTO actual = null;
-//		RecipeDTO expected = new RecipeDTO(3, "capricciosa");
-//		try {
-//			recipe.createRecipe(new RecipeDTO(3, "parmaskinke"));
-//			actual = recipe.readRecipe(3);	
-//		} catch (DALException e) {	System.out.println(e.getMessage());  }
-//		assertThat(expected.toString(), is(equalTo(actual.toString())));
-//	}
-	
+	@Test(expected = IntegrityConstraintViolationException.class)
+	public void createRecipeOnExistingID() throws ConnectivityException, IntegrityConstraintViolationException {
+		recipe.createRecipe(new RecipeDTO(3, "parmaskinke"));
+	}
+
 	/**
 	 * get recipe with invalid input
 	 */
-	
+
 	@Test
 	public void getRecipeWithInvalidID() {
 		String errorMsg = null;
@@ -117,5 +114,5 @@ public class MySQLRecipeDAOTest {
 		} catch (DALException e) { errorMsg = e.getMessage(); }
 		assertThat(errorMsg, is(equalTo("Recipe with id 0 does not exist")));
 	}
-		
+
 }

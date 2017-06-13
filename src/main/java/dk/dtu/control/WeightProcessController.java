@@ -18,7 +18,8 @@ import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.exceptions.AdaptorException;
-import dk.dtu.model.exceptions.dal.ConnectivityException;
+import dk.dtu.model.exceptions.AuthException;
+import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.exceptions.dal.NotFoundException;
 import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
 import dk.dtu.model.interfaces.OperatorDAO;
@@ -68,7 +69,7 @@ public class WeightProcessController implements IWeightProcessController {
 			break initLoop;
 		}
 
-	mainLoop: while(true) {
+	while(true) {
 		String oprId = null;
 		String oprPW = null;
 		String productBatchNumber = null;
@@ -78,113 +79,111 @@ public class WeightProcessController implements IWeightProcessController {
 		List<ProductBatchCompOverviewDTO> productBatchCompOverviewList = null; // The actual product batch. List of the actual already weighed produces. 
 
 		loginLoop: while(true) {
+			// Get operator ID and confirm it in display
 			oprIdLoop: while(true) {
 				try {
 					oprId = weightAdaptor.getOperatorId();
 					Validation.isPositiveInteger(oprId);
 					operatorDTO = operatorDAO.readOperator(Integer.parseInt(oprId));
-					weightAdaptor.confirmOperatorName( operatorDTO.getOprName() );
+					weightAdaptor.confirmOperatorName(operatorDTO.getOprName());
 					break oprIdLoop;
-				} catch (ConnectivityException e) {
-					exceptionHandlingPrompt(e, "Problem trying to read operator from database!");
-					continue oprIdLoop;
 				} catch (AdaptorException e) {
-					exceptionHandlingPrompt(e, "Problem trying to send or recieve message!");
+					errorMessageInSecondaryDisplay("Problem trying to send or recieve message from weight!");
+					e.printStackTrace();
 					continue oprIdLoop;
 				} catch (NumberFormatException e) {
-					exceptionHandlingPrompt(e, "The ID could not be parsed!");
+					errorMessageInSecondaryDisplay("The ID could not be parsed!");
+					e.printStackTrace();
 					continue oprIdLoop;
 				} catch (NotFoundException e) {
-					exceptionHandlingPrompt(e, "Operator was not found!");
+					errorMessageInSecondaryDisplay("Operator was not found!");
+					e.printStackTrace();
 					continue oprIdLoop;
 				} catch (PositiveIntegerValidationException e) {
-					exceptionHandlingPrompt(e, "The ID was not valid!");
+					errorMessageInSecondaryDisplay("The ID was not valid!");
+					e.printStackTrace();
+					continue oprIdLoop;
+				} catch (DALException e) {
+					errorMessageInSecondaryDisplay("Problem trying to read operator from database!");
+					e.printStackTrace();
 					continue oprIdLoop;
 				}
 			}
-
+		// Check operator has a role
 		if (operatorDTO.getRole().equals(Role.None.toString())) {
-			try {
-				weightAdaptor.writeInSecondaryDisplay("Operator must have a role!");
-				weightAdaptor.clearSecondaryDisplay();
-				continue loginLoop;
-			} catch (AdaptorException e) {
-				System.out.println("Operator is not allowed to login with role \"None\"!");
-				e.printStackTrace();
-				continue loginLoop;
-			}
+			errorMessageInSecondaryDisplay("The operator has no role and is therefore disabled!");
+			continue loginLoop;
 		}
-
 		// Get the specific operators password and validate password
 		try {
 			oprPW = weightAdaptor.getOperatorPassword();
 			ILoginController controller = new LoginController();
 			controller.authenticateUser(oprId, oprPW);
-		} catch (Exception e) {
+		} catch (AuthException e) {
+			loginResult(false);
 			e.printStackTrace();
-			try {
-				weightAdaptor.loginResult(false);
-			} catch (AdaptorException e1) {
-				System.out.println("Login failed message couldn't be shown to user in display!");
-				e1.printStackTrace();
-			}
+			continue loginLoop;
+		} catch (AdaptorException e) {
+			errorMessageInSecondaryDisplay("Problem trying to send or recieve message from weight!");
+			e.printStackTrace();
+			continue loginLoop;
+		}  catch (DALException e) {
+			errorMessageInSecondaryDisplay("Problem trying to reach database!");
+			e.printStackTrace();
 			continue loginLoop;
 		}
-		try {
-			weightAdaptor.loginResult(true);
-		} catch (AdaptorException e) {
-			System.out.println("Login success message couldn't be shown to user in display!");
-			e.printStackTrace();
-		}
+		loginResult(true);
 		break loginLoop;
-
 		}
 
-		// Asks for the product batch (number), which will be weighed
+		// Asks for the product batch (number), which needs to be weighed
 		pbLoop: while(true) {
 			try {
 				productBatchNumber = weightAdaptor.getProductBatchNumber();
 				Validation.isPositiveInteger(productBatchNumber);
 				productBatchRequest = productBatchDAO.getProductBatchListDetailsByPbId(Integer.parseInt(productBatchNumber));
-
 				if(productBatchRequest.getStatus() == 2) {
-					weightAdaptor.writeInSecondaryDisplay("All produces in this product batch is already weighed! Status 2");
+					weightAdaptor.writeInSecondaryDisplay("All produces in this product batch is already weighed!");
 					weightAdaptor.clearSecondaryDisplay();
 					continue pbLoop;
 				}
-
 				recipeList = recipeDAO.getRecipeDetailsByID(productBatchRequest.getRecipeId());
 				weightAdaptor.confirmRecipeName(productBatchRequest.getRecipeName());
-			} catch (Exception e) {
-				try {
-					weightAdaptor.writeInSecondaryDisplay("Product batch number doesn't exist!");
-					weightAdaptor.clearSecondaryDisplay();
-				} catch (AdaptorException e1) {
-					System.out.println("Error message couldn't be shown to user in display!");
-					e1.printStackTrace();
-				}
+			} catch (AdaptorException e) {
+				errorMessageInSecondaryDisplay("Problem trying to send or recieve message from weight!");
+				e.printStackTrace();
+				continue pbLoop;
+			} catch (DALException e) {
+				errorMessageInSecondaryDisplay("Product batch number doesn't exist!");
+				e.printStackTrace();
+				continue pbLoop;
+			} catch (PositiveIntegerValidationException e) {
+				errorMessageInSecondaryDisplay("Product batch number is not valid!");
 				e.printStackTrace();
 				continue pbLoop;
 			}
 
-			// Saves list of ProductBatchCompOverviewDTO's specified by the product batch number
+			// Saves list of ProductBatchCompOverviewDTO's (already weighed produces in product batch) specified by the product batch number
 			try {
 				productBatchCompOverviewList = productBatchDAO.getProductBatchDetailsByPbId(Integer.parseInt(productBatchNumber));
-			} catch (Exception e) {
-				productBatchCompOverviewList = null;
+			} catch (NumberFormatException e) {
+				errorMessageInSecondaryDisplay("Product batch number could not be parsed!");
 				e.printStackTrace();
+				continue pbLoop;
+			} catch (DALException e) {
+				// Fine - status 0. No weighed produces in product batch
+				productBatchCompOverviewList = null;
 			}
-
 			break;
 		}
 
+		// Only if there's any already weighed produces in product batch
 		if(productBatchCompOverviewList != null) {
-			// Put all produces in the recipe into ArrayList
+			// Put all produces in the recipe (theoretical) into ArrayList
 			ArrayList<String> producesAlreadyWeighed = new ArrayList<String>();
 			for(ProductBatchCompOverviewDTO dto : productBatchCompOverviewList ) {
 				producesAlreadyWeighed.add(dto.getProduceName());
 			}
-
 			// Removes all the produces that has been weighed. Produces that needs to be weighed is left in the ArrayList
 			Iterator<RecipeListDTO> iterator = recipeList.iterator();
 			while(iterator.hasNext()) {
@@ -195,14 +194,12 @@ public class WeightProcessController implements IWeightProcessController {
 			}
 		}
 
-		// Start the weighing process
 		double tara;
 		double netto;
 		String rbId;
 		double gross;
 		ProductBatchCompDTO productBatchCompDTO;
-
-		// For all produces that needs to be weighed
+		// Start the weighing process. For all produces that needs to be weighed
 		weighingLoop: for(int i = 0; i < recipeList.size(); i++) {
 			try {
 				RecipeListDTO recipeDTO = recipeList.get(i);
@@ -216,39 +213,46 @@ public class WeightProcessController implements IWeightProcessController {
 				} while (Math.abs(recipeDTO.getNomNetto() - netto) >= tolerance);
 				weightAdaptor.clearSecondaryDisplay();
 
-				do {
+				rbIdLoop: do {
 					rbId = weightAdaptor.getProduceBatchNumber();
 					try {
 						produceBatchDAO.readProduceBatch(Integer.parseInt(rbId));
-					} catch (Exception e) {
-						weightAdaptor.writeInSecondaryDisplay("Wrong produce batch id!");
-						weightAdaptor.clearSecondaryDisplay();
-						continue;
-					}
+					} catch (NumberFormatException e) {
+						errorMessageInSecondaryDisplay("Wrong produce batch ID!");
+						e.printStackTrace();
+						continue rbIdLoop;
+					} catch (DALException e) {
+						errorMessageInSecondaryDisplay("Produce batch does not exist!");
+						e.printStackTrace();
+						continue rbIdLoop;
+					}	
 					break;
 				} while(true);
 
 				weightAdaptor.tara();
 				gross = Double.parseDouble(weightAdaptor.removeGross());
+
 				if(tara + netto == Math.abs(gross)) {
 					productBatchCompDTO = new ProductBatchCompDTO(productBatchRequest.getPbId(), Integer.parseInt(rbId), tara, netto, Integer.parseInt(oprId));
 					try {
 						productBatchCompDAO.createProductBatchComp(productBatchCompDTO);
-					} catch (Exception e) {
-						System.out.println("Product batch component couldn't be created in database!");
+					} catch (DALException e) {
+						errorMessageInSecondaryDisplay("Product batch component couldn't be created in database!");
 						e.printStackTrace();
 						i--;
 						continue weighingLoop;
 					}	
 				} else {
-					i--;
 					weightAdaptor.grossCheck(false);
+					i--;
 					continue weighingLoop;
-				}
+				}				
 				weightAdaptor.grossCheck(true);
 			} catch (AdaptorException e) {
-				System.out.println("Something went wrong when trying to weigh the produce!");
+				errorMessageInSecondaryDisplay("Something went wrong when trying to weigh the produce!");
 				e.printStackTrace();
+				i--;
+				continue weighingLoop;
 			}
 		}
 
@@ -258,12 +262,19 @@ public class WeightProcessController implements IWeightProcessController {
 			System.out.println("Error trying to clear primary and secondary display!");
 			e.printStackTrace();
 		}
-
+	}
 	}
 
+	private void loginResult(boolean bool) {
+		try {
+			weightAdaptor.loginResult(bool);
+		} catch (AdaptorException e) {
+			System.out.println("Login success/fail message couldn't be shown to user in display!");
+			e.printStackTrace();
+		}
 	}
-	
-	private void exceptionHandlingPrompt(Exception e, String msg) {
+
+	private void errorMessageInSecondaryDisplay(String msg) {
 		try {
 			weightAdaptor.writeInSecondaryDisplay(msg);
 			weightAdaptor.clearSecondaryDisplay();
@@ -272,7 +283,6 @@ public class WeightProcessController implements IWeightProcessController {
 			e1.printStackTrace();
 		}
 		System.out.println(msg);
-		e.printStackTrace();
 	}
 }
 

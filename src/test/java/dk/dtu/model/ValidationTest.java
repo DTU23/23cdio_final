@@ -118,4 +118,13 @@ public class ValidationTest {
 		Validation.isValidRole("hacker");
 	}
 
+	@Test
+	public void testIsValidSupplierName() throws InvalidNameException {
+		Validation.isValidSupplierName("Ost og skinke A/S");
+	}
+
+	@Test(expected = InvalidNameException.class)
+	public void testIsInvalidSupplierName() throws InvalidNameException {
+		Validation.isValidSupplierName("0st 0g sk1nk3 A/S");
+	}
 }

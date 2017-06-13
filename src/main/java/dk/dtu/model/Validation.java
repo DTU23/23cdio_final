@@ -241,4 +241,14 @@ public class Validation {
 			throw new InvalidStatusException("Not a valid status");
 		}
 	}
+
+	public static void isValidSupplierName(String supplierName) throws InvalidNameException {
+		if(!supplierName.matches("[a-zA-Z /]+"))
+			throw new InvalidNameException("Supplier name contains illegal characters");
+		if(supplierName.length() < 2) {
+			throw new InvalidNameException("Name too short");
+		} else if (supplierName.length() > 20) {
+			throw new InvalidNameException("Name too long");
+		}
+	}
 }

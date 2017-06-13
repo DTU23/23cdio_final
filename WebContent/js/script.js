@@ -621,6 +621,7 @@ $(document).ready(function () {
         $('#loginForm').show();
         $('main').addClass('valign-wrapper');
         Cookies.remove('auth');
+        window.location.replace("./");
     });
 
     $(document).on('click', '.dropdown-item', function (e) {

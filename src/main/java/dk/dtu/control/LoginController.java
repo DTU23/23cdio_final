@@ -31,22 +31,26 @@ public class LoginController implements ILoginController {
 			// Return the token on the response
 			return Response.ok(token).build();
 
-		} catch (Exception e) {
+		} catch (AuthException | DALException e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 	}
 
 	@Override
-	public void authenticateUser(String oprId, String password) throws PositiveIntegerValidationException, AuthException, DALException {
-		Validation.isPositiveInteger(oprId);
-		passwordCheck(Integer.parseInt(oprId), password);
+	public void authenticateUser(String oprId, String password) throws AuthException, DALException {
+		try {
+			Validation.isPositiveInteger(oprId);
+			passwordCheck(Integer.parseInt(oprId), password);
+		} catch (PositiveIntegerValidationException e) {
+			throw new AuthException("Wrong ID and/or password");
+		}
 	}
 
 	private void passwordCheck(int oprId, String password) throws AuthException, DALException {
 		OperatorDAO dao = new MySQLOperatorDAO();
 		OperatorDTO sysOpr = dao.readOperator(oprId);
 		if (!sysOpr.getPassword().equals(password)) {
-			throw new AuthException("Wrong Password!");
+			throw new AuthException("Wrong ID and/or password");
 		}
 	}
 
@@ -70,4 +74,3 @@ public class LoginController implements ILoginController {
 		}
 	}
 }
-

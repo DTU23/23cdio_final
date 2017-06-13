@@ -22,13 +22,12 @@ import dk.dtu.model.dto.ProductBatchCompDTO;
 import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
 import dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.validation.InvalidIDException;
-import dk.dtu.model.exceptions.validation.PositiveDoubleValidationException;
-import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
+import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.ProductBatchCompDAO;
 
 @Path("v1/productbatchcomp")
 @Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ProductBatchCompService {
 
 	// This class implements all MySQLProductBatchDAO methods
@@ -36,32 +35,30 @@ public class ProductBatchCompService {
 	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Pharmacist })
-	public void createProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException, PositiveDoubleValidationException, InvalidIDException {
+	public void createProductBatchComp(ProductBatchCompDTO productBatchComp) throws ValidationException, DALException {
 		controller.createProductBatchCompValidation(productBatchComp);
 	}
 	
 	@GET
 	@Path("/{pbId}/{rbId}")
 	@Secured( roles = { Role.Pharmacist })
-	public ProductBatchCompDTO getProductBatchComp(@PathParam("pbId") int pbId, @PathParam("rbId") int rbId) throws DALException, PositiveIntegerValidationException {
+	public ProductBatchCompDTO getProductBatchComp(@PathParam("pbId") int pbId, @PathParam("rbId") int rbId) throws ValidationException, DALException {
 		Validation.isPositiveInteger(pbId);
 		Validation.isPositiveInteger(rbId);
 		return dao.readProductBatchComp(pbId, rbId);
 	}
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Pharmacist })
-	public void updateProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException, PositiveDoubleValidationException, InvalidIDException {
+	public void updateProductBatchComp(ProductBatchCompDTO productBatchComp) throws ValidationException, DALException {
 		controller.updateProductBatchCompValidation(productBatchComp);
 	}
 	
 	@DELETE
 	@Path("/{pbId}/{rbId}")
 	@Secured( roles = { Role.Pharmacist })
-	public void deleteProductBatchComp(@PathParam("pbId") int pbId, @PathParam("rbId") int rbId) throws DALException, PositiveIntegerValidationException {
+	public void deleteProductBatchComp(@PathParam("pbId") int pbId, @PathParam("rbId") int rbId) throws ValidationException, DALException {
 		Validation.isPositiveInteger(pbId);
 		Validation.isPositiveInteger(rbId);
 		dao.deleteProductBatchComp(pbId, rbId);
@@ -84,7 +81,7 @@ public class ProductBatchCompService {
 	@GET
 	@Path("/list/{pbId}")
 	@Secured( roles = { Role.Pharmacist })
-	public List<ProductBatchCompSupplierDetailsDTO> getRecipeComp(@PathParam("pbId") int pbId) throws DALException, PositiveIntegerValidationException {
+	public List<ProductBatchCompSupplierDetailsDTO> getRecipeComp(@PathParam("pbId") int pbId) throws ValidationException, DALException {
 		Validation.isPositiveInteger(pbId);
 		return dao.getProductBatchComponentSupplierDetailsByPbId(pbId);
 	}

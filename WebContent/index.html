@@ -27,7 +27,7 @@
             <table class="striped centered" id="productBatchHeader">
                 <thead>
                 <tr>
-                    <th class="col s3">ID</th>
+                    <th class="col s3">Product Batch ID</th>
                     <th class="col s3">Recipe ID</th>
                     <th class="col s3">Recipe Name</th>
                     <th class="col s3">Status</th>
@@ -49,12 +49,12 @@
                             <tr>
                                 <th>Produce Batch ID</th>
                                 <th>Produce Name</th>
+                                <th>Supplier</th>
                                 <th>Nom. Netto</th>
                                 <th>Opr. ID</th>
                             </tr>
                             </thead>
                         </table>
-                        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-productbatchcomp" data-productbatch-id="{{pbId}}"><i class="material-icons">add</i></a>
                     </div>
                 </li>
                 <!--{{/.}}-->
@@ -102,6 +102,7 @@
             <tr>
                 <th>Produce Batch ID</th>
                 <th>Produce Name</th>
+                <th>Supplier</th>
                 <th>Nom. Netto</th>
                 <th>Opr. ID</th>
             </tr>
@@ -111,13 +112,13 @@
             <tr id="productbatch-component-{{rbId}}">
                 <td class="producebatch_id">{{rbId}}</td>
                 <td class="produce_name">{{produceName}}</td>
+                <td class="supplier">{{supplier}}</td>
                 <td class="nom_netto">{{netto}}</td>
                 <td class="oprId">{{oprId}}</td>
             </tr>
             <!--{{/.}}-->
             </tbody>
         </table>
-        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-productbatchcomp" data-productbatch-id="{{pbId}}"><i class="material-icons">add</i></a>
     </script>
 
     <script type="text/html" id="productBatchComponentInsertTemplate">
@@ -152,7 +153,7 @@
         <table class="striped centered responsive-table" id="produceList">
             <thead>
             <tr>
-                <th>ID</th>
+                <th>Produce ID</th>
                 <th>Name</th>
                 <th>Supplier</th>
                 <th>Action</th>
@@ -228,7 +229,7 @@
         <table class="striped centered responsive-table" id="produceBatchList">
             <thead>
             <tr>
-                <th>ID</th>
+                <th>Produce Batch ID</th>
                 <th>Name</th>
                 <th>Supplier</th>
                 <th>Amount</th>
@@ -361,7 +362,7 @@
 
     <script type="text/html" id="recipeInsertTemplate">
         <div class="modal-content">
-            <h4>Add Produce</h4>
+            <h4>Add Recipe</h4>
             <form id="recipeAdd">
                 <div class="row">
                     <div class="input-field col s12">
@@ -400,7 +401,7 @@
             <!--{{/.}}-->
             </tbody>
         </table>
-        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipecomp" data-recipe-id="{{recipeId}}"><i class="material-icons">add</i></a>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipecomp" data-recipe-id=""><i class="material-icons">add</i></a>
     </script>
 
     <script type="text/html" id="recipeComponentEditTemplate">
@@ -694,46 +695,6 @@
                     </div>
                 </div>
             </form>
-            <div class="preloader-wrapper large center-align active hide">
-                <div class="spinner-layer spinner-blue">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-
-                <div class="spinner-layer spinner-red">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-
-                <div class="spinner-layer spinner-yellow">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-                <div class="spinner-layer spinner-green">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-            </div>
         </div>
         <div class="modal-footer">
             <a href="#" class="modal-add-user waves-effect waves-green btn-flat">Add</a>
@@ -825,7 +786,7 @@
         <div class="row">
             <div class="col s12">
                 <ul class="tabs" id="MainTabs">
-                    <li class="tab col s3"><a href="#ProductAdminTab" class="blue-grey-text text-darken-3 active">Product Administration</a></li>
+                    <li class="tab col s3"><a href="#ProductAdminTab" class="blue-grey-text text-darken-3">Product Administration</a></li>
                     <li class="tab col s3"><a href="#ProduceAdminTab" class="blue-grey-text text-darken-3">Produce Administration</a></li>
                     <li class="tab col s3"><a href="#RecipeAdminTab" class="blue-grey-text text-darken-3">Recipe Administration</a></li>
                     <li class="tab col s3"><a href="#UserAdminTab" class="blue-grey-text text-darken-3">User Administration</a></li>

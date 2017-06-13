@@ -196,6 +196,7 @@ $(document).ready(function () {
                 "oprName": $('#userEdit').find("#user_name").val(),
                 "ini": $('#userEdit').find("#user_ini").val(),
                 "cpr": $('#userEdit').find("#user_cpr").val(),
+                "password": $('#userEdit').find("#user_password").val(),
                 "admin": $('#userEdit').find("#user_admin").is(':checked'),
                 "role": role
             },
@@ -501,7 +502,7 @@ $(document).ready(function () {
                     $('#RecipeComponentsTemplate').html(),
                     $('div.recipe[data-id='+recipe_id+']').parent().children('.collapsible-body'),
                     function( response ) {
-                        console.log(response);
+
                     }
                 );
             }
@@ -561,6 +562,7 @@ $(document).ready(function () {
                     $('#RecipeComponentsTemplate').html(),
                     $('div.recipe[data-id='+recipe_id+']').parent().children('.collapsible-body'),
                     function( response ) {
+                        $('div.recipe[data-id='+recipe_id+']').parent().find('.add-recipecomp').attr('data-recipe-id', recipe_id);
                         $('#EditModal').modal('close');
                     }
                 );
@@ -637,6 +639,8 @@ $(document).ready(function () {
                 populateRecipeAdmin(true);
                 break;
             case "#ProduceAdminTab":
+                populateProduceAdmin(true);
+                populateProduceBatchAdmin(true);
                 break;
             case "#ProduceAdminSubTab":
                 populateProduceAdmin(true);
@@ -680,7 +684,8 @@ function populateUsersAdmin(notice) {
             $("input:checkbox:not(:checked)").each(function () {
                 $(this).prop("indeterminate", true);
             });
-        }
+        },
+        $("a[href='#UserAdminTab']")
     );
 }
 
@@ -693,8 +698,11 @@ function populateProduceAdmin(notice) {
         $('#ProduceAdministrationTemplate').html(),
         $('#ProduceAdminSubTab'),
         function (response) {
-            // Add custom functionality here
-        }
+            if($("a[href='#ProduceAdminSubTab']").parent().hasClass('disabled') && $("a[href='#ProduceBatchAdminSubTab']").parent().hasClass('disabled')){
+                $("a[href='#ProduceAdminTab']").parent().addClass('disabled');
+            }
+        },
+        $("a[href='#ProduceAdminSubTab']")
     );
 }
 
@@ -707,8 +715,11 @@ function populateProduceBatchAdmin(notice) {
         $('#ProduceBatchAdministrationTemplate').html(),
         $('#ProduceBatchAdminSubTab>div.left'),
         function (response) {
-            // Add custom functionality here
-        }
+            if($("a[href='#ProduceAdminSubTab']").parent().hasClass('disabled') && $("a[href='#ProduceBatchAdminSubTab']").parent().hasClass('disabled')){
+                $("a[href='#ProduceAdminTab']").parent().addClass('disabled');
+            }
+        },
+        $("a[href='#ProduceBatchAdminSubTab']")
     );
     doAjax(
         "GET",
@@ -718,8 +729,11 @@ function populateProduceBatchAdmin(notice) {
         $('#ProduceBatchStockAdministrationTemplate').html(),
         $('#ProduceBatchAdminSubTab>div.right'),
         function (response) {
-            // Add custom functionality here
-        }
+            if($("a[href='#ProduceAdminSubTab']").parent().hasClass('disabled') && $("a[href='#ProduceBatchAdminSubTab']").parent().hasClass('disabled')){
+                $("a[href='#ProduceAdminTab']").parent().addClass('disabled');
+            }
+        },
+        $("a[href='#ProduceBatchAdminSubTab']")
     );
 }
 
@@ -742,11 +756,12 @@ function populateProductAdmin(notice) {
                     $('#productBatchComponentsTemplate').html(),
                     $('div.product[data-id='+$(this).attr('data-id')+']').parent().children('.collapsible-body'),
                     function( response ) {
-                        console.log(response);
+
                     }
                 );
             })
-        }
+        },
+        $("a[href='#ProductAdminTab']")
     );
 }
 
@@ -770,22 +785,23 @@ function populateRecipeAdmin(notice){
                     $('#RecipeComponentsTemplate').html(),
                     $('div.recipe[data-id='+recipe_id+']').parent().children('.collapsible-body'),
                     function( response ) {
-                        console.log(response);
+
                     }
                 );
             })
-        }
+        },
+        $("a[href='#RecipeAdminTab']")
     );
 }
 
-function doAjax(method, url, data, notice, template, dom_target, callback){
+function doAjax(method, url, data, notice, template, dom_target, callback, contextTab){
     var contentType = "application/json";
     if(typeof data !== "string"){
         data = JSON.stringify(data);
     }
-
     $.ajax({
         type: method,
+        context: contextTab,
         contentType: contentType,
         processData: false,
         crossDomain: true,
@@ -793,6 +809,14 @@ function doAjax(method, url, data, notice, template, dom_target, callback){
         data: data,
         headers : {
             Authorization: Cookies.get("auth")
+        },
+        statusCode:{
+            401 : function (response) {
+                callback(response);
+            },
+            403 : function (response) {
+                callback(response);
+            }
         },
         success: function(response) {
             if(template !== null){
@@ -806,16 +830,27 @@ function doAjax(method, url, data, notice, template, dom_target, callback){
             }
         },
         error: function ( msg ) {
-            ajaxErrorHandler(msg, notice);
+            ajaxErrorHandler(msg, notice, contextTab);
         }
     })
 }
 
-function ajaxErrorHandler(msg, notice) {
+function ajaxErrorHandler(msg, notice, contextTab) {
     if(notice){
         switch(msg.status) {
             case 500:
                 Materialize.toast("An unexpected error ocurred!", 4000);
+                break;
+            case 404:
+                break;
+            case 401:
+            case 403:
+                if(contextTab !== "undefined"){
+                    contextTab.parent().addClass('disabled');
+                    $('#MainTabs').tabs();
+                    $('#ProduceSubTabs').tabs();
+                }
+                Materialize.toast("Unauthorized!", 4000);
                 break;
             default:
                 Materialize.toast(msg.responseText, 4000);
@@ -823,6 +858,21 @@ function ajaxErrorHandler(msg, notice) {
         }
     }
     else{
-        console.log(msg);
+        switch(msg.status) {
+            case 500:
+                break;
+            case 404:
+                break;
+            case 401:
+            case 403:
+                if(contextTab !== "undefined"){
+                    contextTab.parent().addClass('disabled');
+                    $('#MainTabs').tabs();
+                    $('#ProduceSubTabs').tabs();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -35,7 +35,7 @@ public class ProductBatchService {
 	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
-	@Consumes(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Foreman })
 	public void createProductBatch(int recipeId) throws DALException, InvalidIDException {
 		controller.createProductBatchValidation(recipeId);

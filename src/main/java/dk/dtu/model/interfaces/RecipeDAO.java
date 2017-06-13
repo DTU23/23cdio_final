@@ -7,10 +7,10 @@ import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.exceptions.DALException;
 
 public interface RecipeDAO {
-	void createRecipe(String recipeName) throws DALException;
-	RecipeDTO readRecipe(int receptId) throws DALException;
+	void createRecipe(RecipeDTO recipe) throws DALException;
+	RecipeDTO readRecipe(int recipe_id) throws DALException;
 	void updateRecipe(RecipeDTO recipe) throws DALException;
-	void deleteRecipe(int receptId) throws DALException;
+	void deleteRecipe(int recipe_id) throws DALException;
 	List<RecipeDTO> getRecipeList() throws DALException;
-	List<RecipeListDTO> getRecipeDetailsByID(int recipeID) throws DALException;
+	List<RecipeListDTO> getRecipeDetailsByID(int recipe_id) throws DALException;
 }

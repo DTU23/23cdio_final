@@ -7,10 +7,10 @@ import dk.dtu.model.dto.ProduceOverviewDTO;
 import dk.dtu.model.exceptions.DALException;
 
 public interface ProduceDAO {
-	void createProduce(ProduceDTO raavare) throws DALException;
-	ProduceDTO readProduce(int raavareId) throws DALException;
-	void updateProduce(ProduceDTO raavare) throws DALException;
-	void deleteProduce(int raavareId) throws DALException;
+	void createProduce(ProduceDTO produceDTO) throws DALException;
+	ProduceDTO readProduce(int produce_id) throws DALException;
+	void updateProduce(ProduceDTO produceDTO) throws DALException;
+	void deleteProduce(int produce_id) throws DALException;
 	List<ProduceDTO> getProduceList() throws DALException;
 	List<ProduceOverviewDTO> getProduceOverview() throws DALException;
 }

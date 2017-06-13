@@ -1,4 +1,4 @@
-package dk.dtu.control.api.ExceptionMappers;
+package dk.dtu.control.api.exceptionMappers;
 
 import dk.dtu.model.exceptions.validation.PositiveDoubleValidationException;
 

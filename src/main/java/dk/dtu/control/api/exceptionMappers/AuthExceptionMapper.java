@@ -1,4 +1,4 @@
-package dk.dtu.control.api.ExceptionMappers;
+package dk.dtu.control.api.exceptionMappers;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;

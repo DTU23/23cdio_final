@@ -27,9 +27,8 @@ public class MySQLProduceDAO implements ProduceDAO {
 			stm = conn.prepareStatement("CALL create_produce(?,?);");
 			stm.setString(1, produce.getProduceName());
 			stm.setString(2, produce.getSupplier());
-			if(stm.executeUpdate() == 0) {
-				throw new IntegrityConstraintViolationException("No rows affected");
-			}
+		} catch (SQLIntegrityConstraintViolationException e) {
+			throw new IntegrityConstraintViolationException(e);
 		} catch (SQLException e) {
 			throw new ConnectivityException(e);
 		} finally {

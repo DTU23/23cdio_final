@@ -31,9 +31,8 @@ public class MySQLProductBatchCompDAO implements ProductBatchCompDAO {
 			stm.setDouble(3, productBatchComponent.getTara());
 			stm.setDouble(4, productBatchComponent.getNetto());
 			stm.setInt(5, productBatchComponent.getOprId());
-			if(stm.executeUpdate() == 0) {
-				throw new IntegrityConstraintViolationException("No rows affected");
-			}
+		} catch (SQLIntegrityConstraintViolationException e) {
+			throw new IntegrityConstraintViolationException(e);
 		} catch (SQLException e) {
 			throw new ConnectivityException(e);
 		} finally {

@@ -94,7 +94,7 @@ public class Validation {
 		try {
 			isPositiveInteger(ID);
 		} catch (PositiveIntegerValidationException e) {
-			throw new InvalidIDException(e);
+			throw new InvalidIDException("ID is not a positive integer");
 		}
 		int i = Integer.parseInt(ID);
 		if(i > 99999999) {
@@ -111,7 +111,7 @@ public class Validation {
 		try {
 			isPositiveInteger(ID);
 		} catch (PositiveIntegerValidationException e) {
-			throw new InvalidIDException(e);
+			throw new InvalidIDException("ID is not a positive integer");
 		}
 		if(ID > 99999999) {
 			throw new InvalidIDException("ID out of bounds");
@@ -125,7 +125,7 @@ public class Validation {
 	 */
 	public static void isValidName(String name) throws InvalidNameException {
 		if(!name.matches("[a-zA-Z ]+"))
-			throw new InvalidNameException("Input contains non-letter characters");
+			throw new InvalidNameException("Name contains non-letter characters");
 		if(name.length() < 2) {
 			throw new InvalidNameException("Name too short");
 		} else if (name.length() > 20) {
@@ -142,7 +142,7 @@ public class Validation {
 		try {
 			isOnlyLetters(initials);
 		} catch (NotLettersException e) {
-			throw new InvalidInitialsException("Intials contains non-letter characters", e);
+			throw new InvalidInitialsException("Intials contains non-letter characters");
 		}
 		if(initials.length() < 2) {
 			throw new InvalidInitialsException("Too few initials");
@@ -160,7 +160,7 @@ public class Validation {
 		try {
 			isPositiveInteger(cpr);
 		} catch (PositiveIntegerValidationException e) {
-			throw new InvalidCprException("CPR is not a positive integer", e);
+			throw new InvalidCprException("CPR is not a positive integer");
 		}
 		// checks the length
 		if(cpr.length() != 10) {

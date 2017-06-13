@@ -19,7 +19,7 @@ public interface IWebInterfaceController {
 	void updateOperatorValidation(OperatorDTO opr) throws ValidationException, DALException;
 	void updateOperatorValidation(OperatorNewPWDTO opr) throws AuthException, ValidationException, DALException;
 	// Produce Batch
-	void createProduceBatchValidation(int produce_id, double amount) throws ValidationException, DALException;
+	void createProduceBatchValidation(ProduceBatchDTO produceBatch) throws ValidationException, DALException;
 	void updateProduceBatchValidation(ProduceBatchDTO produceBatch) throws ValidationException, DALException;
 	// Produce
 	void createProduceValidation(ProduceDTO produce) throws ValidationException, DALException;
@@ -28,12 +28,12 @@ public interface IWebInterfaceController {
 	void createProductBatchCompValidation(ProductBatchCompDTO productBatchComp)	throws ValidationException, DALException;
 	void updateProductBatchCompValidation(ProductBatchCompDTO productBatchComp) throws ValidationException, DALException;
 	// Product Batch
-	void createProductBatchValidation(int recipeId) throws ValidationException, DALException;
+	void createProductBatchValidation(ProductBatchDTO productBatch) throws ValidationException, DALException;
 	void updateProductBatchValidation(ProductBatchDTO productBatch) throws ValidationException, DALException;
 	// Recipe Comp
 	void createRecipeCompValidation(RecipeCompDTO recipeComp) throws ValidationException, DALException;
 	void updateRecipeCompValidation(RecipeCompDTO recipeComp) throws ValidationException, DALException;
 	// Recipe
-	void createRecipeValidation(String recipeName) throws ValidationException, DALException;
+	void createRecipeValidation(RecipeDTO recipe) throws ValidationException, DALException;
 	void updateRecipeValidation(RecipeDTO recipe) throws ValidationException, DALException;
 }

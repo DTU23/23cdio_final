@@ -3,7 +3,8 @@ Foreman
  */
 CREATE OR REPLACE VIEW produce_batch_list AS
   SELECT producebatch.rb_id, produce.produce_name, produce.supplier, producebatch.amount
-  FROM producebatch INNER JOIN produce WHERE produce.produce_id = producebatch.produce_id;
+  FROM producebatch INNER JOIN produce WHERE produce.produce_id = producebatch.produce_id
+  ORDER BY produce_name;
 
 CREATE OR REPLACE VIEW total_amount_by_produce_name AS
   SELECT produce.produce_name, SUM(producebatch.amount) AS total

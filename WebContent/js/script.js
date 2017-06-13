@@ -656,6 +656,30 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on('click', '#logo', function (e) {
+        $('#hiddenModal').modal('open');
+    });
+
+    $(document).on('click','#resetData', function () {
+        doAjax(
+            "GET",
+            "./api/v1/database/reset",
+            "",
+            false,
+            null,
+            null,
+            function (response) {
+                Materialize.toast(response, 4000);
+                $('#hiddenModal').modal('close');
+                populateUsersAdmin(false);
+                populateProduceAdmin(false);
+                populateProduceBatchAdmin(false);
+                populateProductAdmin(false);
+                populateRecipeAdmin(false);
+            }
+        );
+    });
+
     /**
      * Initialization
      */

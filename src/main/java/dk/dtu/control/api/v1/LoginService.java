@@ -24,5 +24,5 @@ public class LoginService {
 		Validation.isPositiveInteger(opr.getOprId());
 		return controller.authenticateUser(opr.getOprId(), opr.getPassword());
 	}
+
 }
-	

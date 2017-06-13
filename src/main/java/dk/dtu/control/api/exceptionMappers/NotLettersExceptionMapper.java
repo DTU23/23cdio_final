@@ -1,14 +1,14 @@
-package dk.dtu.control.api.ExceptionMappers;
+package dk.dtu.control.api.exceptionMappers;
 
-import dk.dtu.model.exceptions.validation.InvalidCprException;
+import dk.dtu.model.exceptions.validation.NotLettersException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class InvalidCprExceptionMapper implements ExceptionMapper<InvalidCprException> {
-    public Response toResponse(InvalidCprException e){
+public class NotLettersExceptionMapper implements ExceptionMapper<NotLettersException> {
+    public Response toResponse(NotLettersException e){
         return Response.status(400)
                 .entity(e.getMessage())
                 .type("text/plain")

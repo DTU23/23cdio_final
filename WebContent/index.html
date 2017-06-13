@@ -626,33 +626,6 @@
         </div>
     </script>
 
-    <script type="text/html" id="userTableRow">
-        <!--{{#users}}-->
-        <tr id="user-row-{{oprId}}">
-            <td class="id">{{oprId}}</td>
-            <td class="name">{{oprName}}</td>
-            <td class="ini">{{ini}}</td>
-            <td class="cpr">{{cpr}}</td>
-            <td>
-                <p>
-                    <!--{{#admin}}-->
-                    <input type="checkbox" class="admin" checked="checked" disabled/>
-                    <!--{{/admin}}-->
-                    <!--{{^admin}}-->
-                    <input type="checkbox" class="admin" disabled/>
-                    <!--{{/admin}}-->
-                    <label></label>
-                </p>
-            </td>
-            <td class="role">{{role}}</td>
-            <td>
-                <a class="btn-floating btn waves-effect waves-light red darken-2 delete-user"><i class="material-icons">delete</i></a>
-                <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1"><i class="material-icons">edit</i></a>
-            </td>
-        </tr>
-        <!--{{/users}}-->
-    </script>
-
     <script type="text/html" id="userInsertTemplate">
         <div class="modal-content">
             <h4>Add User</h4>

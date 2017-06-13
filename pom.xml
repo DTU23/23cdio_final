@@ -20,7 +20,19 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
-                    <warSourceDirectory>WebContent</warSourceDirectory>
+                    <webXml>./web.xml</webXml>
+                    <failOnMissingWebXml>true</failOnMissingWebXml>
+                    <webResources>
+                        <resource>
+                            <!-- this is relative to the pom.xml directory -->
+                            <directory>./WebContent</directory>
+                        </resource>
+                    </webResources>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
             <plugin>

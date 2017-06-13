@@ -13,7 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -57,9 +56,8 @@ public class OperatorService {
 
 	@PUT
 	@Secured( admin = true )
-	public Response updateOperator(OperatorDTO opr) throws ValidationException, DALException {
+	public void updateOperator(OperatorDTO opr) throws ValidationException, DALException {
 		controller.updateOperatorValidation(opr);
-		return Response.status(200).build();
 	}
 
 	@DELETE
@@ -78,9 +76,8 @@ public class OperatorService {
 
 	@PUT
 	@Path("/update")
-	public Response updateOperator(OperatorNewPWDTO opr) throws ValidationException, DALException, AuthException {
+	public void updateOperator(OperatorNewPWDTO opr) throws ValidationException, DALException, AuthException {
 		controller.updateOperatorValidation(opr);
-		return Response.status(200).build();
 	}
 
 	@GET

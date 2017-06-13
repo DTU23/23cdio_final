@@ -29,13 +29,7 @@ import dk.dtu.model.dto.OperatorNewPWDTO;
 import dk.dtu.model.dto.OperatorNoPWDTO;
 import dk.dtu.model.exceptions.AuthException;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.validation.InvalidCprException;
-import dk.dtu.model.exceptions.validation.InvalidIDException;
-import dk.dtu.model.exceptions.validation.InvalidInitialsException;
-import dk.dtu.model.exceptions.validation.InvalidNameException;
-import dk.dtu.model.exceptions.validation.InvalidPasswordException;
-import dk.dtu.model.exceptions.validation.InvalidRoleException;
-import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
+import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.OperatorDAO;
 
 @Path("v1/operator")
@@ -49,23 +43,21 @@ public class OperatorService {
 
 	@POST
 	@Secured( admin = true )
-	public void createOperator(OperatorDTO opr) throws DALException, InvalidIDException, InvalidNameException, InvalidInitialsException,
-	InvalidCprException, InvalidRoleException {
+	public void createOperator(OperatorDTO opr) throws ValidationException, DALException {
 		controller.createOperatorValidation(opr);
 	}
 
 	@GET
 	@Secured( admin = true )
 	@Path("/{id}")
-	public OperatorDTO getOperator(@PathParam("id") String oprID) throws DALException, PositiveIntegerValidationException {
+	public OperatorDTO getOperator(@PathParam("id") String oprID) throws ValidationException, DALException {
 		Validation.isPositiveInteger(oprID);
 		return dao.readOperator(Integer.parseInt(oprID));
 	}
 
 	@PUT
 	@Secured( admin = true )
-	public Response updateOperator(OperatorDTO opr) throws DALException, InvalidIDException, InvalidNameException,
-	InvalidInitialsException, InvalidCprException, InvalidRoleException, InvalidPasswordException {
+	public Response updateOperator(OperatorDTO opr) throws ValidationException, DALException {
 		controller.updateOperatorValidation(opr);
 		return Response.status(200).build();
 	}
@@ -73,7 +65,7 @@ public class OperatorService {
 	@DELETE
 	@Secured( admin = true )
 	@Path("/{id}")
-	public void deleteOperator(@PathParam("id") String oprID) throws DALException, PositiveIntegerValidationException {
+	public void deleteOperator(@PathParam("id") String oprID) throws ValidationException, DALException {
 		Validation.isPositiveInteger(oprID);
 		dao.deleteOperator(Integer.parseInt(oprID));
 	}
@@ -86,8 +78,7 @@ public class OperatorService {
 
 	@PUT
 	@Path("/update")
-	public Response updateOperator(OperatorNewPWDTO opr) throws DALException, AuthException, InvalidIDException, InvalidNameException,
-	InvalidInitialsException, InvalidCprException, InvalidRoleException, InvalidPasswordException {
+	public Response updateOperator(OperatorNewPWDTO opr) throws ValidationException, DALException, AuthException {
 		controller.updateOperatorValidation(opr);
 		return Response.status(200).build();
 	}
@@ -95,7 +86,7 @@ public class OperatorService {
 	@GET
 	@Secured( roles = {Role.None} )
 	@Path("/me")
-	public OperatorNoPWDTO getSelf(ContainerRequestContext requestContext) throws DALException{
+	public OperatorNoPWDTO getSelf(ContainerRequestContext requestContext) throws DALException {
 		String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 		DecodedJWT decodedToken = JWT.decode(authorizationHeader);
 		return dao.readOperatorNoPW(decodedToken.getClaim("oprId").asInt());

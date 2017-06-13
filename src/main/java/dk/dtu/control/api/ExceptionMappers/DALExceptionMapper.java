@@ -9,7 +9,7 @@ import dk.dtu.model.exceptions.DALException;
 @Provider
 public class DALExceptionMapper implements ExceptionMapper<DALException> {
     public Response toResponse(DALException e){
-        return Response.status(404)
+        return Response.status(500)
                 .entity(e.getMessage())
                 .type("text/plain")
                 .build();

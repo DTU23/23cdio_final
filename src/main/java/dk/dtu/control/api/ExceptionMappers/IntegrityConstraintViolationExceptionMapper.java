@@ -9,7 +9,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class IntegrityConstraintViolationExceptionMapper implements ExceptionMapper<IntegrityConstraintViolationException> {
     public Response toResponse(IntegrityConstraintViolationException e){
-        return Response.status(401)
+        return Response.status(405)
                 .entity(e.getMessage())
                 .type("text/plain")
                 .build();

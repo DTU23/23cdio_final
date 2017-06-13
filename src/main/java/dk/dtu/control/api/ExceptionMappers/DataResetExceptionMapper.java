@@ -9,7 +9,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class DataResetExceptionMapper implements ExceptionMapper<DataResetException> {
     public Response toResponse(DataResetException e){
-        return Response.status(401)
+        return Response.status(500)
                 .entity(e.getMessage())
                 .type("text/plain")
                 .build();

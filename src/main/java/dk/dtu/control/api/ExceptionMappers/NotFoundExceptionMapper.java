@@ -9,7 +9,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundException> {
     public Response toResponse(NotFoundException e){
-        return Response.status(401)
+        return Response.status(404)
                 .entity(e.getMessage())
                 .type("text/plain")
                 .build();

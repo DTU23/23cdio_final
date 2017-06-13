@@ -9,7 +9,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class ConnectivityExceptionMapper implements ExceptionMapper<ConnectivityException> {
     public Response toResponse(ConnectivityException e){
-        return Response.status(401)
+        return Response.status(503)
                 .entity(e.getMessage())
                 .type("text/plain")
                 .build();

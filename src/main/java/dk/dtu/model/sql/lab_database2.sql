@@ -18,20 +18,20 @@ CREATE TABLE operator(
 ) ENGINE=innoDB;
  
 CREATE TABLE produce(
-  produce_id INT NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY,
+  produce_id INT PRIMARY KEY,
   produce_name TEXT,
   supplier TEXT
 ) ENGINE=innoDB;
 
 CREATE TABLE producebatch(
-  rb_id INT NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY,
+  rb_id INT PRIMARY KEY,
   produce_id INT,
   amount REAL,
   FOREIGN KEY (produce_id) REFERENCES produce(produce_id)
 ) ENGINE=innoDB;
 
 CREATE TABLE recipe(
-  recipe_id INT NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY,
+  recipe_id INT PRIMARY KEY,
   recipe_name TEXT
 ) ENGINE=innoDB;
 
@@ -46,7 +46,7 @@ CREATE TABLE recipecomponent(
 ) ENGINE=innoDB;
 
 CREATE TABLE productbatch(
-  pb_id INT NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY,
+  pb_id INT PRIMARY KEY,
   recipe_id INT,
   status INT,
   FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id)

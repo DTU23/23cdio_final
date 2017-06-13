@@ -14,10 +14,10 @@ DROP PROCEDURE IF EXISTS recipe_containing_most_of_ingredient;
 Recipe CRUD
  */
 DELIMITER //
-CREATE PROCEDURE create_recipe(IN input_recipe_name TEXT)
+CREATE PROCEDURE create_recipe(IN input_recipe_id INT, IN input_recipe_name TEXT)
 BEGIN
-  INSERT INTO recipe(recipe_name)
-  VALUES(input_recipe_name);
+  INSERT INTO recipe(recipe_id, recipe_name)
+  VALUES(input_recipe_id, input_recipe_name);
 END //
 DELIMITER ;
 

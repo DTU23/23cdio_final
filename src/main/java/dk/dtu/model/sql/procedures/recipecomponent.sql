@@ -3,6 +3,8 @@ DROP PROCEDURE IF EXISTS read_recipe_component;
 DROP PROCEDURE IF EXISTS update_recipe_component;
 DROP PROCEDURE IF EXISTS delete_recipe_component;
 
+DROP PROCEDURE IF EXISTS get_recipe_comp_by_recipe_id;
+
 /**
 Recipe_component CRUD
  */

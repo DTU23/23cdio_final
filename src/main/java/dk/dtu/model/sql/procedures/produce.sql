@@ -10,9 +10,10 @@ DROP PROCEDURE IF EXISTS ingredients_that_is_contained_in_number_of_recipes;
 Produce CRUD
  */
 DELIMITER //
-CREATE PROCEDURE create_produce(IN input_produce_name TEXT, IN input_supplier TEXT)
+CREATE PROCEDURE create_produce(IN input_produce_id INT, IN input_produce_name TEXT, IN input_supplier TEXT)
 BEGIN
-  INSERT INTO produce(produce_name, supplier) VALUES(input_produce_name, input_supplier);
+  INSERT INTO produce(produce_id, produce_name, supplier)
+  VALUES(input_produce_id, input_produce_name, input_supplier);
 END //
 DELIMITER ;
 

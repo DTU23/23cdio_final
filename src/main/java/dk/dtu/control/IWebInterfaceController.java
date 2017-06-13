@@ -10,60 +10,30 @@ import dk.dtu.model.dto.RecipeCompDTO;
 import dk.dtu.model.dto.RecipeDTO;
 import dk.dtu.model.exceptions.AuthException;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.validation.InvalidCprException;
-import dk.dtu.model.exceptions.validation.InvalidIDException;
-import dk.dtu.model.exceptions.validation.InvalidInitialsException;
-import dk.dtu.model.exceptions.validation.InvalidNameException;
-import dk.dtu.model.exceptions.validation.InvalidPasswordException;
-import dk.dtu.model.exceptions.validation.InvalidRoleException;
-import dk.dtu.model.exceptions.validation.InvalidStatusException;
-import dk.dtu.model.exceptions.validation.PositiveDoubleValidationException;
+import dk.dtu.model.exceptions.ValidationException;
 
 public interface IWebInterfaceController {
 
 	// Operator
-	OperatorDTO createOperatorValidation(OperatorDTO opr) throws DALException, InvalidIDException, InvalidNameException,
-	InvalidInitialsException, InvalidCprException, InvalidRoleException;
-	
-	void updateOperatorValidation(OperatorDTO opr) throws InvalidIDException, InvalidNameException, InvalidInitialsException,
-	InvalidCprException, InvalidRoleException, InvalidPasswordException, DALException;
-	
-	void updateOperatorValidation(OperatorNewPWDTO opr) throws InvalidIDException, InvalidNameException, InvalidInitialsException,
-	InvalidCprException, InvalidRoleException, InvalidPasswordException, DALException, AuthException;
-	
+	OperatorDTO createOperatorValidation(OperatorDTO opr) throws ValidationException, DALException;
+	void updateOperatorValidation(OperatorDTO opr) throws ValidationException, DALException;
+	void updateOperatorValidation(OperatorNewPWDTO opr) throws AuthException, ValidationException, DALException;
 	// Produce Batch
-	void createProduceBatchValidation(int produce_id, double amount) throws PositiveDoubleValidationException,
-	InvalidIDException, DALException;
-	
-	void updateProduceBatchValidation(ProduceBatchDTO produceBatch) throws PositiveDoubleValidationException,
-	InvalidIDException, DALException;
-	
+	void createProduceBatchValidation(int produce_id, double amount) throws ValidationException, DALException;
+	void updateProduceBatchValidation(ProduceBatchDTO produceBatch) throws ValidationException, DALException;
 	// Produce
-	void createProduceValidation(ProduceDTO produce) throws InvalidIDException, InvalidNameException, DALException;
-	
-	void updateProduceValidation(ProduceDTO produce) throws InvalidIDException, InvalidNameException, DALException;
-	
+	void createProduceValidation(ProduceDTO produce) throws ValidationException, DALException;
+	void updateProduceValidation(ProduceDTO produce) throws ValidationException, DALException;
 	// Product Batch Comp
-	void createProductBatchCompValidation(ProductBatchCompDTO productBatchComp)	throws PositiveDoubleValidationException,
-	InvalidIDException, DALException;
-	
-	void updateProductBatchCompValidation(ProductBatchCompDTO productBatchComp) throws PositiveDoubleValidationException,
-	InvalidIDException, DALException;
-	
+	void createProductBatchCompValidation(ProductBatchCompDTO productBatchComp)	throws ValidationException, DALException;
+	void updateProductBatchCompValidation(ProductBatchCompDTO productBatchComp) throws ValidationException, DALException;
 	// Product Batch
-	void createProductBatchValidation(int recipeId) throws InvalidIDException, DALException;
-	
-	void updateProductBatchValidation(ProductBatchDTO productBatch) throws InvalidIDException, InvalidStatusException, DALException;
-	
+	void createProductBatchValidation(int recipeId) throws ValidationException, DALException;
+	void updateProductBatchValidation(ProductBatchDTO productBatch) throws ValidationException, DALException;
 	// Recipe Comp
-	void createRecipeCompValidation(RecipeCompDTO recipeComp) throws PositiveDoubleValidationException,
-	InvalidIDException, DALException;
-	
-	void updateRecipeCompValidation(RecipeCompDTO recipeComp) throws PositiveDoubleValidationException,
-	InvalidIDException, DALException;
-	
+	void createRecipeCompValidation(RecipeCompDTO recipeComp) throws ValidationException, DALException;
+	void updateRecipeCompValidation(RecipeCompDTO recipeComp) throws ValidationException, DALException;
 	// Recipe
-	void createRecipeValidation(String recipeName) throws InvalidNameException, DALException;
-	
-	void updateRecipeValidation(RecipeDTO recipe) throws InvalidIDException, InvalidNameException, DALException;
+	void createRecipeValidation(String recipeName) throws ValidationException, DALException;
+	void updateRecipeValidation(RecipeDTO recipe) throws ValidationException, DALException;
 }

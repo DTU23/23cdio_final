@@ -21,13 +21,12 @@ import dk.dtu.model.dao.MySQLProductBatchDAO;
 import dk.dtu.model.dto.ProductBatchDTO;
 import dk.dtu.model.dto.ProductBatchListDTO;
 import dk.dtu.model.exceptions.DALException;
-import dk.dtu.model.exceptions.validation.InvalidIDException;
-import dk.dtu.model.exceptions.validation.InvalidStatusException;
-import dk.dtu.model.exceptions.validation.PositiveIntegerValidationException;
+import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.ProductBatchDAO;
 
 @Path("v1/productbatch")
 @Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ProductBatchService {
 
 	// This class implements all MySQLProductBatchDAO methods
@@ -35,30 +34,28 @@ public class ProductBatchService {
 	private IWebInterfaceController controller = new WebInterfaceController();
 
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Foreman })
-	public void createProductBatch(int recipeId) throws DALException, InvalidIDException {
-		controller.createProductBatchValidation(recipeId);
+	public void createProductBatch(ProductBatchDTO productBatch) throws ValidationException, DALException {
+		controller.createProductBatchValidation(productBatch);
 	}
 	
 	@GET
 	@Path("/{id}")
 	@Secured( roles = { Role.Foreman })
-	public ProductBatchDTO getProductBatch(@PathParam("id") int pbId) throws DALException, PositiveIntegerValidationException {
+	public ProductBatchDTO getProductBatch(@PathParam("id") int pbId) throws ValidationException, DALException {
 		Validation.isPositiveInteger(pbId);
 		return dao.readProductBatch(pbId);
 	}
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured( roles = { Role.Foreman })
-	public void updateProductBatch(ProductBatchDTO productBatch) throws DALException, InvalidIDException, InvalidStatusException {
+	public void updateProductBatch(ProductBatchDTO productBatch) throws ValidationException, DALException {
 		controller.updateProductBatchValidation(productBatch);
 	}
 	
 	@DELETE
 	@Secured( roles = { Role.Foreman })
-	public void deleteProductBatch(int pbId) throws DALException, PositiveIntegerValidationException {
+	public void deleteProductBatch(int pbId) throws ValidationException, DALException {
 		Validation.isPositiveInteger(pbId);
 		dao.deleteProductBatch(pbId);
 	}
@@ -68,8 +65,4 @@ public class ProductBatchService {
 	public List<ProductBatchListDTO> getProductList() throws DALException {
 		return dao.getProductBatchList();
 	}
-	
-	//TODO Methods not implemented here from DAO - but necessary? They're used for weighing process.
-	//getProductBatchListDetailsByPbId
-	//getProductBatchDetailsByPbId
 }

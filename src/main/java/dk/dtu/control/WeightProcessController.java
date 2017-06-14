@@ -3,6 +3,7 @@ package dk.dtu.control;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.v1.IWeightAdaptor;
@@ -50,7 +51,7 @@ public class WeightProcessController implements IWeightProcessController {
 
 	@Override
 	public void run() {
-		initLoop: for(int i = 0; i < 10; i++) {
+		initLoop: for(int i = 0; i < 60; i++) {
 			operatorDAO = new MySQLOperatorDAO();
 			productBatchDAO = new MySQLProductBatchDAO();
 			produceBatchDAO = new MySQLProduceBatchDAO();
@@ -64,8 +65,17 @@ public class WeightProcessController implements IWeightProcessController {
 			} catch (AdaptorException e) {
 				System.out.println("Connection couldn't be established!");
 				e.printStackTrace();
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				if (i == 59) {
+					System.exit(1);
+				}
 				continue initLoop;
 			}
+			
 			break initLoop;
 		}
 
@@ -109,11 +119,7 @@ public class WeightProcessController implements IWeightProcessController {
 					continue oprIdLoop;
 				}
 			}
-		// Check operator has a role
-		if (operatorDTO.getRole().equals(Role.None.toString())) {
-			errorMessageInSecondaryDisplay("The operator has no role and is therefore disabled!");
-			continue loginLoop;
-		}
+
 		// Get the specific operators password and validate password
 		try {
 			oprPW = weightAdaptor.getOperatorPassword();
@@ -133,6 +139,11 @@ public class WeightProcessController implements IWeightProcessController {
 			continue loginLoop;
 		}
 		loginResult(true);
+		// Check operator has a role
+		if (operatorDTO.getRole().equals(Role.None.toString())) {
+			errorMessageInSecondaryDisplay("This operator is disabled!");
+			continue loginLoop;
+		}
 		break loginLoop;
 		}
 

@@ -75,7 +75,7 @@ public class WeightProcessController implements IWeightProcessController {
 				}
 				continue initLoop;
 			}
-			
+
 			break initLoop;
 		}
 
@@ -99,10 +99,6 @@ public class WeightProcessController implements IWeightProcessController {
 					break oprIdLoop;
 				} catch (AdaptorException e) {
 					errorMessageInSecondaryDisplay("Problem trying to send or recieve message from weight!");
-					e.printStackTrace();
-					continue oprIdLoop;
-				} catch (NumberFormatException e) {
-					errorMessageInSecondaryDisplay("The ID could not be parsed!");
 					e.printStackTrace();
 					continue oprIdLoop;
 				} catch (NotFoundException e) {
@@ -177,13 +173,8 @@ public class WeightProcessController implements IWeightProcessController {
 			// Saves list of ProductBatchCompOverviewDTO's (already weighed produces in product batch) specified by the product batch number
 			try {
 				productBatchCompOverviewList = productBatchDAO.getProductBatchDetailsByPbId(Integer.parseInt(productBatchNumber));
-			} catch (NumberFormatException e) {
-				errorMessageInSecondaryDisplay("Product batch number could not be parsed!");
-				e.printStackTrace();
-				continue pbLoop;
 			} catch (DALException e) {
 				// Fine - status 0. No weighed produces in product batch
-				productBatchCompOverviewList = null;
 			}
 			break;
 		}
@@ -265,20 +256,19 @@ public class WeightProcessController implements IWeightProcessController {
 					i--;
 					continue weighingLoop;
 				}				
-				weightAdaptor.grossCheck(true);
 			} catch (AdaptorException e) {
-				errorMessageInSecondaryDisplay("Something went wrong when trying to weigh the produce!");
+				errorMessageInSecondaryDisplay("A connectivity problem occured!");
 				e.printStackTrace();
 				i--;
 				continue weighingLoop;
 			}
-		}
-
-		try {
-			weightAdaptor.clearBothDisplays();
-		} catch (AdaptorException e) {
-			System.out.println("Error trying to clear primary and secondary display!");
-			e.printStackTrace();
+			try {
+				weightAdaptor.grossCheck(true);
+				weightAdaptor.clearBothDisplays();
+			} catch (AdaptorException e) {
+				errorMessageInSecondaryDisplay("A connectivity problem occured!");
+				e.printStackTrace();
+			}
 		}
 	}
 	}
@@ -294,6 +284,7 @@ public class WeightProcessController implements IWeightProcessController {
 
 	private void errorMessageInSecondaryDisplay(String msg) {
 		try {
+			weightAdaptor.clearInputBuffer();
 			weightAdaptor.writeInSecondaryDisplay(msg);
 			weightAdaptor.clearSecondaryDisplay();
 		} catch (AdaptorException e1) {

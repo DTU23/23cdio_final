@@ -45,17 +45,26 @@ public class WeightAdaptor implements IWeightAdaptor {
 	}
 
 	@Override
-	public void establishConnection(String ip, int port) throws AdaptorException {
+	public void clearInputBuffer() throws AdaptorException {
 		try {
-			clientSocket = new Socket(ip, port);
-			input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream())); 
-			output = new DataOutputStream(clientSocket.getOutputStream());
 			TimeUnit.SECONDS.sleep(1);
 			// If there's any data buffered in the socket it is cleared
 			while(input.ready()) {
 				input.readLine();
 			}
 		} catch (IOException | InterruptedException e) {
+			throw new AdaptorException(e);
+		}		
+	}
+	
+	@Override
+	public void establishConnection(String ip, int port) throws AdaptorException {
+		try {
+			clientSocket = new Socket(ip, port);
+			input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream())); 
+			output = new DataOutputStream(clientSocket.getOutputStream());
+			clearInputBuffer();
+		} catch (IOException e) {
 			throw new AdaptorException(e);
 		}
 	}

@@ -45,11 +45,25 @@ public class WeightAdaptor implements IWeightAdaptor {
 	}
 
 	@Override
+	public void clearInputBuffer() throws AdaptorException {
+		try {
+			TimeUnit.SECONDS.sleep(1);
+			// If there's any data buffered in the socket it is cleared
+			while(input.ready()) {
+				input.readLine();
+			}
+		} catch (IOException | InterruptedException e) {
+			throw new AdaptorException(e);
+		}		
+	}
+	
+	@Override
 	public void establishConnection(String ip, int port) throws AdaptorException {
 		try {
 			clientSocket = new Socket(ip, port);
 			input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream())); 
 			output = new DataOutputStream(clientSocket.getOutputStream());
+			clearInputBuffer();
 		} catch (IOException e) {
 			throw new AdaptorException(e);
 		}
@@ -173,7 +187,8 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			waitResponse();
 			sendCommand("S");
-			return waitResponse().split(" ")[7];
+			String[] arr = waitResponse().split("\\.");
+			return arr[0].split(" ")[arr[0].split(" ").length-1] + "." +  arr[1].split(" ")[0];
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}
@@ -186,7 +201,8 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			waitResponse();
 			sendCommand("S");
-			return waitResponse().split(" ")[7];
+			String[] arr = waitResponse().split("\\.");
+			return arr[0].split(" ")[arr[0].split(" ").length-1] + "." +  arr[1].split(" ")[0];
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}
@@ -220,7 +236,8 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			waitResponse();
 			sendCommand("S");
-			return waitResponse().split(" ")[6];
+			String[] arr = waitResponse().split("\\.");
+			return arr[0].split(" ")[arr[0].split(" ").length-1] + "." +  arr[1].split(" ")[0];
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}

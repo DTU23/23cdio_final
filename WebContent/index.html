@@ -63,27 +63,15 @@
         </div>
     </script>
 
-    <script type="text/html" id="productBatchEditTemplate">
-        <div class="modal-content">
-            <h4>Edit Produce Batch</h4>
-            <!--{{#productbatch}}-->
-            <form id="productBatchEdit" data-source-id="{{pbId}}">
-                <div class="row">
-
-                </div>
-            </form>
-            <!--{{/productbatch}}-->
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="modal-save-producebatch waves-effect waves-green btn-flat">Save</a>
-        </div>
-    </script>
-
     <script type="text/html" id="productBatchInsertTemplate">
         <div class="modal-content">
             <h4>Add Product Batch</h4>
             <form id="productBatchAdd">
                 <div class="row" data-source-id="">
+                    <div class="input-field col s12">
+                        <input id="productbatch_id" type="number" class="validate">
+                        <label for="productbatch_id" class="">Product Batch ID</label>
+                    </div>
                     <div class="input-field col s12">
                         <input id="recipe_id" type="number" class="validate" value="">
                         <label for="recipe_id" class="">Recipe ID</label>
@@ -206,6 +194,10 @@
             <form id="produceAdd">
                 <div class="row">
                     <div class="input-field col s12">
+                        <input id="produce_id" type="number" class="validate">
+                        <label for="produce_id" class="">Produce ID</label>
+                    </div>
+                    <div class="input-field col s12">
                         <input id="produce_name" type="text" class="validate" value="">
                         <label for="produce_name" class="">Produce Name</label>
                     </div>
@@ -284,6 +276,10 @@
             <h4>Add Produce Batch</h4>
             <form id="produceBatchAdd">
                 <div class="row" data-source-id="">
+                    <div class="input-field col s12">
+                        <input id="producebatch_id" type="number" class="validate">
+                        <label for="producebatch_id" class="">Produce Batch ID</label>
+                    </div>
                     <div class="input-field col s12">
                         <input id="produce_id" type="number" class="validate">
                         <label for="produce_id" class="">Produce ID</label>
@@ -365,6 +361,10 @@
             <h4>Add Recipe</h4>
             <form id="recipeAdd">
                 <div class="row">
+                    <div class="input-field col s12">
+                        <input id="recipe_id" type="text" class="validate" value="">
+                        <label for="recipe_id" class="">Recipe ID</label>
+                    </div>
                     <div class="input-field col s12">
                         <input id="recipe_name" type="text" class="validate" value="">
                         <label for="recipe_name" class="">Recipe Name</label>
@@ -624,33 +624,6 @@
         <div class="modal-footer">
             <a href="#" class="modal-save-user-profile waves-effect waves-green btn-flat">Save</a>
         </div>
-    </script>
-
-    <script type="text/html" id="userTableRow">
-        <!--{{#users}}-->
-        <tr id="user-row-{{oprId}}">
-            <td class="id">{{oprId}}</td>
-            <td class="name">{{oprName}}</td>
-            <td class="ini">{{ini}}</td>
-            <td class="cpr">{{cpr}}</td>
-            <td>
-                <p>
-                    <!--{{#admin}}-->
-                    <input type="checkbox" class="admin" checked="checked" disabled/>
-                    <!--{{/admin}}-->
-                    <!--{{^admin}}-->
-                    <input type="checkbox" class="admin" disabled/>
-                    <!--{{/admin}}-->
-                    <label></label>
-                </p>
-            </td>
-            <td class="role">{{role}}</td>
-            <td>
-                <a class="btn-floating btn waves-effect waves-light red darken-2 delete-user"><i class="material-icons">delete</i></a>
-                <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1"><i class="material-icons">edit</i></a>
-            </td>
-        </tr>
-        <!--{{/users}}-->
     </script>
 
     <script type="text/html" id="userInsertTemplate">

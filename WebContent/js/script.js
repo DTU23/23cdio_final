@@ -64,7 +64,10 @@ $(document).ready(function () {
         doAjax(
             "POST",
             "./api/v1/productbatch/",
-            $('#productBatchAdd').find('#recipe_id').val(),
+            {
+                pbId: $('#productBatchAdd').find('#productbatch_id').val(),
+                recipeId: $('#productBatchAdd').find('#recipe_id').val()
+            },
             true,
             $('#userEditTemplate').html(),
             $('#EditModal'),
@@ -309,7 +312,7 @@ $(document).ready(function () {
             "POST",
             "./api/v1/produce/",
             {
-                produceId: "",
+                produceId: $('#produceAdd').find('input#produce_id').val(),
                 produceName: $('#produceAdd').find('input#produce_name').val(),
                 supplier: $('#produceAdd').find('input#produce_supplier').val()
             },
@@ -392,8 +395,14 @@ $(document).ready(function () {
         e.preventDefault();
         doAjax(
             "POST",
-            "./api/v1/producebatch/"+$('#produceBatchAdd').find('input#produce_id').val()+'/'+$('#produceBatchAdd').find('input#amount').val(),
-            $('#EditModal').find('#recipe_name').val(),
+            "./api/v1/producebatch/",
+            {
+                rbId: $('#EditModal').find('#producebatch_id').val(),
+                produceId: $('#EditModal').find('#produce_id').val(),
+                amount: $('#EditModal').find('#amount').val(),
+                produceName: "",
+                supplier: ""
+            },
             true,
             null,
             null,
@@ -423,7 +432,10 @@ $(document).ready(function () {
         doAjax(
             "POST",
             "./api/v1/recipe/",
-            $('#EditModal').find('#recipe_name').val(),
+            {
+                recipeId: $('#EditModal').find('#recipe_id').val(),
+                recipeName: $('#EditModal').find('#recipe_name').val()
+            },
             true,
             null,
             null,

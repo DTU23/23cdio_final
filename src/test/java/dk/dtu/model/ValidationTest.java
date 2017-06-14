@@ -75,22 +75,22 @@ public class ValidationTest {
 
 	@Test
 	public void testIsValidCpr() throws InvalidCprException {
-		Validation.isValidCpr("1208871443");
+		Validation.isValidCpr("0109162407");
 	}
 
 	@Test(expected = InvalidCprException.class)
 	public void testIsInvalidCprDay() throws InvalidCprException {
-		Validation.isValidCpr("3208871443");
+		Validation.isValidCpr("3209162407");
 	}
 
 	@Test(expected = InvalidCprException.class)
 	public void testIsInvalidCprMonth() throws InvalidCprException {
-		Validation.isValidCpr("1213871443");
+		Validation.isValidCpr("0113162407");
 	}
 
 	@Test(expected = InvalidCprException.class)
 	public void testIsInvalidCprFutureDate() throws InvalidCprException {
-		Validation.isValidCpr("2902401443");
+		Validation.isValidCpr("2902402407");
 	}
 
 	@Test(expected = InvalidCprException.class)

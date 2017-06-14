@@ -43,6 +43,11 @@ public class WeightAdaptor implements IWeightAdaptor {
 		}
 		return response;
 	}
+	
+	private String getNumberFromResponse(String response) {
+		String[] arr = response.split("\\.");
+		return arr[0].split(" ")[arr[0].split(" ").length-1] + "." +  arr[1].split(" ")[0];
+	}
 
 	@Override
 	public void clearInputBuffer() throws AdaptorException {
@@ -187,8 +192,7 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			waitResponse();
 			sendCommand("S");
-			String[] arr = waitResponse().split("\\.");
-			return arr[0].split(" ")[arr[0].split(" ").length-1] + "." +  arr[1].split(" ")[0];
+			return getNumberFromResponse(waitResponse());
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}
@@ -201,8 +205,7 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			waitResponse();
 			sendCommand("S");
-			String[] arr = waitResponse().split("\\.");
-			return arr[0].split(" ")[arr[0].split(" ").length-1] + "." +  arr[1].split(" ")[0];
+			return getNumberFromResponse(waitResponse());
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}
@@ -236,8 +239,7 @@ public class WeightAdaptor implements IWeightAdaptor {
 			waitResponse();
 			waitResponse();
 			sendCommand("S");
-			String[] arr = waitResponse().split("\\.");
-			return arr[0].split(" ")[arr[0].split(" ").length-1] + "." +  arr[1].split(" ")[0];
+			return getNumberFromResponse(waitResponse());
 		} catch (Exception e) {
 			throw new AdaptorException(e);
 		}

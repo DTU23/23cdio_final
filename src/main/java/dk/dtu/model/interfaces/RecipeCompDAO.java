@@ -1,12 +1,15 @@
-package main.java.dk.dtu.model.interfaces;
+package dk.dtu.model.interfaces;
 
 import java.util.List;
 
-import main.java.dk.dtu.model.dto.RecipeCompDTO;
+import dk.dtu.model.dto.RecipeCompDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public interface RecipeCompDAO {
-	RecipeCompDTO getRecipeComp(int recipeId, int produceId) throws DALException;
-	List<RecipeCompDTO> getRecipeCompList(int recipeId) throws DALException;
-	List<RecipeCompDTO> getRecipeCompList() throws DALException;
 	void createRecipeComp(RecipeCompDTO recipecomponent) throws DALException;
+	RecipeCompDTO readRecipeComp(int recipeId, int produceId) throws DALException;
+	void updateRecipeComp(RecipeCompDTO recipeComponent) throws DALException;
+	void deleteRecipeComp(int recipeId, int produceId) throws DALException;
+	List<RecipeCompDTO> getRecipeCompList() throws DALException;
+	List<RecipeCompDTO> getRecipeCompByRecipeId(int recipeId) throws DALException;
 }

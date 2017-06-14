@@ -1,14 +1,16 @@
-package main.java.dk.dtu.model.interfaces;
+package dk.dtu.model.interfaces;
 
 import java.util.List;
 
-import main.java.dk.dtu.model.dto.ProduceDTO;
-import main.java.dk.dtu.model.dto.ProduceOverviewDTO;
+import dk.dtu.model.dto.ProduceDTO;
+import dk.dtu.model.dto.ProduceOverviewDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public interface ProduceDAO {
-	ProduceDTO getProduce(int raavareId) throws DALException;
+	void createProduce(ProduceDTO produceDTO) throws DALException;
+	ProduceDTO readProduce(int produce_id) throws DALException;
+	void updateProduce(ProduceDTO produceDTO) throws DALException;
+	void deleteProduce(int produce_id) throws DALException;
 	List<ProduceDTO> getProduceList() throws DALException;
-	void createProduce(ProduceDTO raavare) throws DALException;
-	void updateProduce(ProduceDTO raavare) throws DALException;
 	List<ProduceOverviewDTO> getProduceOverview() throws DALException;
 }

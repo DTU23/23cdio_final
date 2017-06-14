@@ -1,4 +1,4 @@
-package test.java.dk.dtu.model.data.dao;
+package dk.dtu.model.data.dao;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
@@ -15,30 +15,29 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.dk.dtu.model.connector.Connector;
-import main.java.dk.dtu.model.dao.MySQLProductBatchCompDAO;
-import main.java.dk.dtu.model.dao.MySQLProductBatchDAO;
-import main.java.dk.dtu.model.dto.ProductBatchCompDTO;
-import main.java.dk.dtu.model.dto.ProductBatchCompOverviewDTO;
-import main.java.dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
-import main.java.dk.dtu.model.dto.ProductBatchDTO;
-import main.java.dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.connector.DataSource;
+import dk.dtu.model.dao.MySQLProductBatchCompDAO;
+import dk.dtu.model.dao.MySQLProductBatchDAO;
+import dk.dtu.model.dto.ProductBatchCompDTO;
+import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
+import dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
+import dk.dtu.model.dto.ProductBatchDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public class MySQLProductBatchCompDAOTest {
     private MySQLProductBatchCompDAO pbcdao;
     private MySQLProductBatchDAO pbdao;
     @Before
     public void setUp() throws Exception {
-        new Connector();
-        Connector.resetData();
+    	DataSource.getInstance().resetData();
         pbcdao = new MySQLProductBatchCompDAO();
         pbdao = new MySQLProductBatchDAO();
     }
 
     @After
     public void tearDown() throws Exception {
+    	DataSource.getInstance().resetData();
         pbcdao = null;
-        Connector.resetData();
     }
 
     /**
@@ -49,7 +48,7 @@ public class MySQLProductBatchCompDAOTest {
     public void getProductBatchComp() throws Exception {
         ProductBatchCompDTO pbc1;
         ProductBatchCompDTO expected = new ProductBatchCompDTO(1, 1, 0.5, 10.05, 1);
-        pbc1 = pbcdao.getProductBatchComp(1, 1);
+        pbc1 = pbcdao.readProductBatchComp(1, 1);
         assertThat(pbc1.toString(), is(equalTo(expected.toString())));
     }
 
@@ -60,7 +59,7 @@ public class MySQLProductBatchCompDAOTest {
     @Test (expected = DALException.class)
     public void getProductBatchCompWithNonExistentID() throws Exception {
         ProductBatchCompDTO pbc1;
-        pbc1 = pbcdao.getProductBatchComp(-1, -1);
+        pbc1 = pbcdao.readProductBatchComp(-1, -1);
         assertThat(pbc1, nullValue());
     }
 
@@ -70,11 +69,11 @@ public class MySQLProductBatchCompDAOTest {
      */
     @Test
     public void testStatusTrigger() throws Exception{
-        ProductBatchDTO pb4 = pbdao.getProductBatch(4);
+        ProductBatchDTO pb4 = pbdao.readProductBatch(4);
         assertThat(pb4.getStatus(), is(equalTo(1)));
         ProductBatchCompDTO pbc1 = new ProductBatchCompDTO(4, 2, 5, 10, 1);
         pbcdao.createProductBatchComp(pbc1);
-        pb4 = pbdao.getProductBatch(4);
+        pb4 = pbdao.readProductBatch(4);
         assertThat(pb4.getStatus(), is(equalTo(2)));
     }
     /**
@@ -88,7 +87,7 @@ public class MySQLProductBatchCompDAOTest {
         pbcdao.createProductBatchComp(new ProductBatchCompDTO(pb_id, 1, 10, 10, 1));
         int batchCountAfter = pbcdao.getProductBatchCompList().size();
         assertEquals(batchCountBefore, batchCountAfter-1);
-        assertThat(pbdao.getProductBatch(pb_id).getStatus(), is(not(0)));
+        assertThat(pbdao.readProductBatch(pb_id).getStatus(), is(not(0)));
     }
 
     /**
@@ -157,7 +156,7 @@ public class MySQLProductBatchCompDAOTest {
     @Test
     public void getSupplierDetailById() throws Exception {
         List<ProductBatchCompSupplierDetailsDTO> pbcsd;
-        pbcsd = pbcdao.getSupplierDetailById(1);
+        pbcsd = pbcdao.getProductBatchComponentSupplierDetailsByPbId(1);
         assertThat(pbcsd, notNullValue());
     }
 
@@ -168,7 +167,7 @@ public class MySQLProductBatchCompDAOTest {
     @Test(expected = DALException.class)
     public void getSupplierDetailByNonExistentId() throws Exception {
         List<ProductBatchCompSupplierDetailsDTO> pbcsd;
-        pbcsd = pbcdao.getSupplierDetailById(-1);
+        pbcsd = pbcdao.getProductBatchComponentSupplierDetailsByPbId(-1);
         assertTrue(pbcsd.size() == 0);
     }
 }

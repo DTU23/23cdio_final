@@ -1,11 +1,4 @@
-package main.java.dk.dtu.model.dto;
-
-/**
- * Operatoer Data Access Objekt
- * 
- * @author mn/tb
- * @version 1.2
- */
+package dk.dtu.model.dto;
 
 public class OperatorNoPWDTO
 {
@@ -42,21 +35,61 @@ public class OperatorNoPWDTO
     	this.oprName = opr.getOprName();
     	this.ini = opr.getIni();
     	this.cpr = opr.getCpr();
-    	this.admin = opr.getAdmin();
+    	this.admin = opr.isAdmin();
     	this.role = opr.getRole();
     }
 
-	public int getOprId() { return oprId; }
-	public void setOprId(int oprId) { this.oprId = oprId; }
-	public String getOprName() { return oprName; }
-	public void setOprNavn(String oprNavn) { this.oprName = oprNavn; }
-	public String getIni() { return ini; }
-	public void setIni(String ini) { this.ini = ini; }
-	public String getCpr() { return cpr; }
-	public void setCpr(String cpr) { this.cpr = cpr; }
-	public boolean getAdmin() { return this.admin; }
-	public void setAdmin(boolean admin) { this.admin = admin; }
-    public String getRole() {return this.role; }
-    public void setRole(String role) { this.role = role; }
-	public String toString() { return oprId + "\t" + oprName + "\t" + ini + "\t" + cpr + "\t" + admin + "\t" + role; }
+	public int getOprId() {
+		return oprId;
+	}
+
+	public void setOprId(int oprId) {
+		this.oprId = oprId;
+	}
+
+	public String getOprName() {
+		return oprName;
+	}
+
+	public void setOprName(String oprName) {
+		this.oprName = oprName;
+	}
+
+	public String getIni() {
+		return ini;
+	}
+
+	public void setIni(String ini) {
+		this.ini = ini;
+	}
+
+	public String getCpr() {
+		return cpr;
+	}
+
+	public void setCpr(String cpr) {
+		this.cpr = cpr;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	@Override
+	public String toString() {
+		return "OperatorNoPWDTO [oprId=" + oprId + ", oprName=" + oprName + ", ini=" + ini + ", cpr=" + cpr + ", admin="
+				+ admin + ", role=" + role + "]";
+	}
 }

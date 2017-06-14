@@ -1,13 +1,14 @@
-package main.java.dk.dtu.model.dto;
+package dk.dtu.model.dto;
 
 public class ProductBatchCompDTO
 {
-	int pbId; 	  // produktbatchets id
-	int rbId;        // i omraadet 1-99999999
+	int pbId;
+	int rbId;
 	double tara;
 	double netto;
-	int oprId;					// operatoer-nummer
+	int oprId;
 
+	public ProductBatchCompDTO() {}
 	
 	public ProductBatchCompDTO(int pbId, int rbId, double tara, double netto, int oprId)
 	{
@@ -17,18 +18,50 @@ public class ProductBatchCompDTO
 		this.netto = netto;
 		this.oprId = oprId;
 	}
-	
-	public int getPbId() { return pbId; }
-	public void setPbId(int pbId) { this.pbId = pbId; }
-	public int getRbId() { return rbId; }
-	public void setRbId(int rbId) { this.rbId = rbId; }
-	public double getTara() { return tara; }
-	public void setTara(double tara) { this.tara = tara; }
-	public double getNetto() { return netto; }
-	public void setNetto(double netto) { this.netto = netto; }
-	public int getOprId() { return oprId; }
-	public void setOprId(int oprId) { this.oprId = oprId; }
-	public String toString() { 
-		return pbId + "\t" + rbId +"\t" + tara +"\t" + netto + "\t" + oprId ; 
+
+	public int getPbId() {
+		return pbId;
+	}
+
+	public void setPbId(int pbId) {
+		this.pbId = pbId;
+	}
+
+	public int getRbId() {
+		return rbId;
+	}
+
+	public void setRbId(int rbId) {
+		this.rbId = rbId;
+	}
+
+	public double getTara() {
+		return tara;
+	}
+
+	public void setTara(double tara) {
+		this.tara = tara;
+	}
+
+	public double getNetto() {
+		return netto;
+	}
+
+	public void setNetto(double netto) {
+		this.netto = netto;
+	}
+
+	public int getOprId() {
+		return oprId;
+	}
+
+	public void setOprId(int oprId) {
+		this.oprId = oprId;
+	}
+
+	@Override
+	public String toString() {
+		return "ProductBatchCompDTO [pbId=" + pbId + ", rbId=" + rbId + ", tara=" + tara + ", netto=" + netto
+				+ ", oprId=" + oprId + "]";
 	}
 }

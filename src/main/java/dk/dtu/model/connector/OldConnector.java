@@ -1,4 +1,4 @@
-package main.java.dk.dtu.model.connector;
+package dk.dtu.model.connector;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,10 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import main.java.dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.exceptions.DALException;
 
-public class Connector
-{
+public class OldConnector {
 	/**
 	 * To connect to a MySQL-server
 	 * 
@@ -38,12 +37,12 @@ public class Connector
 	private static Connection conn;
 	private static Statement stm;
 	
-	public Connector(String server, int port, String database, String username, String password) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+	public OldConnector(String server, int port, String database, String username, String password) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		conn = connectToDatabase("jdbc:mysql://"+server+":"+port+"/"+database+"?verifyServerCertificate=false&useSSL=true", username, password);
 		stm	= conn.createStatement();
 	}
 	
-	public Connector() throws InstantiationException, IllegalAccessException,
+	public OldConnector() throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, SQLException
 	{
 		this(Constant.server, Constant.port, Constant.database,

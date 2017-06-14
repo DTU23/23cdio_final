@@ -1,4 +1,4 @@
-package test.java.dk.dtu.model.data.dao;
+package dk.dtu.model.data.dao;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -13,10 +13,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.dk.dtu.model.connector.Connector;
-import main.java.dk.dtu.model.dao.MySQLRecipeCompDAO;
-import main.java.dk.dtu.model.dto.RecipeCompDTO;
-import main.java.dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.connector.DataSource;
+import dk.dtu.model.dao.MySQLRecipeCompDAO;
+import dk.dtu.model.dto.RecipeCompDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public class MySQLRecipeCompDaoTest {
 
@@ -24,14 +24,13 @@ public class MySQLRecipeCompDaoTest {
 
 	@Before
 	public void setUp() throws Exception {
-		new Connector();
-		Connector.resetData();
+		DataSource.getInstance().resetData();
 		recipeComp = new MySQLRecipeCompDAO();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		Connector.resetData();
+		DataSource.getInstance().resetData();
 		recipeComp = null;
 	}
 
@@ -44,7 +43,7 @@ public class MySQLRecipeCompDaoTest {
 		RecipeCompDTO actual = null;
 		RecipeCompDTO expected = new RecipeCompDTO(1, 1, 10, 0.1);
 		try {
-			actual = recipeComp.getRecipeComp(1, 1);
+			actual = recipeComp.readRecipeComp(1, 1);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(expected.toString(), is(equalTo(actual.toString())));
 	}
@@ -57,9 +56,9 @@ public class MySQLRecipeCompDaoTest {
 	public void getRecipeCompByIDThatDoesntExist() {
 		String errorMsg = null;
 		try {
-			recipeComp.getRecipeComp(4,1);
+			recipeComp.readRecipeComp(4,1);
 		} catch (DALException e) { errorMsg = e.getMessage(); }
-		assertThat(errorMsg, is(equalTo("Recipecomponent with recipeid 4 and produceid 1 does not exist")));
+		assertThat(errorMsg, is(equalTo("Recipe component with recipe id 4 and produce id 1 does not exist")));
 	}
 
 	/**
@@ -70,7 +69,7 @@ public class MySQLRecipeCompDaoTest {
 	public void positiveGetListRecipeCompWithID() {
 		List<RecipeCompDTO> actual = null;
 		try {
-			actual = recipeComp.getRecipeCompList(1);
+			actual = recipeComp.getRecipeCompByRecipeId(1);
 			
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(actual.get(1).getRecipeId(), not(nullValue()));
@@ -105,7 +104,7 @@ public class MySQLRecipeCompDaoTest {
 		RecipeCompDTO actual = null;
 		try {
 			recipeComp.createRecipeComp(expected);
-			actual = recipeComp.getRecipeComp(3, 2);
+			actual = recipeComp.readRecipeComp(3, 2);
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(expected.toString(), is(equalTo(actual.toString())));
 	}
@@ -116,7 +115,7 @@ public class MySQLRecipeCompDaoTest {
 	
 	@Test (expected = DALException.class)
 	public void getRecipeCompWithInvalidID() throws Exception{
-		recipeComp.getRecipeComp(0, 1);
+		recipeComp.readRecipeComp(0, 1);
 	}
 	
 }

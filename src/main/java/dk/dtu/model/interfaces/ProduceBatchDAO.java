@@ -1,12 +1,17 @@
-package main.java.dk.dtu.model.interfaces;
+package dk.dtu.model.interfaces;
 
 import java.util.List;
 
-import main.java.dk.dtu.model.dto.ProduceBatchDTO;
+import dk.dtu.model.dto.ProduceBatchDTO;
+import dk.dtu.model.dto.StockDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public interface ProduceBatchDAO {
-	ProduceBatchDTO getProduceBatch(int rbId) throws DALException;
+	void createProduceBatch(ProduceBatchDTO produceBatchDTO) throws DALException;
+	ProduceBatchDTO readProduceBatch(int rbId) throws DALException;
+	void updateProduceBatch(ProduceBatchDTO produceBatchDTO) throws DALException;
+	void deleteProduceBatch(int rbId) throws DALException;
 	List<ProduceBatchDTO> getProduceBatchList() throws DALException;
-	void createProduceBatch(int produce_id, double amount) throws DALException;
-	void updateProduceBatch(int produce_id, double amount) throws DALException;
+	ProduceBatchDTO getProduceBatchWithProduceName(int rbId) throws DALException;
+	List<StockDTO> getProduceInStock() throws DALException;
 }

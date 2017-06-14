@@ -1,4 +1,4 @@
-package test.java.dk.dtu.model.data.dao;
+package dk.dtu.model.data.dao;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -11,10 +11,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.dk.dtu.model.connector.Connector;
-import main.java.dk.dtu.model.dao.MySQLRecipeDAO;
-import main.java.dk.dtu.model.dto.RecipeDTO;
-import main.java.dk.dtu.model.interfaces.DALException;
+import dk.dtu.model.connector.DataSource;
+import dk.dtu.model.dao.MySQLRecipeDAO;
+import dk.dtu.model.dto.RecipeDTO;
+import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.dal.ConnectivityException;
+import dk.dtu.model.exceptions.dal.IntegrityConstraintViolationException;
 
 public class MySQLRecipeDAOTest {
 
@@ -22,14 +24,13 @@ public class MySQLRecipeDAOTest {
 
 	@Before
 	public void setUp() throws Exception {
-		new Connector();
-		Connector.resetData();
+		DataSource.getInstance().resetData();
 		recipe = new MySQLRecipeDAO();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		Connector.resetData();
+		DataSource.getInstance().resetData();
 		recipe = null;
 	}
 
@@ -42,7 +43,7 @@ public class MySQLRecipeDAOTest {
 		RecipeDTO actual = null;
 		RecipeDTO expected = new RecipeDTO(3, "capricciosa");
 		try {
-			actual = recipe.getRecipe(3);	
+			actual = recipe.readRecipe(3);	
 		} catch (DALException e) {	System.out.println(e.getMessage());  }
 		assertThat(expected.toString(), is(equalTo(actual.toString())));
 	}
@@ -55,7 +56,7 @@ public class MySQLRecipeDAOTest {
 	public void getRecipeByIDThatDoesntExist() {
 		String errorMsg = null;
 		try {
-			recipe.getRecipe(5);
+			recipe.readRecipe(5);
 		} catch (DALException e) {	errorMsg = e.getMessage();	}
 		assertThat(errorMsg, is(equalTo("Recipe with id 5 does not exist")));
 
@@ -85,37 +86,33 @@ public class MySQLRecipeDAOTest {
 		RecipeDTO actual = null;
 		try {
 			recipe.createRecipe(expected);
-			actual = recipe.getRecipe(4);
+			actual = recipe.readRecipe(4);
 		} catch (DALException e) {	System.out.println(e.getMessage());}
 		assertThat(expected.toString(), is(equalTo(actual.toString())));
 	}
-	
+
 	/**
 	 * negative test for create recipe. 
-	 * Auto-generates an ID so cant create on existing.  
+	 * Auto-generates an ID so cant create on existing. 
+	 * @throws IntegrityConstraintViolationException 
+	 * @throws ConnectivityException 
 	 */
-	@Test
-	public void createRecipeOnExistingID() {
-		RecipeDTO actual = null;
-		RecipeDTO expected = new RecipeDTO(3, "capricciosa");
-		try {
-			recipe.createRecipe(new RecipeDTO(3, "parmaskinke"));
-			actual = recipe.getRecipe(3);	
-		} catch (DALException e) {	System.out.println(e.getMessage());  }
-		assertThat(expected.toString(), is(equalTo(actual.toString())));
+	@Test(expected = IntegrityConstraintViolationException.class)
+	public void createRecipeOnExistingID() throws ConnectivityException, IntegrityConstraintViolationException {
+		recipe.createRecipe(new RecipeDTO(3, "parmaskinke"));
 	}
-	
+
 	/**
 	 * get recipe with invalid input
 	 */
-	
+
 	@Test
 	public void getRecipeWithInvalidID() {
 		String errorMsg = null;
 		try {
-			recipe.getRecipe(0);
+			recipe.readRecipe(0);
 		} catch (DALException e) { errorMsg = e.getMessage(); }
 		assertThat(errorMsg, is(equalTo("Recipe with id 0 does not exist")));
 	}
-		
+
 }

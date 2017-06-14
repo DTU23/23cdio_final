@@ -1,15 +1,18 @@
-package main.java.dk.dtu.model.interfaces;
+package dk.dtu.model.interfaces;
 
 import java.util.List;
 
-import main.java.dk.dtu.model.dto.ProductBatchCompDTO;
-import main.java.dk.dtu.model.dto.ProductBatchCompOverviewDTO;
-import main.java.dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
+import dk.dtu.model.dto.ProductBatchCompDTO;
+import dk.dtu.model.dto.ProductBatchCompOverviewDTO;
+import dk.dtu.model.dto.ProductBatchCompSupplierDetailsDTO;
+import dk.dtu.model.exceptions.DALException;
 
 public interface ProductBatchCompDAO {
-	ProductBatchCompDTO getProductBatchComp(int pbId, int rbId) throws DALException;
-	List<ProductBatchCompDTO> getProductBatchCompList() throws DALException;
 	void createProductBatchComp(ProductBatchCompDTO productbatchcomponent) throws DALException;
+	ProductBatchCompDTO readProductBatchComp(int pbId, int rbId) throws DALException;
+	void updateProductBatchComp(ProductBatchCompDTO productBatchComponent) throws DALException;
+	void deleteProductBatchComp(int pbId, int rbId) throws DALException;
+	List<ProductBatchCompDTO> getProductBatchCompList() throws DALException;
 	List<ProductBatchCompOverviewDTO> getProductBatchCompOverview() throws DALException;
-	List<ProductBatchCompSupplierDetailsDTO> getSupplierDetailById(int pbId) throws DALException;
+	List<ProductBatchCompSupplierDetailsDTO> getProductBatchComponentSupplierDetailsByPbId(int pbId) throws DALException;
 }

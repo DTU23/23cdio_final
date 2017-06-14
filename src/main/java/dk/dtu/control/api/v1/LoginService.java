@@ -1,20 +1,28 @@
-package main.java.dk.dtu.control.api.v1;
+package dk.dtu.control.api.v1;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import main.java.dk.dtu.model.dto.OperatorDTO;
+import dk.dtu.control.ILoginController;
+import dk.dtu.control.LoginController;
+import dk.dtu.model.Validation;
+import dk.dtu.model.dto.OperatorDTO;
+import dk.dtu.model.exceptions.AuthException;
+import dk.dtu.model.exceptions.DALException;
+import dk.dtu.model.exceptions.ValidationException;
 
 @Path("/v1/login")
-@Consumes(MediaType.APPLICATION_JSON)
 public class LoginService {
 
 	@POST
-	public boolean passwordCheck(OperatorDTO opr) {
-//		if(opr.getOprName().equals("admin") && opr.getPassword().equals("admin"))
-			return true;
-//		return false;
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response authorize(OperatorDTO opr) throws ValidationException, AuthException, DALException  {
+		ILoginController controller = new LoginController();
+		Validation.isPositiveInteger(opr.getOprId());
+		return controller.authenticateUser(opr.getOprId(), opr.getPassword());
 	}
+
 }

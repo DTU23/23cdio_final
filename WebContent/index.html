@@ -4,25 +4,518 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>CDIO 2.3</title>
-    <!-- Materialize CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+    <!-- Materialize CSS & Icons -->
+    <link rel="stylesheet" href="css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <!-- Mustache JS -->
     <script src="js/mustache.js" type="text/javascript"></script>
 
-    <!-- Mustache Templates -->
+    <!--
+        **
+        **
+        **  Mustache Templates
+        **
+        **
+    -->
+
+    <!--
+        ** ProduceBatch Administration Templates
+    -->
+    <script type="text/html" id="ProductBatchAdministrationTemplate">
+        <div class="container-fluid">
+            <table class="striped centered" id="productBatchHeader">
+                <thead>
+                <tr>
+                    <th class="col s3">Product Batch ID</th>
+                    <th class="col s3">Recipe ID</th>
+                    <th class="col s3">Recipe Name</th>
+                    <th class="col s3">Status</th>
+                </tr>
+                </thead>
+            </table>
+            <ul class="collapsible" data-collapsible="accordion">
+                <!--{{#.}}-->
+                <li>
+                    <div class="center product collapsible-header" data-id="{{ pbId }}">
+                        <span class="col s3 pbId">{{pbId}}</span>
+                        <span class="col s3 recipeId">{{recipeId}}</span>
+                        <span class="col s3 recipeName">{{recipeName}}</span>
+                        <span class="col s3 status">{{status}}</span>
+                    </div>
+                    <div class="collapsible-body">
+                        <table class="striped centered responsive-table">
+                            <thead>
+                            <tr>
+                                <th>Produce Batch ID</th>
+                                <th>Produce Name</th>
+                                <th>Supplier</th>
+                                <th>Nom. Netto</th>
+                                <th>Opr. ID</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </li>
+                <!--{{/.}}-->
+            </ul>
+            <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-productbatch"><i class="material-icons">add</i></a>
+        </div>
+    </script>
+
+    <script type="text/html" id="productBatchInsertTemplate">
+        <div class="modal-content">
+            <h4>Add Product Batch</h4>
+            <form id="productBatchAdd">
+                <div class="row" data-source-id="">
+                    <div class="input-field col s12">
+                        <input id="productbatch_id" type="number" class="validate">
+                        <label for="productbatch_id" class="">Product Batch ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="recipe_id" type="number" class="validate" value="">
+                        <label for="recipe_id" class="">Recipe ID</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-add-productbatch waves-effect waves-green btn-flat">Add</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="productBatchComponentsTemplate">
+        <table class="striped centered responsive-table">
+            <thead>
+            <tr>
+                <th>Produce Batch ID</th>
+                <th>Produce Name</th>
+                <th>Supplier</th>
+                <th>Nom. Netto</th>
+                <th>Opr. ID</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--{{#.}}-->
+            <tr id="productbatch-component-{{rbId}}">
+                <td class="producebatch_id">{{rbId}}</td>
+                <td class="produce_name">{{produceName}}</td>
+                <td class="supplier">{{supplier}}</td>
+                <td class="nom_netto">{{netto}}</td>
+                <td class="oprId">{{oprId}}</td>
+            </tr>
+            <!--{{/.}}-->
+            </tbody>
+        </table>
+    </script>
+
+    <script type="text/html" id="productBatchComponentInsertTemplate">
+        <div class="modal-content">
+            <h4>Add Produce</h4>
+            <form id="recipeComponentAdd" data-recipe-id="{{recipeId}}">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="produce_id" type="number" class="validate" value="">
+                        <label for="produce_id" class="active">Produce ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="nom_netto" type="number" class="validate" value="">
+                        <label for="nom_netto" class="active">Nom. Netto</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="tolerance" type="number" class="validate" value="">
+                        <label for="tolerance" class="active">Tolerance</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-add-recipecomp waves-effect waves-green btn-flat">Add</a>
+        </div>
+    </script>
+
+    <!--
+        ** Produce Administration Templates
+    -->
+    <script type="text/html" id="ProduceAdministrationTemplate">
+        <table class="striped centered responsive-table" id="produceList">
+            <thead>
+            <tr>
+                <th>Produce ID</th>
+                <th>Name</th>
+                <th>Supplier</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="produceListRows">
+            <!--{{#.}}-->
+            <tr id="produce-row-{{produceId}}">
+                <td class="id">{{produceId}}</td>
+                <td class="name">{{produceName}}</td>
+                <td class="supplier">{{supplier}}</td>
+                <td>
+                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-produce" data-id="{{produceId}}"><i class="material-icons">delete</i></a>
+                    <a class="btn-floating btn waves-effect waves-light blue darken-1 edit-produce" data-id="{{produceId}}"><i class="material-icons">edit</i></a>
+                </td>
+            </tr>
+            <!--{{/.}}-->
+            </tbody>
+        </table>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-produce"><i class="material-icons">add</i></a>
+    </script>
+
+    <script type="text/html" id="produceEditTemplate">
+        <div class="modal-content">
+            <h4>Edit Produce</h4>
+            <form id="produceEdit" data-source-id="{{produceId}}">
+                <!--{{#.}}-->
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="produce_name" type="text" class="validate" value="{{produceName}}">
+                        <label for="produce_name" class="active">Produce Name</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="produce_supplier" type="text" class="validate" value="{{supplier}}">
+                        <label for="produce_supplier" class="active">Supplier</label>
+                    </div>
+                </div>
+                <!--{{/.}}-->
+            </form>
+
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-save-produce waves-effect waves-green btn-flat">Save</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="produceInsertTemplate">
+        <div class="modal-content">
+            <h4>Add Produce</h4>
+            <form id="produceAdd">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="produce_id" type="number" class="validate">
+                        <label for="produce_id" class="">Produce ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="produce_name" type="text" class="validate" value="">
+                        <label for="produce_name" class="">Produce Name</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="produce_supplier" type="text" class="validate" value="">
+                        <label for="produce_supplier" class="">Supplier</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-add-produce waves-effect waves-green btn-flat">Add</a>
+        </div>
+    </script>
+
+    <!--
+        ** ProduceBatch Administration Templates
+    -->
+    <script type="text/html" id="ProduceBatchAdministrationTemplate">
+        <h6 class="center">Produce Batch Overview</h6>
+        <table class="striped centered responsive-table" id="produceBatchList">
+            <thead>
+            <tr>
+                <th>Produce Batch ID</th>
+                <th>Name</th>
+                <th>Supplier</th>
+                <th>Amount</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="produceBatchListRows">
+            <!--{{#.}}-->
+            <tr id="produce-batch-row-{{produceId}}/{{rbId}}">
+                <td class="id">{{rbId}}</td>
+                <td class="name">{{produceName}}</td>
+                <td class="supplier">{{supplier}}</td>
+                <td class="supplier">{{amount}}</td>
+                <td>
+                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-producebatch" data-id="{{rbId}}"><i class="material-icons">delete</i></a>
+                    <a class="btn-floating btn waves-effect waves-light edit-producebatch blue darken-1" data-id="{{rbId}}"><i class="material-icons">edit</i></a>
+                </td>
+            </tr>
+            <!--{{/.}}-->
+            </tbody>
+        </table>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-producebatch"><i class="material-icons">add</i></a>
+    </script>
+
+    <script type="text/html" id="produceBatchEditTemplate">
+        <div class="modal-content">
+            <h4>Edit Produce Batch</h4>
+            <!--{{#.}}-->
+            <form id="produceBatchEdit" data-source-id="{{rbId}}">
+                <div class="row">
+                    <input disabled id="produceName" type="text" class="hide" value="{{produceName}}">
+                    <input disabled id="supplier" type="text" class="hide" value="{{supplier}}">
+                    <div class="input-field col s12">
+                        <input disabled id="produceId" type="text" class="validate" value="{{produceId}}">
+                        <label for="produceId" class="active disabled">Produce Batch ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="amount" type="text" class="validate" value="{{amount}}">
+                        <label for="amount" class="active">Amount</label>
+                    </div>
+                </div>
+            </form>
+            <!--{{/.}}-->
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-save-producebatch waves-effect waves-green btn-flat">Save</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="produceBatchInsertTemplate">
+        <div class="modal-content">
+            <h4>Add Produce Batch</h4>
+            <form id="produceBatchAdd">
+                <div class="row" data-source-id="">
+                    <div class="input-field col s12">
+                        <input id="producebatch_id" type="number" class="validate">
+                        <label for="producebatch_id" class="">Produce Batch ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="produce_id" type="number" class="validate">
+                        <label for="produce_id" class="">Produce ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="amount" type="number" class="validate">
+                        <label for="amount" class="">Amount</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-add-producebatch waves-effect waves-green btn-flat">Add</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="ProduceBatchStockAdministrationTemplate">
+        <h6 class="center">Produce Stock Overview</h6>
+        <table class="striped centered responsive-table" id="produceBatchStockList">
+            <thead>
+            <tr>
+                <th>Produce Name</th>
+                <th>Current Stock</th>
+            </tr>
+            </thead>
+            <tbody id="produceBatchStockListRows">
+            <!--{{#.}}-->
+            <tr id="produce-batch-stock-row-{{rb_id}}">
+                <td class="name">{{produceName}}</td>
+                <td class="supplier">{{currentStock}}</td>
+            </tr>
+            <!--{{/.}}-->
+            </tbody>
+        </table>
+    </script>
+
+    <!--
+        ** Recipe Administration Templates
+    -->
+    <script type="text/html" id="RecipeAdministrationTemplate">
+        <div class="container-fluid">
+            <table class="striped centered" id="recipeHeader">
+                <thead>
+                <tr>
+                    <th class="col s2">ID</th>
+                    <th class="col s10">Recipe Name</th>
+                </tr>
+                </thead>
+            </table>
+        <ul class="collapsible" data-collapsible="accordion">
+            <!--{{#.}}-->
+            <li>
+                <div class="recipe collapsible-header" data-id="{{ recipeId }}">
+                    <span class="center col s2">{{ recipeId }}</span>
+                    <span class="center col s10">{{ recipeName }}</span>
+                </div>
+                <div class="collapsible-body">
+                    <table class="striped centered responsive-table">
+                        <thead>
+                        <tr>
+                            <th>Produce ID</th>
+                            <th>Nom. Netto</th>
+                            <th>Tolerance</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipecomp" data-recipe-id="{{recipeId}}"><i class="material-icons">add</i></a>
+                </div>
+            </li>
+            <!--{{/.}}-->
+        </ul>
+            <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipe"><i class="material-icons">add</i></a>
+        </div>
+    </script>
+
+    <script type="text/html" id="recipeInsertTemplate">
+        <div class="modal-content">
+            <h4>Add Recipe</h4>
+            <form id="recipeAdd">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="recipe_id" type="text" class="validate" value="">
+                        <label for="recipe_id" class="">Recipe ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="recipe_name" type="text" class="validate" value="">
+                        <label for="recipe_name" class="">Recipe Name</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-add-recipe waves-effect waves-green btn-flat">Add</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="RecipeComponentsTemplate">
+        <table class="striped centered responsive-table">
+            <thead>
+            <tr>
+                <th>Produce ID</th>
+                <th>Nom. Netto</th>
+                <th>Tolerance</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--{{#.}}-->
+            <tr id="recipe-component-{{recipeId}}">
+                <td class="produce_id">{{produceId}}</td>
+                <td class="nom_netto">{{nomNetto}}</td>
+                <td class="nom_netto">{{tolerance}}</td>
+                <td>
+                <a class="btn-floating btn waves-effect waves-light red darken-2 delete-recipecomp" data-produce-id="{{produceId}}" data-recipe-id="{{recipeId}}"><i class="material-icons">delete</i></a>
+                <a class="btn-floating btn waves-effect waves-light blue darken-1 edit-recipecomp" data-produce-id="{{produceId}}" data-recipe-id="{{recipeId}}"><i class="material-icons">edit</i></a>
+            </td>
+            </tr>
+            <!--{{/.}}-->
+            </tbody>
+        </table>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-recipecomp" data-recipe-id=""><i class="material-icons">add</i></a>
+    </script>
+
+    <script type="text/html" id="recipeComponentEditTemplate">
+        <div class="modal-content">
+            <h4>Edit Recipe Component</h4>
+            <form id="recipeComponentEdit" data-recipe-id="" data-produce-id="">
+                <!--{{#.}}-->
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="nom_netto" type="text" class="validate" value="{{nomNetto}}">
+                        <label for="nom_netto" class="active">Nom. Netto</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="tolerance" type="text" class="validate" value="{{tolerance}}">
+                        <label for="tolerance" class="active">Tolerance</label>
+                    </div>
+                </div>
+                <!--{{/.}}-->
+            </form>
+
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-save-recipecomp waves-effect waves-green btn-flat">Save</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="recipeComponentInsertTemplate">
+        <div class="modal-content">
+            <h4>Add Recipe Component</h4>
+            <form id="recipeComponentAdd" data-recipe-id="{{recipeId}}">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="produce_id" type="text" class="validate" value="">
+                        <label for="produce_id" class="">Produce ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="nom_netto" type="text" class="validate" value="">
+                        <label for="nom_netto" class="">Nom. Netto</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="tolerance" type="text" class="validate" value="">
+                        <label for="tolerance" class="">Tolerance</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-add-recipecomp waves-effect waves-green btn-flat">Add</a>
+        </div>
+    </script>
+
+    <!--
+        ** User Administration Templates
+    -->
+    <script type="text/html" id="UserAdministrationTemplate">
+        <table class="striped centered responsive-table" id="userlist">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Initials</th>
+                <th>CPR</th>
+                <th>Admin</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="userListRows">
+            <!--{{#.}}-->
+            <tr id="user-row-{{oprId}}">
+                <td class="id">{{oprId}}</td>
+                <td class="name">{{oprName}}</td>
+                <td class="ini">{{ini}}</td>
+                <td class="cpr">{{cpr}}</td>
+                <td>
+                    <p>
+                        <!--{{#admin}}-->
+                        <input type="checkbox" class="admin" checked="checked" disabled/>
+                        <!--{{/admin}}-->
+                        <!--{{^admin}}-->
+                        <input type="checkbox" class="admin" disabled/>
+                        <!--{{/admin}}-->
+                        <label></label>
+                    </p>
+                </td>
+                <td class="role">{{role}}</td>
+                <td>
+                    <a class="btn-floating btn waves-effect waves-light red darken-2 delete-user" data-id="{{oprId}}"><i class="material-icons">delete</i></a>
+                    <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1" data-id="{{oprId}}"><i class="material-icons">edit</i></a>
+                </td>
+            </tr>
+            <!--{{/.}}-->
+            </tbody>
+        </table>
+        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-user"><i class="material-icons">add</i></a>
+    </script>
+
     <script type="text/html" id="userEditTemplate">
         <div class="modal-content">
             <h4>Edit User</h4>
             <form id="userEdit">
+                <!--{{#.}}-->
                 <div class="row" data-source-id="{{oprId}}">
-                    <div class="input-field col s6">
-                        <input id="user_id" type="text" class="validate" value="{{oprId}}" data-length="10" disabled>
+                    <div class="input-field col m6 s12">
+                        <input id="user_id" type="text" class="active validate" value="{{oprId}}" data-length="10" disabled>
                         <label for="user_id" class="active" data-error="User ID must be provided!" data-length="10">User ID</label>
                     </div>
-                    <div class="input-field col s6">
+                    <div class="input-field col m6 s12">
                         <input id="user_ini" type="text" class="validate" value="{{ini}}">
                         <label for="user_ini" class="active">User Initials</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="user_password" type="password" class="validate" value="">
+                        <label for="user_password">New  Password</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="user_name" type="text" class="validate" value="{{oprName}}">
@@ -52,50 +545,70 @@
                         <label>Role</label>
                     </div>
                 </div>
+                <!--{{/.}}-->
             </form>
-            <div class="preloader-wrapper large center-align active hide">
-                <div class="spinner-layer spinner-blue">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-
-                <div class="spinner-layer spinner-red">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-
-                <div class="spinner-layer spinner-yellow">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-                <div class="spinner-layer spinner-green">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-            </div>
         </div>
         <div class="modal-footer">
-            <a href="#" class="modal-save waves-effect waves-green btn-flat">Save</a>
+            <a href="#" class="modal-save-user waves-effect waves-green btn-flat">Save</a>
+        </div>
+    </script>
+
+    <script type="text/html" id="userEditProfileTemplate">
+        <div class="modal-content">
+            <h4>Edit User</h4>
+            <form id="userEditProfile">
+                <!--{{#.}}-->
+                <div class="row" data-source-id="{{oprId}}">
+                    <div class="input-field col m6 s12">
+                        <input id="user_id" type="text" class="validate active" value="{{oprId}}" data-length="10" disabled>
+                        <label for="user_id" class="active" data-error="User ID must be provided!" data-length="10">User ID</label>
+                    </div>
+
+                    <div class="input-field col m6 s12">
+                        <input id="user_ini" type="text" class="validate" value="{{ini}}">
+                        <label for="user_ini" class="active">User Initials</label>
+                    </div>
+                    <div class="input-field col m6 s12">
+                        <input id="user_password" type="password" class="" data-length="2">
+                        <label for="user_password" class="" data-length="2">Old Password</label>
+                    </div>
+                    <div class="input-field col m6 s12">
+                        <input id="user_new_password" type="password" class="" data-length="2">
+                        <label for="user_new_password" class="" data-length="2">New Passsword</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="user_name" type="text" class="validate" value="{{oprName}}">
+                        <label for="user_name" class="active">Name</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="user_cpr" type="text" class="validate" value="{{cpr}}">
+                        <label for="user_cpr" class="active">User CPR</label>
+                    </div>
+                    <p class="col s4">
+                        <!--{{#admin}}-->
+                        <input type="checkbox" id="user_admin" checked="checked" />
+                        <!--{{/admin}}-->
+                        <!--{{^admin}}-->
+                        <input type="checkbox" id="user_admin"/>
+                        <!--{{/admin}}-->
+                        <label for="user_admin">Admin</label>
+                    </p>
+                    <!-- Dropdown Trigger -->
+                    <div id="user_role" class="input-field col s8" data-selected="{{role}}">
+                        <select>
+                            <option value="none">none</option>
+                            <option value="operator">operator</option>
+                            <option value="foreman">foreman</option>
+                            <option value="pharmacist">pharmacist</option>
+                        </select>
+                        <label>Role</label>
+                    </div>
+                </div>
+                <!--{{/.}}-->
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-save-user-profile waves-effect waves-green btn-flat">Save</a>
         </div>
     </script>
 
@@ -106,19 +619,19 @@
                 <div class="row" data-source-id="{{oprId}}">
                     <div class="input-field col s6">
                         <input id="user_id" type="text" class="validate" value="{{oprId}}" data-length="10">
-                        <label for="user_id" class="active" data-error="User ID must be provided!" data-length="10">User ID</label>
+                        <label for="user_id" class="" data-error="User ID must be provided!" data-length="10">User ID</label>
                     </div>
                     <div class="input-field col s6">
                         <input id="user_ini" type="text" class="validate" value="{{ini}}">
-                        <label for="user_ini" class="active">User Initials</label>
+                        <label for="user_ini" class="">User Initials</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="user_name" type="text" class="validate" value="{{oprName}}">
-                        <label for="user_name" class="active">Name</label>
+                        <label for="user_name" class="">Name</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="user_cpr" type="text" class="validate" value="{{cpr}}">
-                        <label for="user_cpr" class="active">User CPR</label>
+                        <label for="user_cpr" class="">User CPR</label>
                     </div>
                     <p class="col s4">
                         <!--{{#admin}}-->
@@ -141,105 +654,96 @@
                     </div>
                 </div>
             </form>
-            <div class="preloader-wrapper large center-align active hide">
-                <div class="spinner-layer spinner-blue">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-
-                <div class="spinner-layer spinner-red">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-
-                <div class="spinner-layer spinner-yellow">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-                <div class="spinner-layer spinner-green">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-                </div>
-            </div>
         </div>
         <div class="modal-footer">
-            <a href="#" class="modal-add waves-effect waves-green btn-flat">Add</a>
+            <a href="#" class="modal-add-user waves-effect waves-green btn-flat">Add</a>
         </div>
     </script>
 
-    <script type="text/html" id="userTableRow">
-        <!--{{#users}}-->
-        <tr id="user-row-{{oprId}}">
-            <td class="id">{{oprId}}</td>
-            <td class="name">{{oprName}}</td>
-            <td class="ini">{{ini}}</td>
-            <td class="cpr">{{cpr}}</td>
-            <td>
-                <p>
-                    <!--{{#admin}}-->
-                    <input type="checkbox" class="admin" checked="checked" disabled/>
-                    <!--{{/admin}}-->
-                    <!--{{^admin}}-->
-                    <input type="checkbox" class="admin" disabled/>
-                    <!--{{/admin}}-->
-                    <label></label>
-                </p>
-            </td>
-            <td class="role">{{role}}</td>
-            <td>
-                <a class="btn-floating btn waves-effect waves-light red darken-2 delete-user"><i class="material-icons">delete</i></a>
-                <a class="btn-floating btn waves-effect waves-light edit-user blue darken-1"><i class="material-icons">edit</i></a>
-            </td>
-        </tr>
-        <!--{{/users}}-->
-    </script>
 </head>
 <body>
+<div class="loading-box">
+    <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
 
+            <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+
+            <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+
+            <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+    </div>
+</div>
 <nav class="blue-grey darken-3">
     <div class="nav-wrapper container">
-        <a href="#" class="brand-logo">DTU Gruppe 23</a>
-        <ul id="nav-mobile" class="right">
-            <li><a href="#" class="logout">Logout</a></li>
+        <a href="/" class="brand-logo">DTU Gruppe 23</a>
+        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="#" class="edit-profile"><i class="material-icons left">edit</i>Edit Profile</a></li>
+            <li><a href="#" class="logout"><i class="material-icons left">clear</i>Logout</a></li>
+        </ul>
+        <ul class="side-nav" id="mobile-demo">
+            <li><a href="#" class="edit-profile"><i class="material-icons blue-grey-text text-darken-3 left">edit</i>Edit Profile</a></li>
+            <li><a href="#" class="logout"><i class="material-icons blue-grey-text text-darken-3 left">clear</i>Logout</a></li>
         </ul>
     </div>
 </nav>
 <!-- Modal -->
-<div class="modal modal-fixed-footer" id="userEditModal" tabindex="-1"></div>
-<!-- END Modal -->
-<div>
-
+<!-- Modal Structure -->
+<div id="hiddenModal" class="modal bottom-sheet">
+    <div class="modal-content">
+        <h4>Hidden Features!</h4>
+        <div class="collection">
+            <a id="resetData" href="#!" class="collection-item red-text text-darken-2"><i class="material-icons left">warning</i>Reset Data</a>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Abort</a>
+    </div>
 </div>
+<div class="modal modal-fixed-footer" id="EditModal" tabindex="-1"></div>
+<!-- END Modal -->
 <main class="valign-wrapper">
     <div id="loginForm" class="container">
         <div class="row">
             <form class="col s12 m10 offset-m1 l8 offset-l2 xl-6 offset-xl2">
                 <div class="input-field col s12 m6">
-                    <input id="username" type="text" class="validate">
-                    <label for="username">Username</label>
+                    <input value="4" name="oprId" id="oprId" type="number" size="3" class="validate">
+                    <label for="oprId">Operator ID</label>
                 </div>
                 <div class="input-field col s12 m6">
-                    <input id="password" type="password" class="validate">
+                    <input value="root" name="password" id="password" type="password" class="validate">
                     <label for="password">Password</label>
                 </div>
                 <div class="right-align">
@@ -248,25 +752,40 @@
             </form>
         </div>
     </div>
-    <div id="userAdministration" class="container">
+    <div id="Administration" class="container">
         <br>
-        <table class="striped centered responsive-table" id="userlist">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Initials</th>
-            <th>CPR</th>
-            <th>Admin</th>
-            <th>Role</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody id="userListRows">
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs" id="MainTabs">
+                    <li class="tab col s3"><a href="#ProductAdminTab" class="blue-grey-text text-darken-3">Product Administration</a></li>
+                    <li class="tab col s3"><a href="#ProduceAdminTab" class="blue-grey-text text-darken-3">Produce Administration</a></li>
+                    <li class="tab col s3"><a href="#RecipeAdminTab" class="blue-grey-text text-darken-3">Recipe Administration</a></li>
+                    <li class="tab col s3"><a href="#UserAdminTab" class="blue-grey-text text-darken-3">User Administration</a></li>
+                </ul>
+            </div>
+            <div id="ProductAdminTab" class="col s12"></div>
+            <div id="ProduceAdminTab" class="col s12">
+                <div class="row">
+                    <div class="col s12">
+                        <ul id="ProduceSubTabs" class="tabs">
+                            <li class="tab col s6"><a class="active blue-grey-text text-darken-3" href="#ProduceAdminSubTab">Produce</a></li>
+                            <li class="tab col s6"><a class="blue-grey-text text-darken-3" href="#ProduceBatchAdminSubTab">Produce Batches</a></li>
+                        </ul>
+                    </div>
+                    <div id="ProduceAdminSubTab" class="col s12">
+                    </div>
+                    <div id="ProduceBatchAdminSubTab" class="col s12">
+                        <div class="left col l8 m12 s12"></div>
+                        <div class="right col l4 m12 s12"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="RecipeAdminTab" class="col s12">
+            </div>
+            <div id="UserAdminTab" class="col s12">
 
-        </tbody>
-    </table>
-        <a class="btn-floating btn-medium waves-effect waves-light green darken-2 add-user"><i class="material-icons">add</i></a>
+            </div>
+        </div>
     </div>
 </main>
 
@@ -274,7 +793,7 @@
     <div class="container">
         <div class="row">
             <div class="col offset-l10 offset-m10 offset-s8 l2 m2 s4 right-align">
-                <img width="100%" src="./img/dtulogo.png">
+                <img id="logo" alt="DTU Logo" src="./img/dtulogo.png">
             </div>
         </div>
     </div>
@@ -284,11 +803,19 @@
         </div>
     </div>
 </footer>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- jQuery v3.2.1 -->
+<script src="js/jquery.min.js"></script>
+
 <!-- Materialize JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+<script src="js/materialize.min.js"></script>
+
+<!-- jQuery Cookie plugin -->
+<script src="js/js.cookie.js"></script>
+
 <!-- User scripts and styles -->
 <link rel="stylesheet" href="css/style.css">
-<script src="./js/script.js"></script>
+<script src="js/script.js"></script>
+
 </body>
 </html>

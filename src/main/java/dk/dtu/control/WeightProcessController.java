@@ -261,6 +261,11 @@ public class WeightProcessController implements IWeightProcessController {
 				e.printStackTrace();
 				i--;
 				continue weighingLoop;
+			} catch (NumberFormatException e) {
+				errorMessageInSecondaryDisplay("Could not measure the weight!");
+				e.printStackTrace();
+				i--;
+				continue weighingLoop;
 			}
 			try {
 				weightAdaptor.grossCheck(true);

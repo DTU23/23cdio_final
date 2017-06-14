@@ -41,7 +41,7 @@ public class MySQLOperatorDAOTest {
 	@Test
 	public void testGetOperatorByID() {
 		OperatorDTO opr3 = null;
-		OperatorDTO oprCheck = new OperatorDTO(3, "Luigi C", "LC", "090990-9009", "jEfm5aQ", false, "Operator");
+		OperatorDTO oprCheck = new OperatorDTO(3, "Luigi C", "LC", "0909909009", "jEfm5aQ", false, "Operator");
 		try {
 			opr3 = opr.readOperator(3);
 		} catch (DALException e) { System.out.println(e.getMessage()); }

@@ -3,6 +3,7 @@ package dk.dtu.control;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import dk.dtu.control.api.Role;
 import dk.dtu.control.api.v1.IWeightAdaptor;
@@ -50,7 +51,7 @@ public class WeightProcessController implements IWeightProcessController {
 
 	@Override
 	public void run() {
-		initLoop: while(true) {
+		initLoop: for(int i = 0; i < 60; i++) {
 			operatorDAO = new MySQLOperatorDAO();
 			productBatchDAO = new MySQLProductBatchDAO();
 			produceBatchDAO = new MySQLProduceBatchDAO();
@@ -64,8 +65,17 @@ public class WeightProcessController implements IWeightProcessController {
 			} catch (AdaptorException e) {
 				System.out.println("Connection couldn't be established!");
 				e.printStackTrace();
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				if (i == 59) {
+					System.exit(1);
+				}
 				continue initLoop;
 			}
+
 			break initLoop;
 		}
 
@@ -91,10 +101,6 @@ public class WeightProcessController implements IWeightProcessController {
 					errorMessageInSecondaryDisplay("Problem trying to send or recieve message from weight!");
 					e.printStackTrace();
 					continue oprIdLoop;
-				} catch (NumberFormatException e) {
-					errorMessageInSecondaryDisplay("The ID could not be parsed!");
-					e.printStackTrace();
-					continue oprIdLoop;
 				} catch (NotFoundException e) {
 					errorMessageInSecondaryDisplay("Operator was not found!");
 					e.printStackTrace();
@@ -109,11 +115,7 @@ public class WeightProcessController implements IWeightProcessController {
 					continue oprIdLoop;
 				}
 			}
-		// Check operator has a role
-		if (operatorDTO.getRole().equals(Role.None.toString())) {
-			errorMessageInSecondaryDisplay("The operator has no role and is therefore disabled!");
-			continue loginLoop;
-		}
+
 		// Get the specific operators password and validate password
 		try {
 			oprPW = weightAdaptor.getOperatorPassword();
@@ -133,6 +135,11 @@ public class WeightProcessController implements IWeightProcessController {
 			continue loginLoop;
 		}
 		loginResult(true);
+		// Check operator has a role
+		if (operatorDTO.getRole().equals(Role.None.toString())) {
+			errorMessageInSecondaryDisplay("This operator is disabled!");
+			continue loginLoop;
+		}
 		break loginLoop;
 		}
 
@@ -166,13 +173,8 @@ public class WeightProcessController implements IWeightProcessController {
 			// Saves list of ProductBatchCompOverviewDTO's (already weighed produces in product batch) specified by the product batch number
 			try {
 				productBatchCompOverviewList = productBatchDAO.getProductBatchDetailsByPbId(Integer.parseInt(productBatchNumber));
-			} catch (NumberFormatException e) {
-				errorMessageInSecondaryDisplay("Product batch number could not be parsed!");
-				e.printStackTrace();
-				continue pbLoop;
 			} catch (DALException e) {
 				// Fine - status 0. No weighed produces in product batch
-				productBatchCompOverviewList = null;
 			}
 			break;
 		}
@@ -254,20 +256,24 @@ public class WeightProcessController implements IWeightProcessController {
 					i--;
 					continue weighingLoop;
 				}				
-				weightAdaptor.grossCheck(true);
 			} catch (AdaptorException e) {
-				errorMessageInSecondaryDisplay("Something went wrong when trying to weigh the produce!");
+				errorMessageInSecondaryDisplay("A connectivity problem occured!");
+				e.printStackTrace();
+				i--;
+				continue weighingLoop;
+			} catch (NumberFormatException e) {
+				errorMessageInSecondaryDisplay("Could not measure the weight!");
 				e.printStackTrace();
 				i--;
 				continue weighingLoop;
 			}
-		}
-
-		try {
-			weightAdaptor.clearBothDisplays();
-		} catch (AdaptorException e) {
-			System.out.println("Error trying to clear primary and secondary display!");
-			e.printStackTrace();
+			try {
+				weightAdaptor.grossCheck(true);
+				weightAdaptor.clearBothDisplays();
+			} catch (AdaptorException e) {
+				errorMessageInSecondaryDisplay("A connectivity problem occured!");
+				e.printStackTrace();
+			}
 		}
 	}
 	}
@@ -283,6 +289,7 @@ public class WeightProcessController implements IWeightProcessController {
 
 	private void errorMessageInSecondaryDisplay(String msg) {
 		try {
+			weightAdaptor.clearInputBuffer();
 			weightAdaptor.writeInSecondaryDisplay(msg);
 			weightAdaptor.clearSecondaryDisplay();
 		} catch (AdaptorException e1) {

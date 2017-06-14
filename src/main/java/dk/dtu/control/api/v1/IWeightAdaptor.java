@@ -4,6 +4,7 @@ import dk.dtu.model.exceptions.AdaptorException;
 
 public interface IWeightAdaptor {
 	
+	void clearInputBuffer() throws AdaptorException;
 	public void establishConnection(String ip, int port) throws AdaptorException;
 	public void setupUnit() throws AdaptorException;
 	
@@ -27,6 +28,4 @@ public interface IWeightAdaptor {
 	void writeInSecondaryDisplay(String msg) throws AdaptorException;
 	
 
-	
-	
 }

@@ -50,7 +50,7 @@ public class WeightProcessController implements IWeightProcessController {
 
 	@Override
 	public void run() {
-		initLoop: while(true) {
+		initLoop: for(int i = 0; i < 10; i++) {
 			operatorDAO = new MySQLOperatorDAO();
 			productBatchDAO = new MySQLProductBatchDAO();
 			produceBatchDAO = new MySQLProduceBatchDAO();

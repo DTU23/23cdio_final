@@ -203,13 +203,13 @@ $(document).ready(function () {
                 "oprName": $('#userEdit').find("#user_name").val(),
                 "ini": $('#userEdit').find("#user_ini").val(),
                 "cpr": $('#userEdit').find("#user_cpr").val(),
-                "password": $('#userEdit').find("#user_password").val(),
+                "password": (($('#userEdit').find("#user_password").val().length > 0) ? $('#userEdit').find("#user_password").val() : null),
                 "admin": $('#userEdit').find("#user_admin").is(':checked'),
                 "role": role
             },
             true,
-            $('#produceEditTemplate').html(),
-            $('#EditModal'),
+            null,
+            null,
             function( response ) {
                 populateUsersAdmin();
                 $('#EditModal').modal('close');

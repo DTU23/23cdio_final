@@ -448,6 +448,37 @@ $(document).ready(function () {
         Materialize.updateTextFields();
     });
 
+    $(document).on("click", '.edit-recipe', function (e) {
+        doAjax(
+            "GET",
+            "./api/v1/recipe/"+$(this).attr('data-id'),
+            "",
+            true,
+            $('#recipeEditTemplate').html(),
+            $('#EditModal'),
+            function( response ) {
+                $('#EditModal').modal('open');
+            },
+            null
+        );
+    });
+
+    $(document).on("click", '.delete-recipe', function (e) {
+        var recipeId = $(this).attr('data-id');
+        doAjax(
+            "DELETE",
+            "./api/v1/recipe/"+recipeId,
+            "",
+            true,
+            null,
+            null,
+            function( response ) {
+                Materialize.toast("Recipe with ID: "+ recipeId +" was deleted!", 4000);
+                populateRecipeAdmin(false);
+            }
+        );
+    });
+
     $(document).on('click', '.modal-add-recipe', function (e) {
         e.preventDefault();
         doAjax(
@@ -456,6 +487,25 @@ $(document).ready(function () {
             {
                 recipeId: $('#EditModal').find('#recipe_id').val(),
                 recipeName: $('#EditModal').find('#recipe_name').val()
+            },
+            true,
+            null,
+            null,
+            function( response ) {
+                populateRecipeAdmin(false);
+                $('#EditModal').modal('close');
+            }
+        );
+    });
+
+    $(document).on('click', '.modal-save-recipe', function (e) {
+        e.preventDefault();
+        doAjax(
+            "PUT",
+            "./api/v1/recipe/",
+            {
+                recipeId: $('#recipeEdit').find('input#recipe_id').val(),
+                recipeName: $('#recipeEdit').find('input#recipe_name').val()
             },
             true,
             null,
@@ -481,6 +531,8 @@ $(document).ready(function () {
             callback = function( response ) {
                 var clicked_element = $('.recipe.collapsible-header[data-id='+clicked_element_id+']');
                 clicked_element.parent().find('a.add-recipecomp').attr('data-recipe-id', clicked_element.attr('data-id'));
+                clicked_element.parent().find("a.delete-recipe").attr("data-id", clicked_element.attr('data-id'));
+                clicked_element.parent().find("a.edit-recipe").attr("data-id", clicked_element.attr('data-id'));
             }
         );
     });
@@ -535,7 +587,9 @@ $(document).ready(function () {
                     $('#RecipeComponentsTemplate').html(),
                     $('div.recipe[data-id='+recipe_id+']').parent().children('.collapsible-body'),
                     function( response ) {
-
+                        if(response.status === 404){
+                            populateRecipeAdmin(false);
+                        }
                     }
                 );
             }
@@ -852,7 +906,10 @@ function populateRecipeAdmin(notice){
                     $('#RecipeComponentsTemplate').html(),
                     $('div.recipe[data-id='+recipe_id+']').parent().children('.collapsible-body'),
                     function( response ) {
-
+                        var clicked_element = $('.recipe.collapsible-header[data-id='+recipe_id+']');
+                        clicked_element.parent().find('a.add-recipecomp').attr('data-recipe-id', clicked_element.attr('data-id'));
+                        clicked_element.parent().find("a.delete-recipe").attr("data-id", clicked_element.attr('data-id'));
+                        clicked_element.parent().find("a.edit-recipe").attr("data-id", clicked_element.attr('data-id'));
                     }
                 );
             })
@@ -882,6 +939,9 @@ function doAjax(method, url, data, notice, template, dom_target, callback, conte
                 callback(response);
             },
             403 : function (response) {
+                callback(response);
+            },
+            404 : function (response) {
                 callback(response);
             }
         },

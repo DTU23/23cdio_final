@@ -14,8 +14,8 @@ CREATE PROCEDURE reset_data()
     DELETE FROM producebatch;
     DELETE FROM produce;
     INSERT INTO operator(opr_id, opr_name, ini, cpr, password, admin, role) VALUES
-      (1, 'Angelo A', 'AA', '0707707003', 'lKje4fa', FALSE, 'Foreman'),
-      (2, 'Antonella B', 'AB', '0808802236', 'atoJ21v', FALSE, 'Pharmacist'),
+      (1, 'Angelo A', 'AA', '0707707003', 'lKjE4fa', FALSE, 'Foreman'),
+      (2, 'Antonella B', 'AB', '0808802236', 'aToJ21v', FALSE, 'Pharmacist'),
       (3, 'Luigi C', 'LC', '0909909007', 'jEfm5aQ', FALSE, 'Operator'),
       (4, 'Super User', 'SU', '0109162407', 'root', TRUE, 'Pharmacist'),
       (5, 'Admin', 'ADM', '0109162407', 'root', TRUE, 'None'),

@@ -32,7 +32,7 @@ nav ul.right {
     opacity: 0.5;
 }
 
-.tabs .tab.disabled a, .tabs .tab.disabled a:hover{
+.tabs .tab.disabled a, .tabs .tab.disabled a:hover, input:disabled{
     cursor: not-allowed;
 }
 

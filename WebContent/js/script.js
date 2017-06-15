@@ -616,8 +616,8 @@ $(document).ready(function () {
                 $('#Administration').show();
                 populateUsersAdmin(false);
                 populateProduceAdmin(false);
-                //populateProduceBatchAdmin(false);
-                //populateProductAdmin(false);
+                populateProduceBatchAdmin(false);
+                populateProductAdmin(false);
                 populateRecipeAdmin(false);
             },
             error: function ( msg ) {
@@ -689,7 +689,8 @@ $(document).ready(function () {
                 populateProduceBatchAdmin(false);
                 populateProductAdmin(false);
                 populateRecipeAdmin(false);
-            }
+            },
+            null
         );
     });
 
@@ -731,7 +732,7 @@ function populateProduceAdmin(notice) {
         "GET",
         "./api/v1/produce/",
         "",
-        true,
+        notice,
         $('#ProduceAdministrationTemplate').html(),
         $('#ProduceAdminSubTab'),
         function (response) {
@@ -882,7 +883,7 @@ function ajaxErrorHandler(msg, notice, contextTab) {
                 break;
             case 401:
             case 403:
-                if(contextTab !== "undefined"){
+                if(contextTab !== null){
                     contextTab.parent().addClass('disabled');
                     $('#MainTabs').tabs();
                     $('#ProduceSubTabs').tabs();
@@ -902,7 +903,7 @@ function ajaxErrorHandler(msg, notice, contextTab) {
                 break;
             case 401:
             case 403:
-                if(contextTab !== "undefined"){
+                if(contextTab !== null){
                     contextTab.parent().addClass('disabled');
                     $('#MainTabs').tabs();
                     $('#ProduceSubTabs').tabs();

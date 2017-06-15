@@ -177,8 +177,14 @@ $(document).ready(function () {
             null,
             null,
             function( response ) {
-                populateUsersAdmin(false);
-                $('#EditModal').modal('close');
+                console.log(response);
+                data = {};
+                data['password'] = response;
+                Mustache.parse($('#userCreationSuccess').html());   // optional, speeds up future uses
+                var rendered = Mustache.render($('#userCreationSuccess').html(), data);
+                $('#EditModal').html(rendered).promise().done(function () {
+
+                });
             }
         );
     });

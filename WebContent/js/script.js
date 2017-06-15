@@ -181,16 +181,7 @@ $(document).ready(function () {
                 Mustache.parse($('#userCreationSuccess').html());   // optional, speeds up future uses
                 var rendered = Mustache.render($('#userCreationSuccess').html(), response);
                 $('#EditModal').html(rendered).promise().done(function () {
-                    $('.modal').modal({
-                        dismissible: true, // Modal can be dismissed by clicking outside of the modal
-                        opacity: .5,
-                        complete: function() {
-                            $(this).find('.preloader-wrapper').addClass('hide');
-                            $('#userEditTemplate').find('select').material_select('destroy');
-                        },
-                        ready: function () {
-                        }
-                    });
+                    populateUsersAdmin(false);
                 });
             }
         );
@@ -684,6 +675,11 @@ $(document).ready(function () {
 
     $(document).on('click', '#logo', function (e) {
         $('#hiddenModal').modal('open');
+    });
+
+    $(document).on('click', 'a.modal-close', function (e) {
+        e.preventDefault();
+        $('#EditModal').modal('close');
     });
 
     $(document).on('click','#resetData', function () {

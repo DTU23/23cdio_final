@@ -55,7 +55,7 @@ public class LoginController implements ILoginController {
 		try {
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.DATE, 7);
-			Algorithm algorithm = Algorithm.HMAC256("secret");
+			Algorithm algorithm = Algorithm.HMAC256("7pAusDB1Wl");
 			return JWT.create()
 					.withIssuer("auth0")
 					.withClaim("oprId", oprId)

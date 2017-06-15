@@ -31,7 +31,6 @@
                     <th class="col s3">Recipe ID</th>
                     <th class="col s3">Recipe Name</th>
                     <th class="col s2">Status</th>
-                    <th class="col s1">Action</th>
                 </tr>
                 </thead>
             </table>
@@ -43,9 +42,9 @@
                         <span class="col s3 recipeId">{{recipeId}}</span>
                         <span class="col s3 recipeName">{{recipeName}}</span>
                         <span class="col s2 status">{{status}}</span>
-                        <span class="col s1 status"><a class="btn-floating btn waves-effect waves-light red darken-2 delete-productbatch" data-id="{{pbId}}"><i class="material-icons">delete</i></a></span>
                     </div>
                     <div class="collapsible-body">
+                        <span class="col s1 status left"><a class="btn waves-effect waves-light red darken-2 delete-productbatch" data-id="{{pbId}}">Delete Productbatch</a></span>
                         <table class="striped centered responsive-table">
                             <thead>
                             <tr>
@@ -87,6 +86,7 @@
     </script>
 
     <script type="text/html" id="productBatchComponentsTemplate">
+        <span class="col s1 status left"><a class="btn waves-effect waves-light red darken-2 delete-productbatch" data-id="">Delete Productbatch</a></span>
         <table class="striped centered responsive-table">
             <thead>
             <tr>

@@ -33,6 +33,7 @@ $(document).ready(function () {
             function( response ) {
                 var clicked_element = $('.product.collapsible-header[data-id='+clicked_element_id+']');
                 clicked_element.parent().find('a.add-productbatchcomp').attr('data-productbatch-id', clicked_element.attr('data-id'));
+                clicked_element.parent().find("a.delete-productbatch").attr("data-id", clicked_element.attr('data-id'));
             }
         );
     });
@@ -57,6 +58,22 @@ $(document).ready(function () {
             $('#EditModal').modal('open');
             Materialize.updateTextFields();
         });
+    });
+
+    $(document).on("click", '.delete-productbatch', function (e) {
+        var pbid = $(this).attr('data-id');
+        doAjax(
+            "DELETE",
+            "./api/v1/productbatch/"+pbid,
+            "",
+            true,
+            null,
+            null,
+            function( response ) {
+                Materialize.toast("Productbath with ID: "+ pbid +" was deleted!", 4000);
+                populateProductAdmin(false);
+            }
+        );
     });
 
     $(document).on('click', '.modal-add-productbatch', function (e) {
@@ -234,9 +251,9 @@ $(document).ready(function () {
                 "ini": $('#userEditProfile').find("#user_ini").val(),
                 "cpr": $('#userEditProfile').find("#user_cpr").val(),
                 "password": (($('#userEdit').find("#user_password").val().length > 0) ? $('#userEdit').find("#user_password").val() : null),
-                "newPassword": (($('#userEdit').find("#user_new_password").val().length > 0) ? $('#userEdit').find("#user_new_password").val() : null)
-                "admin": $('#userEditProfile').find("#user_admin").is(':checked'),
-                "role": role
+                "newPassword": (($('#userEdit').find("#user_new_password").val().length > 0) ? $('#userEdit').find("#user_new_password").val() : null),
+                "admin": null,
+                "role": null
             },
             true,
             $('#produceEditTemplate').html(),
@@ -795,16 +812,19 @@ function populateProductAdmin(notice) {
         function (response) {
             $('.collapsible').collapsible();
             $('.product.collapsible-header').each(function () {
+                var rbId = $(this).attr('data-id');
                 doAjax(
                     "GET",
-                    "./api/v1/productbatchcomp/list/"+$(this).attr('data-id'),
+                    "./api/v1/productbatchcomp/list/"+rbId,
                     "",
                     notice,
                     $('#productBatchComponentsTemplate').html(),
-                    $('div.product[data-id='+$(this).attr('data-id')+']').parent().children('.collapsible-body'),
+                    $('div.product[data-id='+rbId+']').parent().children('.collapsible-body'),
                     function( response ) {
-
-                    }
+                        console.log(rbId);
+                        $('div.product[data-id='+rbId+']').find("a.delete-productbatch").attr("data-id", rbId);
+                    },
+                    null
                 );
             })
         },

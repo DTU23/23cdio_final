@@ -233,8 +233,8 @@ $(document).ready(function () {
                 "oprName": $('#userEditProfile').find("#user_name").val(),
                 "ini": $('#userEditProfile').find("#user_ini").val(),
                 "cpr": $('#userEditProfile').find("#user_cpr").val(),
-                "password": $('#userEditProfile').find("#user_password").val(),
-                "newPassword": $('#userEditProfile').find("#user_new_password").val(),
+                "password": (($('#userEdit').find("#user_password").val().length > 0) ? $('#userEdit').find("#user_password").val() : null),
+                "newPassword": (($('#userEdit').find("#user_new_password").val().length > 0) ? $('#userEdit').find("#user_new_password").val() : null)
                 "admin": $('#userEditProfile').find("#user_admin").is(':checked'),
                 "role": role
             },

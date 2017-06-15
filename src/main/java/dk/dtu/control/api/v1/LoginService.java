@@ -19,14 +19,10 @@ public class LoginService {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response authorize(OperatorDTO opr) throws ValidationException, DALException  {
+	public Response authorize(OperatorDTO opr) throws ValidationException, AuthException, DALException {
 		ILoginController controller = new LoginController();
 		Validation.isPositiveInteger(opr.getOprId());
-		try {
-			return controller.authenticateUser(opr.getOprId(), opr.getPassword());
-		} catch (AuthException e) {
-			return Response.status(Response.Status.UNAUTHORIZED).build();
-		}
+		return controller.authenticateUser(opr.getOprId(), opr.getPassword());
 	}
 
 }

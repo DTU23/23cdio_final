@@ -251,18 +251,21 @@ $(document).ready(function () {
                 "oprName": $('#userEditProfile').find("#user_name").val(),
                 "ini": $('#userEditProfile').find("#user_ini").val(),
                 "cpr": $('#userEditProfile').find("#user_cpr").val(),
-                "password": (($('#userEditProfile').find("#user_password").val().length > 0) ? $('#userEdit').find("#user_password").val() : null),
-                "newPassword": (($('#userEditProfile').find("#user_new_password").val().length > 0) ? $('#userEdit').find("#user_new_password").val() : null),
+                "password": (($('#userEditProfile').find("#user_password").val().length > 0) ? $('#userEditProfile').find("#user_password").val() : null),
+                "newPassword": (($('#userEditProfile').find("#user_new_password").val().length > 0) ? $('#userEditProfile').find("#user_new_password").val() : null),
                 "admin": null,
                 "role": null
             },
             true,
-            $('#produceEditTemplate').html(),
-            $('#EditModal'),
+            null,
+            null,
             function( response ) {
-                populateUsersAdmin();
-                $('#EditModal').modal('close');
-            }
+                if(response.status === 200){
+                    populateUsersAdmin();
+                    $('#EditModal').modal('close');
+                }
+            },
+            null
         );
     });
 
@@ -957,6 +960,7 @@ function doAjax(method, url, data, notice, template, dom_target, callback, conte
             }
         },
         error: function ( msg ) {
+            console.log("Ajax error");
             ajaxErrorHandler(msg, notice, contextTab);
         }
     })
@@ -977,7 +981,7 @@ function ajaxErrorHandler(msg, notice, contextTab) {
                     $('#MainTabs').tabs();
                     $('#ProduceSubTabs').tabs();
                 }
-                Materialize.toast("Unauthorized!", 4000);
+                Materialize.toast(msg.responseText, 4000);
                 break;
             default:
                 Materialize.toast(msg.responseText, 4000);

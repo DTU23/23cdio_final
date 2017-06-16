@@ -776,6 +776,23 @@ $(document).ready(function () {
             null
         );
     });
+    
+    $(document).on('click','#addUsers', function () {
+    	doAjax(
+                method = "GET",
+                url = "./api/v1/database/users",
+                data = "",
+                notice= false,
+                template = null,
+                dom_target = null,
+                callback = function (response) {
+                    Materialize.toast(response, 4000);
+                    $('#hiddenModal').modal('close');
+                    populateUsersAdmin(false);
+                },
+                contextTab = null
+            );
+    });
 
     /**
      * Initialization

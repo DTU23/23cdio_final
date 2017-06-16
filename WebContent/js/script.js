@@ -31,7 +31,6 @@ $(document).ready(function () {
             $('#productBatchComponentsTemplate').html(),
             $('div[data-id='+$(this).attr('data-id')+']').parent().children('.collapsible-body'),
             function( response ) {
-                console.log(clicked_element);
                 var clicked_element = $('.product.collapsible-header[data-id='+clicked_element_id+']');
                 clicked_element.parent().find('a.add-productbatchcomp').attr('data-productbatch-id', clicked_element.attr('data-id'));
                 clicked_element.parent().find("a.delete-productbatch").attr("data-id", clicked_element.attr('data-id'));
@@ -260,7 +259,7 @@ $(document).ready(function () {
             null,
             null,
             function( response ) {
-                if(response.status === 200){
+                if(response == null){
                     populateUsersAdmin();
                     $('#EditModal').modal('close');
                 }
@@ -960,7 +959,6 @@ function doAjax(method, url, data, notice, template, dom_target, callback, conte
             }
         },
         error: function ( msg ) {
-            console.log("Ajax error");
             ajaxErrorHandler(msg, notice, contextTab);
         }
     })

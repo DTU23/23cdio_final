@@ -9,7 +9,7 @@ import dk.dtu.model.exceptions.DALException;
 import dk.dtu.control.api.Role;
 
 @Path("/v1/database")
-@Secured(roles = {Role.Pharmacist}, admin = true)
+@Secured(roles = {Role.None})
 public class DatabaseService {
 
 	@GET

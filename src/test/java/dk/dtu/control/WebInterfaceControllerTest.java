@@ -154,6 +154,24 @@ public class WebInterfaceControllerTest {
 		assertThat(oprAfterEdit.toString(), is(not(equalTo(controlObject.toString()))));
 		assertThat(oprAfterEdit.toString(), is(equalTo(oprBeforeEdit.toString())));
 	}
+	
+	@Test(expected = AuthException.class)
+	public void editProfileWithEmptyStringPWTest() throws DALException, AuthException, ValidationException {
+		OperatorDTO oprBeforeEdit = null;
+		OperatorDTO oprAfterEdit = null;
+		OperatorNewPWDTO editObject = null;
+		OperatorDTO controlObject = null;
+		oprBeforeEdit = dao.readOperator(1);
+		editObject = new OperatorNewPWDTO(oprBeforeEdit);
+		editObject.setOprName("John Doe");
+		editObject.setIni("JD");
+		editObject.setPassword("");
+		controlObject = new OperatorDTO(editObject);
+		ctrl.updateOperatorValidation(editObject);
+		oprAfterEdit = dao.readOperator(1);
+		assertThat(oprAfterEdit.toString(), is(not(equalTo(controlObject.toString()))));
+		assertThat(oprAfterEdit.toString(), is(equalTo(oprBeforeEdit.toString())));
+	}
 
 	@Test(expected = AuthException.class)
 	public void editProfileWithWrongPWTest() throws DALException, AuthException, ValidationException {

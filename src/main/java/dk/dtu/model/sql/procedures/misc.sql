@@ -1,8 +1,69 @@
+DROP PROCEDURE IF EXISTS insert_users;
+DROP PROCEDURE IF EXISTS insert_produce;
+DROP PROCEDURE IF EXISTS insert_recipe;
+DROP PROCEDURE IF EXISTS insert_producebatch;
+DROP PROCEDURE IF EXISTS insert_productbatch;
+DROP PROCEDURE IF EXISTS insert_productbatchcomponents;
 DROP PROCEDURE IF EXISTS reset_data;
 
-/**
-Reset Data
- */
+DELIMITER //
+CREATE PROCEDURE insert_users()
+  BEGIN
+    INSERT INTO operator(opr_id, opr_name, ini, cpr, password, admin, role) VALUES
+      (22, 'Mads Pedersen', 'MP', '0109162407', 'root', FALSE , 'Pharmacist'),
+      (23, 'Christian Niemann', 'CN', '0109162407', 'root', FALSE, 'Foreman'),
+      (24, 'Frederik Værnegaard', 'FV', '0109162407', 'root', FALSE, 'Operator');
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE insert_produce()
+  BEGIN
+    INSERT INTO produce(produce_id, produce_name, supplier) VALUES
+      (22, 'gorgonzola', 'We Love Cheese');
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE insert_recipe()
+  BEGIN
+    INSERT INTO recipe(recipe_id, recipe_name) VALUES
+      (99, 'El Formaggio');
+
+    INSERT INTO recipecomponent(recipe_id, produce_id, nom_netto, tolerance) VALUES
+      (99, 1, 10.0, 0.1),
+      (99, 2, 2.0, 0.1),
+      (99, 5, 3.0, 0.1),
+      (99, 22, 3.0, 0.1);
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE insert_producebatch()
+  BEGIN
+    INSERT INTO producebatch(rb_id, produce_id, amount) VALUES
+      (23, 22, 2000);
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE insert_productbatch()
+  BEGIN
+    INSERT INTO productbatch(pb_id, recipe_id, status) VALUES
+      (23, 99, 0);
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE insert_productbatchcomponents()
+  BEGIN
+    INSERT INTO productbatchcomponent(pb_id, rb_id, tara, netto, opr_id) VALUES
+      (23, 1, 0.5, 10.05, 1),
+      (23, 2, 0.5, 1.98, 1),
+      (23, 5, 0.5, 3.01, 1);
+  END //
+DELIMITER ;
+
 DELIMITER //
 CREATE PROCEDURE reset_data()
   BEGIN
@@ -22,7 +83,8 @@ CREATE PROCEDURE reset_data()
       (6, 'Pharmacist', 'PHA', '0109162407', 'root', FALSE , 'Pharmacist'),
       (7, 'Foreman', 'FM', '0109162407', 'root', FALSE, 'Foreman'),
       (8, 'Operator', 'OPR', '0109162407', 'root', FALSE, 'Operator'),
-      (9, 'None', 'NONE', '0109162407', 'root', FALSE, 'None');
+      (9, 'None', 'NONE', '0109162407', 'root', FALSE, 'None'),
+      (21, 'Viktor Poulsen', 'VP', '0109162407', 'root', TRUE, 'None');
 
     INSERT INTO produce(produce_id, produce_name, supplier) VALUES
       (1, 'dej', 'Wawelka'),

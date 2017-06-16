@@ -80,4 +80,114 @@ public final class DataSource {
 			try { if (conn != null) conn.close(); } catch (SQLException e) {};
 		}
 	}
+	
+	// methods below this line are for presentation
+	
+	public int insertUsers() throws ConnectivityException, DataResetException {
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = getInstance().getConnection();
+			stm = conn.prepareStatement("CALL insert_users();");
+			if(stm.executeUpdate() == 0) {
+				throw new DataResetException("No rows affected");
+			}
+			return stm.executeUpdate();
+		} catch (SQLException e) {
+			throw new ConnectivityException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
+		}
+	}
+
+	public int insertProduce() throws ConnectivityException, DataResetException {
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = getInstance().getConnection();
+			stm = conn.prepareStatement("CALL insert_produce();");
+			if(stm.executeUpdate() == 0) {
+				throw new DataResetException("No rows affected");
+			}
+			return stm.executeUpdate();
+		} catch (SQLException e) {
+			throw new ConnectivityException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
+		}
+	}
+
+	public int insertRecipe() throws ConnectivityException, DataResetException {
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = getInstance().getConnection();
+			stm = conn.prepareStatement("CALL insert_recipe();");
+			if(stm.executeUpdate() == 0) {
+				throw new DataResetException("No rows affected");
+			}
+			return stm.executeUpdate();
+		} catch (SQLException e) {
+			throw new ConnectivityException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
+		}
+	}
+
+	public int insertProduceBatch() throws ConnectivityException, DataResetException {
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = getInstance().getConnection();
+			stm = conn.prepareStatement("CALL insert_producebatch();");
+			if(stm.executeUpdate() == 0) {
+				throw new DataResetException("No rows affected");
+			}
+			return stm.executeUpdate();
+		} catch (SQLException e) {
+			throw new ConnectivityException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
+		}
+	}
+
+	public int insertProductBatch() throws ConnectivityException, DataResetException {
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = getInstance().getConnection();
+			stm = conn.prepareStatement("CALL insert_productbatch();");
+			if(stm.executeUpdate() == 0) {
+				throw new DataResetException("No rows affected");
+			}
+			return stm.executeUpdate();
+		} catch (SQLException e) {
+			throw new ConnectivityException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
+		}
+	}
+
+	public int insertProductBatchComp() throws ConnectivityException, DataResetException {
+		Connection conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = getInstance().getConnection();
+			stm = conn.prepareStatement("CALL insert_productbatchcomponents();");
+			if(stm.executeUpdate() == 0) {
+				throw new DataResetException("No rows affected");
+			}
+			return stm.executeUpdate();
+		} catch (SQLException e) {
+			throw new ConnectivityException(e);
+		} finally {
+			try { if (stm != null) stm.close(); } catch (SQLException e) {};
+			try { if (conn != null) conn.close(); } catch (SQLException e) {};
+		}
+	}
 }

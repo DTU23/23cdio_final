@@ -252,7 +252,7 @@ $(document).ready(function () {
                 "ini": $('#userEditProfile').find("#user_ini").val(),
                 "cpr": $('#userEditProfile').find("#user_cpr").val(),
                 "password": (($('#userEditProfile').find("#user_password").val().length > 0) ? $('#userEdit').find("#user_password").val() : null),
-                "newPassword": (($('#userEdit').find("#user_new_password").val().length > 0) ? $('#userEdit').find("#user_new_password").val() : null),
+                "newPassword": (($('#userEditProfile').find("#user_new_password").val().length > 0) ? $('#userEdit').find("#user_new_password").val() : null),
                 "admin": null,
                 "role": null
             },

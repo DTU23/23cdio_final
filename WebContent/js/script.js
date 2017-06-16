@@ -31,10 +31,12 @@ $(document).ready(function () {
             $('#productBatchComponentsTemplate').html(),
             $('div[data-id='+$(this).attr('data-id')+']').parent().children('.collapsible-body'),
             function( response ) {
+                console.log(clicked_element);
                 var clicked_element = $('.product.collapsible-header[data-id='+clicked_element_id+']');
                 clicked_element.parent().find('a.add-productbatchcomp').attr('data-productbatch-id', clicked_element.attr('data-id'));
                 clicked_element.parent().find("a.delete-productbatch").attr("data-id", clicked_element.attr('data-id'));
-            }
+            },
+            null
         );
     });
 
@@ -194,7 +196,6 @@ $(document).ready(function () {
             null,
             null,
             function( response ) {
-                console.log(response);
                 Mustache.parse($('#userCreationSuccess').html());   // optional, speeds up future uses
                 var rendered = Mustache.render($('#userCreationSuccess').html(), response);
                 $('#EditModal').html(rendered).promise().done(function () {
@@ -721,23 +722,23 @@ $(document).ready(function () {
         switch($(this).children("a").attr("href"))
         {
             case "#UserAdminTab":
-                populateUsersAdmin(true);
+                populateUsersAdmin(false);
                 break;
             case "#RecipeAdminTab":
-                populateRecipeAdmin(true);
+                populateRecipeAdmin(false);
                 break;
             case "#ProduceAdminTab":
-                populateProduceAdmin(true);
-                populateProduceBatchAdmin(true);
+                populateProduceAdmin(false);
+                populateProduceBatchAdmin(false);
                 break;
             case "#ProduceAdminSubTab":
-                populateProduceAdmin(true);
+                populateProduceAdmin(false);
                 break;
             case "#ProduceBatchAdminSubTab":
-                populateProduceBatchAdmin(true);
+                populateProduceBatchAdmin(false);
                 break;
             case "#ProductAdminTab":
-                populateProductAdmin(true);
+                populateProductAdmin(false);
                 break;
             default:
                 break;
@@ -875,7 +876,6 @@ function populateProductAdmin(notice) {
                     $('#productBatchComponentsTemplate').html(),
                     $('div.product[data-id='+rbId+']').parent().children('.collapsible-body'),
                     function( response ) {
-                        console.log(rbId);
                         $('div.product[data-id='+rbId+']').find("a.delete-productbatch").attr("data-id", rbId);
                     },
                     null

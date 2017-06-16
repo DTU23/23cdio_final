@@ -31,7 +31,6 @@ $(document).ready(function () {
             $('#productBatchComponentsTemplate').html(),
             $('div[data-id='+$(this).attr('data-id')+']').parent().children('.collapsible-body'),
             function( response ) {
-                console.log(clicked_element);
                 var clicked_element = $('.product.collapsible-header[data-id='+clicked_element_id+']');
                 clicked_element.parent().find('a.add-productbatchcomp').attr('data-productbatch-id', clicked_element.attr('data-id'));
                 clicked_element.parent().find("a.delete-productbatch").attr("data-id", clicked_element.attr('data-id'));
@@ -251,18 +250,21 @@ $(document).ready(function () {
                 "oprName": $('#userEditProfile').find("#user_name").val(),
                 "ini": $('#userEditProfile').find("#user_ini").val(),
                 "cpr": $('#userEditProfile').find("#user_cpr").val(),
-                "password": (($('#userEdit').find("#user_password").val().length > 0) ? $('#userEdit').find("#user_password").val() : null),
-                "newPassword": (($('#userEdit').find("#user_new_password").val().length > 0) ? $('#userEdit').find("#user_new_password").val() : null),
+                "password": (($('#userEditProfile').find("#user_password").val().length > 0) ? $('#userEditProfile').find("#user_password").val() : null),
+                "newPassword": (($('#userEditProfile').find("#user_new_password").val().length > 0) ? $('#userEditProfile').find("#user_new_password").val() : null),
                 "admin": null,
                 "role": null
             },
             true,
-            $('#produceEditTemplate').html(),
-            $('#EditModal'),
+            null,
+            null,
             function( response ) {
-                populateUsersAdmin();
-                $('#EditModal').modal('close');
-            }
+                if(response == null){
+                    populateUsersAdmin();
+                    $('#EditModal').modal('close');
+                }
+            },
+            null
         );
     });
 
@@ -977,7 +979,7 @@ function ajaxErrorHandler(msg, notice, contextTab) {
                     $('#MainTabs').tabs();
                     $('#ProduceSubTabs').tabs();
                 }
-                Materialize.toast("Unauthorized!", 4000);
+                Materialize.toast(msg.responseText, 4000);
                 break;
             default:
                 Materialize.toast(msg.responseText, 4000);

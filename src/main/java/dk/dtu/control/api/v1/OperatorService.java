@@ -42,8 +42,8 @@ public class OperatorService {
 
 	@POST
 	@Secured( admin = true )
-	public void createOperator(OperatorDTO opr) throws ValidationException, DALException {
-		controller.createOperatorValidation(opr);
+	public OperatorDTO createOperator(OperatorDTO opr) throws ValidationException, DALException {
+		return controller.createOperatorValidation(opr);
 	}
 
 	@GET
@@ -75,6 +75,7 @@ public class OperatorService {
 	}
 
 	@PUT
+	@Secured( roles = {Role.None} )
 	@Path("/update")
 	public void updateOperator(OperatorNewPWDTO opr) throws ValidationException, DALException, AuthException {
 		controller.updateOperatorValidation(opr);

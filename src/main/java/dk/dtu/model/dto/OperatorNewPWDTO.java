@@ -18,13 +18,14 @@ public class OperatorNewPWDTO
 
 	public OperatorNewPWDTO(){}
 
-	public OperatorNewPWDTO(int oprId, String oprName, String ini, String cpr, String password, boolean admin, String role)
+	public OperatorNewPWDTO(int oprId, String oprName, String ini, String cpr, String password, String newPassword, boolean admin, String role)
 	{
 		this.oprId = oprId;
 		this.oprName = oprName;
 		this.ini = ini;
 		this.cpr = cpr;
 		this.password = password;
+		this.newPassword = newPassword;
 		this.admin = admin;
 		this.role = role;
 	}
@@ -36,6 +37,19 @@ public class OperatorNewPWDTO
     	this.ini = opr.getIni();
     	this.cpr = opr.getCpr();
     	this.password = opr.getPassword();
+    	this.newPassword = opr.getNewPassword();
+    	this.admin = opr.isAdmin();
+    	this.role = opr.getRole();
+    }
+    
+    public OperatorNewPWDTO(OperatorDTO opr)
+    {
+    	this.oprId = opr.getOprId();
+    	this.oprName = opr.getOprName();
+    	this.ini = opr.getIni();
+    	this.cpr = opr.getCpr();
+    	this.password = opr.getPassword();
+    	this.newPassword = null;
     	this.admin = opr.isAdmin();
     	this.role = opr.getRole();
     }

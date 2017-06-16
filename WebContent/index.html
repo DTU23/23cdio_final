@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <title>CDIO 2.3</title>
+    <title>CDIO Final</title>
     <!-- Materialize CSS & Icons -->
     <link rel="stylesheet" href="css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -30,7 +30,7 @@
                     <th class="col s3">Product Batch ID</th>
                     <th class="col s3">Recipe ID</th>
                     <th class="col s3">Recipe Name</th>
-                    <th class="col s3">Status</th>
+                    <th class="col s2">Status</th>
                 </tr>
                 </thead>
             </table>
@@ -41,9 +41,10 @@
                         <span class="col s3 pbId">{{pbId}}</span>
                         <span class="col s3 recipeId">{{recipeId}}</span>
                         <span class="col s3 recipeName">{{recipeName}}</span>
-                        <span class="col s3 status">{{status}}</span>
+                        <span class="col s2 status">{{status}}</span>
                     </div>
                     <div class="collapsible-body">
+                        <span class="col s1 status left"><a class="btn waves-effect waves-light red darken-2 delete-productbatch" data-id="{{pbId}}">Delete Productbatch</a></span>
                         <table class="striped centered responsive-table">
                             <thead>
                             <tr>
@@ -85,6 +86,7 @@
     </script>
 
     <script type="text/html" id="productBatchComponentsTemplate">
+        <span class="col s1 status left"><a class="btn waves-effect waves-light red darken-2 delete-productbatch" data-id="">Delete Productbatch</a></span>
         <table class="striped centered responsive-table">
             <thead>
             <tr>
@@ -337,6 +339,8 @@
                     <span class="center col s10">{{ recipeName }}</span>
                 </div>
                 <div class="collapsible-body">
+                    <span class="status left"><a class="btn waves-effect waves-light red darken-2 delete-recipe" data-id="">Delete Recipe</a></span>
+                    <span class="status left"><a class="btn waves-effect waves-light blue darken-2 edit-recipe" data-id="">Edit Recipe</a></span>
                     <table class="striped centered responsive-table">
                         <thead>
                         <tr>
@@ -377,7 +381,30 @@
         </div>
     </script>
 
+    <script type="text/html" id="recipeEditTemplate">
+        <div class="modal-content">
+            <h4>Add Recipe</h4>
+            <form id="recipeEdit">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input disabled id="recipe_id" type="text" class="validate" value="{{recipeId}}">
+                        <label for="recipe_id" class="active">Recipe ID</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="recipe_name" type="text" class="validate" value="{{recipeName}}">
+                        <label for="recipe_name" class="active">Recipe Name</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-save-recipe waves-effect waves-green btn-flat">Save</a>
+        </div>
+    </script>
+
     <script type="text/html" id="RecipeComponentsTemplate">
+        <span class="status left"><a class="btn waves-effect waves-light red darken-2 delete-recipe" data-id="">Delete Recipe</a></span>
+        <span class="status left"><a class="btn waves-effect waves-light blue darken-2 edit-recipe" data-id="">Edit Recipe</a></span>
         <table class="striped centered responsive-table">
             <thead>
             <tr>
@@ -514,7 +541,7 @@
                         <label for="user_ini" class="active">User Initials</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="user_password" type="password" class="validate" value="">
+                        <input id="user_password" type="password" class="" value="">
                         <label for="user_password">New  Password</label>
                     </div>
                     <div class="input-field col s12">
@@ -586,16 +613,16 @@
                     </div>
                     <p class="col s4">
                         <!--{{#admin}}-->
-                        <input type="checkbox" id="user_admin" checked="checked" />
+                        <input type="checkbox" id="user_admin" checked="checked" disabled/>
                         <!--{{/admin}}-->
                         <!--{{^admin}}-->
-                        <input type="checkbox" id="user_admin"/>
+                        <input type="checkbox" id="user_admin" disabled/>
                         <!--{{/admin}}-->
                         <label for="user_admin">Admin</label>
                     </p>
                     <!-- Dropdown Trigger -->
                     <div id="user_role" class="input-field col s8" data-selected="{{role}}">
-                        <select>
+                        <select disabled>
                             <option value="none">none</option>
                             <option value="operator">operator</option>
                             <option value="foreman">foreman</option>
@@ -660,6 +687,16 @@
         </div>
     </script>
 
+    <script type="text/html" id="userCreationSuccess">
+        <div class="modal-content">
+            <h4 class="center">User Added successfully</h4>
+            <span>Autogenerated password is: <i>{{password}}</i></span>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Dismiss</a>
+        </div>
+    </script>
+
 </head>
 <body>
 <div class="loading-box">
@@ -707,7 +744,7 @@
 </div>
 <nav class="blue-grey darken-3">
     <div class="nav-wrapper container">
-        <a href="/" class="brand-logo">DTU Gruppe 23</a>
+        <a href="./" class="brand-logo">DTU Gruppe 23</a>
         <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="#" class="edit-profile"><i class="material-icons left">edit</i>Edit Profile</a></li>

@@ -21,7 +21,6 @@ public class LoginController implements ILoginController {
 
 	@Override
 	public Response authenticateUser(int oprId, String password) throws AuthException, DALException {
-		try {
 			// Authenticate the user using the credentials provided
 			passwordCheck(oprId, password);
 
@@ -30,10 +29,6 @@ public class LoginController implements ILoginController {
 
 			// Return the token on the response
 			return Response.ok(token).build();
-
-		} catch (AuthException | DALException e) {
-			return Response.status(Response.Status.UNAUTHORIZED).build();
-		}
 	}
 
 	@Override
@@ -60,7 +55,7 @@ public class LoginController implements ILoginController {
 		try {
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.DATE, 7);
-			Algorithm algorithm = Algorithm.HMAC256("secret");
+			Algorithm algorithm = Algorithm.HMAC256("7pAusDB1Wl");
 			return JWT.create()
 					.withIssuer("auth0")
 					.withClaim("oprId", oprId)

@@ -31,9 +31,12 @@ $(document).ready(function () {
             $('#productBatchComponentsTemplate').html(),
             $('div[data-id='+$(this).attr('data-id')+']').parent().children('.collapsible-body'),
             function( response ) {
+                console.log(clicked_element);
                 var clicked_element = $('.product.collapsible-header[data-id='+clicked_element_id+']');
                 clicked_element.parent().find('a.add-productbatchcomp').attr('data-productbatch-id', clicked_element.attr('data-id'));
-            }
+                clicked_element.parent().find("a.delete-productbatch").attr("data-id", clicked_element.attr('data-id'));
+            },
+            null
         );
     });
 
@@ -57,6 +60,22 @@ $(document).ready(function () {
             $('#EditModal').modal('open');
             Materialize.updateTextFields();
         });
+    });
+
+    $(document).on("click", '.delete-productbatch', function (e) {
+        var pbid = $(this).attr('data-id');
+        doAjax(
+            "DELETE",
+            "./api/v1/productbatch/"+pbid,
+            "",
+            true,
+            null,
+            null,
+            function( response ) {
+                Materialize.toast("Productbath with ID: "+ pbid +" was deleted!", 4000);
+                populateProductAdmin(false);
+            }
+        );
     });
 
     $(document).on('click', '.modal-add-productbatch', function (e) {
@@ -177,8 +196,11 @@ $(document).ready(function () {
             null,
             null,
             function( response ) {
-                populateUsersAdmin(false);
-                $('#EditModal').modal('close');
+                Mustache.parse($('#userCreationSuccess').html());   // optional, speeds up future uses
+                var rendered = Mustache.render($('#userCreationSuccess').html(), response);
+                $('#EditModal').html(rendered).promise().done(function () {
+                    populateUsersAdmin(false);
+                });
             }
         );
     });
@@ -199,13 +221,13 @@ $(document).ready(function () {
                 "oprName": $('#userEdit').find("#user_name").val(),
                 "ini": $('#userEdit').find("#user_ini").val(),
                 "cpr": $('#userEdit').find("#user_cpr").val(),
-                "password": $('#userEdit').find("#user_password").val(),
+                "password": (($('#userEdit').find("#user_password").val().length > 0) ? $('#userEdit').find("#user_password").val() : null),
                 "admin": $('#userEdit').find("#user_admin").is(':checked'),
                 "role": role
             },
             true,
-            $('#produceEditTemplate').html(),
-            $('#EditModal'),
+            null,
+            null,
             function( response ) {
                 populateUsersAdmin();
                 $('#EditModal').modal('close');
@@ -229,10 +251,10 @@ $(document).ready(function () {
                 "oprName": $('#userEditProfile').find("#user_name").val(),
                 "ini": $('#userEditProfile').find("#user_ini").val(),
                 "cpr": $('#userEditProfile').find("#user_cpr").val(),
-                "password": $('#userEditProfile').find("#user_password").val(),
-                "newPassword": $('#userEditProfile').find("#user_new_password").val(),
-                "admin": $('#userEditProfile').find("#user_admin").is(':checked'),
-                "role": role
+                "password": (($('#userEdit').find("#user_password").val().length > 0) ? $('#userEdit').find("#user_password").val() : null),
+                "newPassword": (($('#userEdit').find("#user_new_password").val().length > 0) ? $('#userEdit').find("#user_new_password").val() : null),
+                "admin": null,
+                "role": null
             },
             true,
             $('#produceEditTemplate').html(),
@@ -427,6 +449,37 @@ $(document).ready(function () {
         Materialize.updateTextFields();
     });
 
+    $(document).on("click", '.edit-recipe', function (e) {
+        doAjax(
+            "GET",
+            "./api/v1/recipe/"+$(this).attr('data-id'),
+            "",
+            true,
+            $('#recipeEditTemplate').html(),
+            $('#EditModal'),
+            function( response ) {
+                $('#EditModal').modal('open');
+            },
+            null
+        );
+    });
+
+    $(document).on("click", '.delete-recipe', function (e) {
+        var recipeId = $(this).attr('data-id');
+        doAjax(
+            "DELETE",
+            "./api/v1/recipe/"+recipeId,
+            "",
+            true,
+            null,
+            null,
+            function( response ) {
+                Materialize.toast("Recipe with ID: "+ recipeId +" was deleted!", 4000);
+                populateRecipeAdmin(false);
+            }
+        );
+    });
+
     $(document).on('click', '.modal-add-recipe', function (e) {
         e.preventDefault();
         doAjax(
@@ -435,6 +488,25 @@ $(document).ready(function () {
             {
                 recipeId: $('#EditModal').find('#recipe_id').val(),
                 recipeName: $('#EditModal').find('#recipe_name').val()
+            },
+            true,
+            null,
+            null,
+            function( response ) {
+                populateRecipeAdmin(false);
+                $('#EditModal').modal('close');
+            }
+        );
+    });
+
+    $(document).on('click', '.modal-save-recipe', function (e) {
+        e.preventDefault();
+        doAjax(
+            "PUT",
+            "./api/v1/recipe/",
+            {
+                recipeId: $('#recipeEdit').find('input#recipe_id').val(),
+                recipeName: $('#recipeEdit').find('input#recipe_name').val()
             },
             true,
             null,
@@ -460,6 +532,8 @@ $(document).ready(function () {
             callback = function( response ) {
                 var clicked_element = $('.recipe.collapsible-header[data-id='+clicked_element_id+']');
                 clicked_element.parent().find('a.add-recipecomp').attr('data-recipe-id', clicked_element.attr('data-id'));
+                clicked_element.parent().find("a.delete-recipe").attr("data-id", clicked_element.attr('data-id'));
+                clicked_element.parent().find("a.edit-recipe").attr("data-id", clicked_element.attr('data-id'));
             }
         );
     });
@@ -514,7 +588,9 @@ $(document).ready(function () {
                     $('#RecipeComponentsTemplate').html(),
                     $('div.recipe[data-id='+recipe_id+']').parent().children('.collapsible-body'),
                     function( response ) {
-
+                        if(response.status === 404){
+                            populateRecipeAdmin(false);
+                        }
                     }
                 );
             }
@@ -616,8 +692,8 @@ $(document).ready(function () {
                 $('#Administration').show();
                 populateUsersAdmin(false);
                 populateProduceAdmin(false);
-                //populateProduceBatchAdmin(false);
-                //populateProductAdmin(false);
+                populateProduceBatchAdmin(false);
+                populateProductAdmin(false);
                 populateRecipeAdmin(false);
             },
             error: function ( msg ) {
@@ -646,23 +722,23 @@ $(document).ready(function () {
         switch($(this).children("a").attr("href"))
         {
             case "#UserAdminTab":
-                populateUsersAdmin(true);
+                populateUsersAdmin(false);
                 break;
             case "#RecipeAdminTab":
-                populateRecipeAdmin(true);
+                populateRecipeAdmin(false);
                 break;
             case "#ProduceAdminTab":
-                populateProduceAdmin(true);
-                populateProduceBatchAdmin(true);
+                populateProduceAdmin(false);
+                populateProduceBatchAdmin(false);
                 break;
             case "#ProduceAdminSubTab":
-                populateProduceAdmin(true);
+                populateProduceAdmin(false);
                 break;
             case "#ProduceBatchAdminSubTab":
-                populateProduceBatchAdmin(true);
+                populateProduceBatchAdmin(false);
                 break;
             case "#ProductAdminTab":
-                populateProductAdmin(true);
+                populateProductAdmin(false);
                 break;
             default:
                 break;
@@ -671,6 +747,11 @@ $(document).ready(function () {
 
     $(document).on('click', '#logo', function (e) {
         $('#hiddenModal').modal('open');
+    });
+
+    $(document).on('click', 'a.modal-close', function (e) {
+        e.preventDefault();
+        $('#EditModal').modal('close');
     });
 
     $(document).on('click','#resetData', function () {
@@ -689,7 +770,8 @@ $(document).ready(function () {
                 populateProduceBatchAdmin(false);
                 populateProductAdmin(false);
                 populateRecipeAdmin(false);
-            }
+            },
+            null
         );
     });
 
@@ -731,7 +813,7 @@ function populateProduceAdmin(notice) {
         "GET",
         "./api/v1/produce/",
         "",
-        true,
+        notice,
         $('#ProduceAdministrationTemplate').html(),
         $('#ProduceAdminSubTab'),
         function (response) {
@@ -785,16 +867,18 @@ function populateProductAdmin(notice) {
         function (response) {
             $('.collapsible').collapsible();
             $('.product.collapsible-header').each(function () {
+                var rbId = $(this).attr('data-id');
                 doAjax(
                     "GET",
-                    "./api/v1/productbatchcomp/list/"+$(this).attr('data-id'),
+                    "./api/v1/productbatchcomp/list/"+rbId,
                     "",
                     notice,
                     $('#productBatchComponentsTemplate').html(),
-                    $('div.product[data-id='+$(this).attr('data-id')+']').parent().children('.collapsible-body'),
+                    $('div.product[data-id='+rbId+']').parent().children('.collapsible-body'),
                     function( response ) {
-
-                    }
+                        $('div.product[data-id='+rbId+']').find("a.delete-productbatch").attr("data-id", rbId);
+                    },
+                    null
                 );
             })
         },
@@ -822,7 +906,10 @@ function populateRecipeAdmin(notice){
                     $('#RecipeComponentsTemplate').html(),
                     $('div.recipe[data-id='+recipe_id+']').parent().children('.collapsible-body'),
                     function( response ) {
-
+                        var clicked_element = $('.recipe.collapsible-header[data-id='+recipe_id+']');
+                        clicked_element.parent().find('a.add-recipecomp').attr('data-recipe-id', clicked_element.attr('data-id'));
+                        clicked_element.parent().find("a.delete-recipe").attr("data-id", clicked_element.attr('data-id'));
+                        clicked_element.parent().find("a.edit-recipe").attr("data-id", clicked_element.attr('data-id'));
                     }
                 );
             })
@@ -853,6 +940,9 @@ function doAjax(method, url, data, notice, template, dom_target, callback, conte
             },
             403 : function (response) {
                 callback(response);
+            },
+            404 : function (response) {
+                callback(response);
             }
         },
         success: function(response) {
@@ -882,7 +972,7 @@ function ajaxErrorHandler(msg, notice, contextTab) {
                 break;
             case 401:
             case 403:
-                if(contextTab !== "undefined"){
+                if(contextTab !== null){
                     contextTab.parent().addClass('disabled');
                     $('#MainTabs').tabs();
                     $('#ProduceSubTabs').tabs();
@@ -902,7 +992,7 @@ function ajaxErrorHandler(msg, notice, contextTab) {
                 break;
             case 401:
             case 403:
-                if(contextTab !== "undefined"){
+                if(contextTab !== null){
                     contextTab.parent().addClass('disabled');
                     $('#MainTabs').tabs();
                     $('#ProduceSubTabs').tabs();

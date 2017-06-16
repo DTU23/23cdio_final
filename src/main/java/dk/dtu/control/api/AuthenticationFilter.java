@@ -84,7 +84,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     }
 
     private void validateToken(String token) throws Exception {
-        Algorithm algorithm = Algorithm.HMAC256("secret");
+        Algorithm algorithm = Algorithm.HMAC256("7pAusDB1Wl");
         JWTVerifier verifier = JWT.require(algorithm)
                 .withIssuer("auth0")
                 .build(); //Reusable verifier instance

@@ -51,7 +51,7 @@ DELIMITER //
 CREATE PROCEDURE get_recipe_comp_by_recipe_id(IN input_recipe_id INT)
 BEGIN
   SELECT *
-  FROM recipecomponent
-  WHERE recipecomponent.recipe_id = input_recipe_id;
+  FROM recipe_list
+  WHERE recipe_list.recipe_id = input_recipe_id;
 END //
 DELIMITER ;

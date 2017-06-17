@@ -10,6 +10,7 @@ import java.util.List;
 
 import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dto.RecipeCompDTO;
+import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.exceptions.dal.ConnectivityException;
 import dk.dtu.model.exceptions.dal.IntegrityConstraintViolationException;
 import dk.dtu.model.exceptions.dal.NotFoundException;
@@ -144,8 +145,8 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 	}
 
 	@Override
-	public List<RecipeCompDTO> getRecipeCompByRecipeId(int recipeId) throws ConnectivityException, NotFoundException {
-		List<RecipeCompDTO> list = new ArrayList<RecipeCompDTO>();
+	public List<RecipeListDTO> getRecipeCompByRecipeId(int recipeId) throws ConnectivityException, NotFoundException {
+		List<RecipeListDTO> list = new ArrayList<RecipeListDTO>();
 		Connection conn = null;
 		PreparedStatement stm = null;
 		ResultSet rs = null;
@@ -158,9 +159,11 @@ public class MySQLRecipeCompDAO implements RecipeCompDAO {
 				throw new NotFoundException("Recipe with id " + recipeId + " does not exist");
 			}
 			do {
-				list.add(new RecipeCompDTO(
+				list.add(new RecipeListDTO(
 						rs.getInt("recipe_id"),
+						null,
 						rs.getInt("produce_id"),
+						rs.getString("produce_name"),
 						rs.getDouble("nom_netto"),
 						rs.getDouble("tolerance")));
 			} while (rs.next());

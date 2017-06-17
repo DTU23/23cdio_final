@@ -19,6 +19,7 @@ import dk.dtu.control.api.Secured;
 import dk.dtu.model.Validation;
 import dk.dtu.model.dao.MySQLRecipeCompDAO;
 import dk.dtu.model.dto.RecipeCompDTO;
+import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.exceptions.DALException;
 import dk.dtu.model.exceptions.ValidationException;
 import dk.dtu.model.interfaces.RecipeCompDAO;
@@ -65,7 +66,7 @@ public class RecipeCompService {
 	@GET
 	@Path("list/{id}")
 	@Secured( roles = { Role.Pharmacist })
-	public List<RecipeCompDTO> getRecipeCompList(@PathParam("id") int recipeId) throws ValidationException, DALException {
+	public List<RecipeListDTO> getRecipeCompList(@PathParam("id") int recipeId) throws ValidationException, DALException {
 		Validation.isPositiveInteger(recipeId);
 		return dao.getRecipeCompByRecipeId(recipeId);
 	}

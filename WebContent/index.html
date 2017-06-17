@@ -409,6 +409,7 @@
             <thead>
             <tr>
                 <th>Produce ID</th>
+				<th>Produce Name</th>
                 <th>Nom. Netto</th>
                 <th>Tolerance</th>
                 <th>Action</th>
@@ -418,8 +419,9 @@
             <!--{{#.}}-->
             <tr id="recipe-component-{{recipeId}}">
                 <td class="produce_id">{{produceId}}</td>
+				<td class="produce_name">{{produceName}}</td>
                 <td class="nom_netto">{{nomNetto}}</td>
-                <td class="nom_netto">{{tolerance}}</td>
+                <td class="tolerance">{{tolerance}}</td>
                 <td>
                 <a class="btn-floating btn waves-effect waves-light red darken-2 delete-recipecomp" data-produce-id="{{produceId}}" data-recipe-id="{{recipeId}}"><i class="material-icons">delete</i></a>
                 <a class="btn-floating btn waves-effect waves-light blue darken-1 edit-recipecomp" data-produce-id="{{produceId}}" data-recipe-id="{{recipeId}}"><i class="material-icons">edit</i></a>

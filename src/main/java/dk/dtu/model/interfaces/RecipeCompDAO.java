@@ -3,6 +3,7 @@ package dk.dtu.model.interfaces;
 import java.util.List;
 
 import dk.dtu.model.dto.RecipeCompDTO;
+import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.exceptions.DALException;
 
 public interface RecipeCompDAO {
@@ -11,5 +12,5 @@ public interface RecipeCompDAO {
 	void updateRecipeComp(RecipeCompDTO recipeComponent) throws DALException;
 	void deleteRecipeComp(int recipeId, int produceId) throws DALException;
 	List<RecipeCompDTO> getRecipeCompList() throws DALException;
-	List<RecipeCompDTO> getRecipeCompByRecipeId(int recipeId) throws DALException;
+	List<RecipeListDTO> getRecipeCompByRecipeId(int recipeId) throws DALException;
 }

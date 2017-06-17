@@ -16,6 +16,7 @@ import org.junit.Test;
 import dk.dtu.model.connector.DataSource;
 import dk.dtu.model.dao.MySQLRecipeCompDAO;
 import dk.dtu.model.dto.RecipeCompDTO;
+import dk.dtu.model.dto.RecipeListDTO;
 import dk.dtu.model.exceptions.DALException;
 
 public class MySQLRecipeCompDaoTest {
@@ -34,10 +35,10 @@ public class MySQLRecipeCompDaoTest {
 		recipeComp = null;
 	}
 
-/**
- * positive get recipe comp test
- */
-	
+	/**
+	 * positive get recipe comp test
+	 */
+
 	@Test
 	public void positiveGetRecipeComp() {
 		RecipeCompDTO actual = null;
@@ -47,11 +48,11 @@ public class MySQLRecipeCompDaoTest {
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(expected.toString(), is(equalTo(actual.toString())));
 	}
-	
+
 	/**
 	 * negative get recipe comp test
 	 */
-	
+
 	@Test
 	public void getRecipeCompByIDThatDoesntExist() {
 		String errorMsg = null;
@@ -64,13 +65,13 @@ public class MySQLRecipeCompDaoTest {
 	/**
 	 * positive get recipe comp list with ID 
 	 */
-	
+
 	@Test
 	public void positiveGetListRecipeCompWithID() {
-		List<RecipeCompDTO> actual = null;
+		List<RecipeListDTO> actual = null;
 		try {
 			actual = recipeComp.getRecipeCompByRecipeId(1);
-			
+
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(actual.get(1).getRecipeId(), not(nullValue()));
 		assertThat(actual.get(1).getProduceId(), not(nullValue()));
@@ -81,7 +82,7 @@ public class MySQLRecipeCompDaoTest {
 	/**
 	 * positive get list recipe comp without ID test 
 	 */
-	
+
 	@Test
 	public void positiveGetListRecipeComp() {
 		List<RecipeCompDTO> actual = null;
@@ -97,7 +98,7 @@ public class MySQLRecipeCompDaoTest {
 	/**
 	 * Positive create recipe comp test
 	 */
-	
+
 	@Test
 	public void positiveCreateRecipeComp() {
 		RecipeCompDTO expected = new RecipeCompDTO(3, 2, 1.5, 0.1);
@@ -108,14 +109,14 @@ public class MySQLRecipeCompDaoTest {
 		} catch (DALException e) { System.out.println(e.getMessage()); }
 		assertThat(expected.toString(), is(equalTo(actual.toString())));
 	}
-	
+
 	/**
 	 * get recipe comp with invalid input
 	 */
-	
+
 	@Test (expected = DALException.class)
 	public void getRecipeCompWithInvalidID() throws Exception{
 		recipeComp.readRecipeComp(0, 1);
 	}
-	
+
 }

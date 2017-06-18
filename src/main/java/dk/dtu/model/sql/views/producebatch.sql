@@ -7,13 +7,15 @@ CREATE OR REPLACE VIEW produce_batch_list AS
   ORDER BY produce_name;
 
 CREATE OR REPLACE VIEW total_amount_by_produce_name AS
-  SELECT produce.produce_name, SUM(producebatch.amount) AS total
-  FROM producebatch NATURAL JOIN produce
+  SELECT produce.produce_name, COALESCE(SUM(producebatch.amount),0) AS total
+  FROM produce LEFT JOIN producebatch
+    ON produce.produce_id = producebatch.produce_id
   GROUP BY produce.produce_name;
 
 CREATE OR REPLACE VIEW amount_used_by_produce_name AS
   SELECT produce.produce_name, COALESCE(SUM(productbatchcomponent.netto),0) AS used
-  FROM (producebatch NATURAL JOIN produce) LEFT JOIN productbatchcomponent
+  FROM (produce LEFT JOIN producebatch
+    ON produce.produce_id = producebatch.produce_id) LEFT JOIN productbatchcomponent
       ON producebatch.rb_id = productbatchcomponent.rb_id
   GROUP BY produce.produce_name;
 

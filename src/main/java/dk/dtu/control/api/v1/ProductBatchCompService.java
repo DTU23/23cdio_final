@@ -80,7 +80,7 @@ public class ProductBatchCompService {
 	
 	@GET
 	@Path("/list/{pbId}")
-	@Secured( roles = { Role.Pharmacist })
+	@Secured( roles = { Role.Foreman })
 	public List<ProductBatchCompSupplierDetailsDTO> getRecipeComp(@PathParam("pbId") int pbId) throws ValidationException, DALException {
 		Validation.isPositiveInteger(pbId);
 		return dao.getProductBatchComponentSupplierDetailsByPbId(pbId);

@@ -145,7 +145,7 @@ public class WeightAdaptor implements IWeightAdaptor {
 	@Override
 	public String getProductBatchNumber() throws AdaptorException {
 		try {
-			sendCommand("RM20 8 \"BATCH?\" \"\" \"&3\"");
+			sendCommand("RM20 8 \"PB ID?\" \"\" \"&3\"");
 			waitResponse();
 			return waitResponse().split("\"")[1];
 		} catch (Exception e) {
@@ -249,13 +249,13 @@ public class WeightAdaptor implements IWeightAdaptor {
 	public void grossCheck(boolean result) throws AdaptorException {
 		try {
 			if(result) {
-				sendCommand("P111 \"Weighing OK! [->");
+				sendCommand("P111 \"Weighing OK! [->\"");
 				waitResponse();
 				waitResponse();
 				sendCommand("T");
 				waitResponse();
 			} else {
-				sendCommand("P111 \"Weighing not OK! [->");
+				sendCommand("P111 \"Weighing not OK! [->\"");
 				waitResponse();
 				waitResponse();
 				sendCommand("T");

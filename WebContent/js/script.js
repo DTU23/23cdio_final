@@ -756,25 +756,29 @@ $(document).ready(function () {
         $('#EditModal').modal('close');
     });
 
+	function executeHidden(path) {
+		doAjax(
+				method = "GET",
+				url = "./api/v1/database/"+path,
+				data = "",
+				notice= false,
+				template = null,
+				dom_target = null,
+				callback = function (response) {
+					Materialize.toast(response, 4000);
+					$('#hiddenModal').modal('close');
+					populateUsersAdmin(false);
+					populateProduceAdmin(false);
+					populateProduceBatchAdmin(false);
+					populateProductAdmin(false);
+					populateRecipeAdmin(false);
+				},
+				contextTab = null
+		);
+	}
+
     $(document).on('click','#resetData', function () {
-        doAjax(
-            "GET",
-            "./api/v1/database/reset",
-            "",
-            false,
-            null,
-            null,
-            function (response) {
-                Materialize.toast(response, 4000);
-                $('#hiddenModal').modal('close');
-                populateUsersAdmin(false);
-                populateProduceAdmin(false);
-                populateProduceBatchAdmin(false);
-                populateProductAdmin(false);
-                populateRecipeAdmin(false);
-            },
-            null
-        );
+        executeHidden("reset");
     });
     
     $(document).on('click','#addUsers', function () {
@@ -800,27 +804,6 @@ $(document).ready(function () {
 	$(document).on('click','#addProductBatchComp', function () {
 		executeHidden("productbatchcomp");
 	});
-
-	function executeHidden(path) {
-		doAjax(
-				method = "GET",
-				url = "./api/v1/database/"+path,
-				data = "",
-				notice= false,
-				template = null,
-				dom_target = null,
-				callback = function (response) {
-					Materialize.toast(response, 4000);
-					$('#hiddenModal').modal('close');
-					populateUsersAdmin(false);
-					populateProduceAdmin(false);
-					populateProduceBatchAdmin(false);
-					populateProductAdmin(false);
-					populateRecipeAdmin(false);
-				},
-				contextTab = null
-		);
-	}
 
     /**
      * Initialization

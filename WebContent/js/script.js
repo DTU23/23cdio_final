@@ -778,21 +778,49 @@ $(document).ready(function () {
     });
     
     $(document).on('click','#addUsers', function () {
-    	doAjax(
-                method = "GET",
-                url = "./api/v1/database/users",
-                data = "",
-                notice= false,
-                template = null,
-                dom_target = null,
-                callback = function (response) {
-                    Materialize.toast(response, 4000);
-                    $('#hiddenModal').modal('close');
-                    populateUsersAdmin(false);
-                },
-                contextTab = null
-            );
-    });
+		executeHidden("users");
+	});
+	
+	$(document).on('click','#addProduce', function () {
+		executeHidden("produce");
+	});
+	
+	$(document).on('click','#addRecipe', function () {
+		executeHidden("recipe");
+	});
+	
+	$(document).on('click','#addProduceBatch', function () {
+		executeHidden("producebatch");
+	});
+	
+	$(document).on('click','#addProductBatch', function () {
+		executeHidden("productbatch");
+	});
+	
+	$(document).on('click','#addProductBatchComp', function () {
+		executeHidden("productbatchcomp");
+	});
+
+	function executeHidden(path) {
+		doAjax(
+				method = "GET",
+				url = "./api/v1/database/"+path,
+				data = "",
+				notice= false,
+				template = null,
+				dom_target = null,
+				callback = function (response) {
+					Materialize.toast(response, 4000);
+					$('#hiddenModal').modal('close');
+					populateUsersAdmin(false);
+					populateProduceAdmin(false);
+					populateProduceBatchAdmin(false);
+					populateProductAdmin(false);
+					populateRecipeAdmin(false);
+				},
+				contextTab = null
+		);
+	}
 
     /**
      * Initialization

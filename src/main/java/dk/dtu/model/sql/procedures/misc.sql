@@ -12,7 +12,7 @@ CREATE PROCEDURE insert_users()
     INSERT INTO operator(opr_id, opr_name, ini, cpr, password, admin, role) VALUES
       (22, 'Mads Pedersen', 'MP', '0109162407', 'root', FALSE , 'Pharmacist'),
       (23, 'Christian Niemann', 'CN', '0109162407', 'root', FALSE, 'Foreman'),
-      (24, 'Frederik Værnegaard', 'FV', '0109162407', 'root', FALSE, 'Operator');
+      (24, 'Frederik Værnegaard', 'FV', '0109162407', '123', FALSE, 'Operator');
   END //
 DELIMITER ;
 
@@ -34,7 +34,7 @@ CREATE PROCEDURE insert_recipe()
       (99, 1, 10.0, 0.1),
       (99, 2, 2.0, 0.1),
       (99, 5, 3.0, 0.1),
-      (99, 22, 3.0, 0.1);
+      (99, 22, 1.55, 0.1);
   END //
 DELIMITER ;
 
@@ -83,7 +83,7 @@ CREATE PROCEDURE reset_data()
       (6, 'Pharmacist', 'PHA', '0109162407', 'root', FALSE , 'Pharmacist'),
       (7, 'Foreman', 'FM', '0109162407', 'root', FALSE, 'Foreman'),
       (8, 'Operator', 'OPR', '0109162407', 'root', FALSE, 'Operator'),
-      (9, 'None', 'NONE', '0109162407', 'root', FALSE, 'None'),
+      (9, 'None', 'NONE', '0109162407', '123', FALSE, 'None'),
       (21, 'Viktor Poulsen', 'VP', '0109162407', 'root', TRUE, 'None');
 
     INSERT INTO produce(produce_id, produce_name, supplier) VALUES

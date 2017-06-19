@@ -242,7 +242,7 @@ public class WeightProcessController implements IWeightProcessController {
 				weightAdaptor.tara();
 				gross = Double.parseDouble(weightAdaptor.removeGross());
 
-				if(tara + netto == Math.abs(gross)) {
+				if(Math.abs(tara + netto + gross) < 0.05) {
 					productBatchCompDTO = new ProductBatchCompDTO(productBatchRequest.getPbId(), Integer.parseInt(rbId), tara, netto, Integer.parseInt(oprId));
 					try {
 						productBatchCompDAO.createProductBatchComp(productBatchCompDTO);

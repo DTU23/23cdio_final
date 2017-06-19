@@ -98,19 +98,19 @@ public class WeightProcessController implements IWeightProcessController {
 					weightAdaptor.confirmOperatorName(operatorDTO.getOprName());
 					break oprIdLoop;
 				} catch (AdaptorException e) {
-					errorMessageInSecondaryDisplay("Problem trying to send or recieve message from weight!");
+					errorMessageInSecondaryDisplay("Connectivity problem!");
 					e.printStackTrace();
 					continue oprIdLoop;
 				} catch (NotFoundException e) {
-					errorMessageInSecondaryDisplay("Operator was not found!");
+					errorMessageInSecondaryDisplay("Operator not found!");
 					e.printStackTrace();
 					continue oprIdLoop;
 				} catch (PositiveIntegerValidationException e) {
-					errorMessageInSecondaryDisplay("The ID was not valid!");
+					errorMessageInSecondaryDisplay("Invalid ID!");
 					e.printStackTrace();
 					continue oprIdLoop;
 				} catch (DALException e) {
-					errorMessageInSecondaryDisplay("Problem trying to read operator from database!");
+					errorMessageInSecondaryDisplay("Database problem!");
 					e.printStackTrace();
 					continue oprIdLoop;
 				}
@@ -126,18 +126,18 @@ public class WeightProcessController implements IWeightProcessController {
 			e.printStackTrace();
 			continue loginLoop;
 		} catch (AdaptorException e) {
-			errorMessageInSecondaryDisplay("Problem trying to send or recieve message from weight!");
+			errorMessageInSecondaryDisplay("Connectivity problem!!");
 			e.printStackTrace();
 			continue loginLoop;
 		}  catch (DALException e) {
-			errorMessageInSecondaryDisplay("Problem trying to reach database!");
+			errorMessageInSecondaryDisplay("Database problem!");
 			e.printStackTrace();
 			continue loginLoop;
 		}
 		loginResult(true);
 		// Check operator has a role
 		if (operatorDTO.getRole().equals(Role.None.toString())) {
-			errorMessageInSecondaryDisplay("This operator is disabled!");
+			errorMessageInSecondaryDisplay("Operator disabled!");
 			continue loginLoop;
 		}
 		break loginLoop;
@@ -150,22 +150,22 @@ public class WeightProcessController implements IWeightProcessController {
 				Validation.isPositiveInteger(productBatchNumber);
 				productBatchRequest = productBatchDAO.getProductBatchListDetailsByPbId(Integer.parseInt(productBatchNumber));
 				if(productBatchRequest.getStatus() == 2) {
-					weightAdaptor.writeInSecondaryDisplay("All produces in this product batch is already weighed!");
+					weightAdaptor.writeInSecondaryDisplay("Productbatch complete!");
 					weightAdaptor.clearSecondaryDisplay();
 					continue pbLoop;
 				}
 				recipeList = recipeDAO.getRecipeDetailsByID(productBatchRequest.getRecipeId());
 				weightAdaptor.confirmRecipeName(productBatchRequest.getRecipeName());
 			} catch (AdaptorException e) {
-				errorMessageInSecondaryDisplay("Problem trying to send or recieve message from weight!");
+				errorMessageInSecondaryDisplay("Connectivity problem!");
 				e.printStackTrace();
 				continue pbLoop;
 			} catch (DALException e) {
-				errorMessageInSecondaryDisplay("Product batch number doesn't exist!");
+				errorMessageInSecondaryDisplay("PB ID doesn't exist!");
 				e.printStackTrace();
 				continue pbLoop;
 			} catch (PositiveIntegerValidationException e) {
-				errorMessageInSecondaryDisplay("Product batch number is not valid!");
+				errorMessageInSecondaryDisplay("PB ID not valid!");
 				e.printStackTrace();
 				continue pbLoop;
 			}
@@ -206,6 +206,7 @@ public class WeightProcessController implements IWeightProcessController {
 			try {
 				RecipeListDTO recipeDTO = recipeList.get(i);
 				weightAdaptor.startWeighingProcess(recipeDTO.getProduceName());
+				weightAdaptor.writeInSecondaryDisplay("Clear weight!");
 				weightAdaptor.tara();
 				tara = Double.parseDouble(weightAdaptor.placeTara());
 				weightAdaptor.tara();
@@ -213,7 +214,7 @@ public class WeightProcessController implements IWeightProcessController {
 				weighNettoLoop: do {
 					netto = Double.parseDouble(weightAdaptor.placeNetto(recipeDTO.getNomNetto()));
 					if(Math.abs(recipeDTO.getNomNetto() - netto) / recipeDTO.getNomNetto() > tolerance) {
-						weightAdaptor.writeInSecondaryDisplay("Netto too high or too low! Please place "+recipeDTO.getNomNetto()+" kg");
+						weightAdaptor.writeInSecondaryDisplay("Outside tolerance!");
 						weightAdaptor.clearSecondaryDisplay();
 						continue weighNettoLoop;
 					} else {
@@ -227,11 +228,11 @@ public class WeightProcessController implements IWeightProcessController {
 					try {
 						produceBatchDAO.readProduceBatch(Integer.parseInt(rbId));
 					} catch (NumberFormatException e) {
-						errorMessageInSecondaryDisplay("Wrong produce batch ID!");
+						errorMessageInSecondaryDisplay("Wrong RB ID!");
 						e.printStackTrace();
 						continue rbIdLoop;
 					} catch (DALException e) {
-						errorMessageInSecondaryDisplay("Produce batch does not exist!");
+						errorMessageInSecondaryDisplay("RB doesn't exist!");
 						e.printStackTrace();
 						continue rbIdLoop;
 					}	
@@ -246,7 +247,7 @@ public class WeightProcessController implements IWeightProcessController {
 					try {
 						productBatchCompDAO.createProductBatchComp(productBatchCompDTO);
 					} catch (DALException e) {
-						errorMessageInSecondaryDisplay("Product batch component couldn't be created in database!");
+						errorMessageInSecondaryDisplay("Database problem!");
 						e.printStackTrace();
 						i--;
 						continue weighingLoop;
@@ -257,12 +258,12 @@ public class WeightProcessController implements IWeightProcessController {
 					continue weighingLoop;
 				}				
 			} catch (AdaptorException e) {
-				errorMessageInSecondaryDisplay("A connectivity problem occured!");
+				errorMessageInSecondaryDisplay("Connectivity problem!");
 				e.printStackTrace();
 				i--;
 				continue weighingLoop;
 			} catch (NumberFormatException e) {
-				errorMessageInSecondaryDisplay("Could not measure the weight!");
+				errorMessageInSecondaryDisplay("Bad measurement!");
 				e.printStackTrace();
 				i--;
 				continue weighingLoop;
@@ -271,7 +272,7 @@ public class WeightProcessController implements IWeightProcessController {
 				weightAdaptor.grossCheck(true);
 				weightAdaptor.clearBothDisplays();
 			} catch (AdaptorException e) {
-				errorMessageInSecondaryDisplay("A connectivity problem occured!");
+				errorMessageInSecondaryDisplay("Connectivity problem!");
 				e.printStackTrace();
 			}
 		}

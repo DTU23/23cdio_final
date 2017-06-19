@@ -145,7 +145,7 @@ public class WeightAdaptor implements IWeightAdaptor {
 	@Override
 	public String getProductBatchNumber() throws AdaptorException {
 		try {
-			sendCommand("RM20 8 \"BATCH?\" \"\" \"&3\"");
+			sendCommand("RM20 8 \"PB ID?\" \"\" \"&3\"");
 			waitResponse();
 			return waitResponse().split("\"")[1];
 		} catch (Exception e) {

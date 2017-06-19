@@ -15,63 +15,49 @@ public class DatabaseService {
 	@GET
 	@Path("/reset")
 	public String resetDatabase() throws DALException {
-		if (DataSource.getInstance().resetData() == 0) {
-			throw new DALException("No rows affected!");
-		}
+		DataSource.getInstance().resetData();
 		return "Database reset successfully!";
 	}
 	
 	@GET
 	@Path("/users")
 	public String insertUsers() throws DALException {
-		if (DataSource.getInstance().insertUsers() == 0) {
-			throw new DALException("No rows affected!");
-		}
+		DataSource.getInstance().insertUsers();
 		return "Users inserted successfully!";
 	}
 	
 	@GET
 	@Path("/produce")
 	public String insertProduce() throws DALException {
-		if (DataSource.getInstance().insertProduce() == 0) {
-			throw new DALException("No rows affected!");
-		}
+		DataSource.getInstance().insertProduce();
 		return "Produce inserted successfully!";
 	}
 	
 	@GET
 	@Path("/recipe")
 	public String insertRecipe() throws DALException {
-		if (DataSource.getInstance().insertRecipe() == 0) {
-			throw new DALException("No rows affected!");
-		}
+		DataSource.getInstance().insertRecipe();
 		return "Recipe inserted successfully!";
 	}
 	
 	@GET
 	@Path("/producebatch")
 	public String insertProduceBatch() throws DALException {
-		if (DataSource.getInstance().insertProduceBatch() == 0) {
-			throw new DALException("No rows affected!");
-		}
+		DataSource.getInstance().insertProduceBatch();
 		return "Produce batch inserted successfully!";
 	}
 	
 	@GET
 	@Path("/productbatch")
 	public String insertProductBatch() throws DALException {
-		if (DataSource.getInstance().insertProductBatch() == 0) {
-			throw new DALException("No rows affected!");
-		}
+		DataSource.getInstance().insertProductBatch();
 		return "Product batch inserted successfully!";
 	}
 	
 	@GET
 	@Path("/productbatchcomp")
 	public String insertProductBatchComp() throws DALException {
-		if (DataSource.getInstance().insertProductBatchComp() == 0) {
-			throw new DALException("No rows affected!");
-		}
+		DataSource.getInstance().insertProductBatchComp();
 		return "Product batch components inserted successfully!";
 	}
 }

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import dk.dtu.model.exceptions.dal.ConnectivityException;
+import dk.dtu.model.exceptions.dal.DataInsertException;
 import dk.dtu.model.exceptions.dal.DataResetException;
 
 public final class DataSource {
@@ -63,7 +64,7 @@ public final class DataSource {
 		}	
 	}
 
-	public int resetData() throws ConnectivityException, DataResetException {
+	public void resetData() throws ConnectivityException, DataResetException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
@@ -72,7 +73,6 @@ public final class DataSource {
 			if(stm.executeUpdate() == 0) {
 				throw new DataResetException("No rows affected");
 			}
-			return stm.executeUpdate();
 		} catch (SQLException e) {
 			throw new ConnectivityException(e);
 		} finally {
@@ -83,16 +83,15 @@ public final class DataSource {
 	
 	// methods below this line are for presentation
 	
-	public int insertUsers() throws ConnectivityException, DataResetException {
+	public void insertUsers() throws ConnectivityException, DataInsertException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
 			conn = getInstance().getConnection();
 			stm = conn.prepareStatement("CALL insert_users();");
 			if(stm.executeUpdate() == 0) {
-				throw new DataResetException("No rows affected");
+				throw new DataInsertException("No rows affected");
 			}
-			return stm.executeUpdate();
 		} catch (SQLException e) {
 			throw new ConnectivityException(e);
 		} finally {
@@ -101,16 +100,15 @@ public final class DataSource {
 		}
 	}
 
-	public int insertProduce() throws ConnectivityException, DataResetException {
+	public void insertProduce() throws ConnectivityException, DataInsertException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
 			conn = getInstance().getConnection();
 			stm = conn.prepareStatement("CALL insert_produce();");
 			if(stm.executeUpdate() == 0) {
-				throw new DataResetException("No rows affected");
+				throw new DataInsertException("No rows affected");
 			}
-			return stm.executeUpdate();
 		} catch (SQLException e) {
 			throw new ConnectivityException(e);
 		} finally {
@@ -119,16 +117,15 @@ public final class DataSource {
 		}
 	}
 
-	public int insertRecipe() throws ConnectivityException, DataResetException {
+	public void insertRecipe() throws ConnectivityException, DataInsertException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
 			conn = getInstance().getConnection();
 			stm = conn.prepareStatement("CALL insert_recipe();");
 			if(stm.executeUpdate() == 0) {
-				throw new DataResetException("No rows affected");
+				throw new DataInsertException("No rows affected");
 			}
-			return stm.executeUpdate();
 		} catch (SQLException e) {
 			throw new ConnectivityException(e);
 		} finally {
@@ -137,16 +134,15 @@ public final class DataSource {
 		}
 	}
 
-	public int insertProduceBatch() throws ConnectivityException, DataResetException {
+	public void insertProduceBatch() throws ConnectivityException, DataInsertException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
 			conn = getInstance().getConnection();
 			stm = conn.prepareStatement("CALL insert_producebatch();");
 			if(stm.executeUpdate() == 0) {
-				throw new DataResetException("No rows affected");
+				throw new DataInsertException("No rows affected");
 			}
-			return stm.executeUpdate();
 		} catch (SQLException e) {
 			throw new ConnectivityException(e);
 		} finally {
@@ -155,16 +151,15 @@ public final class DataSource {
 		}
 	}
 
-	public int insertProductBatch() throws ConnectivityException, DataResetException {
+	public void insertProductBatch() throws ConnectivityException, DataInsertException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
 			conn = getInstance().getConnection();
 			stm = conn.prepareStatement("CALL insert_productbatch();");
 			if(stm.executeUpdate() == 0) {
-				throw new DataResetException("No rows affected");
+				throw new DataInsertException("No rows affected");
 			}
-			return stm.executeUpdate();
 		} catch (SQLException e) {
 			throw new ConnectivityException(e);
 		} finally {
@@ -173,16 +168,15 @@ public final class DataSource {
 		}
 	}
 
-	public int insertProductBatchComp() throws ConnectivityException, DataResetException {
+	public void insertProductBatchComp() throws ConnectivityException, DataInsertException {
 		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
 			conn = getInstance().getConnection();
 			stm = conn.prepareStatement("CALL insert_productbatchcomponents();");
 			if(stm.executeUpdate() == 0) {
-				throw new DataResetException("No rows affected");
+				throw new DataInsertException("No rows affected");
 			}
-			return stm.executeUpdate();
 		} catch (SQLException e) {
 			throw new ConnectivityException(e);
 		} finally {

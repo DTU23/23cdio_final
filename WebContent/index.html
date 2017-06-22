@@ -43,9 +43,11 @@
                         <span class="col s3 recipeName">{{recipeName}}</span>
                         <span class="col s2 status">{{status}}</span>
                     </div>
-                    <div class="collapsible-body">
-                        <span class="col s1 status left"><a class="btn waves-effect waves-light red darken-2 delete-productbatch" data-id="{{pbId}}">Delete Productbatch</a></span>
-                        <table class="striped centered responsive-table">
+                    <div class="collapsible-body row">
+                        <div class="col s12">
+                            <span class="col s1 status left"><a class="btn waves-effect waves-light red darken-2 delete-productbatch" data-id="{{pbId}}">Delete Productbatch</a></span>
+                        </div>
+                        <table class="striped centered responsive-table col s12">
                             <thead>
                             <tr>
                                 <th>Produce Batch ID</th>
@@ -86,8 +88,10 @@
     </script>
 
     <script type="text/html" id="productBatchComponentsTemplate">
-        <span class="col s1 status left"><a class="btn waves-effect waves-light red darken-2 delete-productbatch" data-id="">Delete Productbatch</a></span>
-        <table class="striped centered responsive-table">
+        <div class="col s12">
+            <span class="col s1 status left"><a class="btn waves-effect waves-light red darken-2 delete-productbatch" data-id="">Delete Productbatch</a></span>
+        </div>
+        <table class="striped centered responsive-table col s12">
             <thead>
             <tr>
                 <th>Produce Batch ID</th>
@@ -338,10 +342,12 @@
                     <span class="center col s2">{{ recipeId }}</span>
                     <span class="center col s10">{{ recipeName }}</span>
                 </div>
-                <div class="collapsible-body">
-                    <span class="status left"><a class="btn waves-effect waves-light red darken-2 delete-recipe" data-id="">Delete Recipe</a></span>
-                    <span class="status left"><a class="btn waves-effect waves-light blue darken-2 edit-recipe" data-id="">Edit Recipe</a></span>
-                    <table class="striped centered responsive-table">
+                <div class="collapsible-body row">
+                    <div class="col s12">
+                        <span class="status left"><a class="btn waves-effect waves-light red darken-2 delete-recipe" data-id="">Delete Recipe</a></span>
+                        <span class="status left"><a class="btn waves-effect waves-light blue darken-2 edit-recipe" data-id="">Edit Recipe</a></span>
+                    </div>
+                    <table class="striped centered responsive-table col s12">
                         <thead>
                         <tr>
                             <th>Produce ID</th>
@@ -403,9 +409,11 @@
     </script>
 
     <script type="text/html" id="RecipeComponentsTemplate">
-        <span class="status left"><a class="btn waves-effect waves-light red darken-2 delete-recipe" data-id="">Delete Recipe</a></span>
-        <span class="status left"><a class="btn waves-effect waves-light blue darken-2 edit-recipe" data-id="">Edit Recipe</a></span>
-        <table class="striped centered responsive-table">
+        <div class="col s12">
+            <span class="status left"><a class="btn waves-effect waves-light red darken-2 delete-recipe" data-id="">Delete Recipe</a></span>
+            <span class="status left"><a class="btn waves-effect waves-light blue darken-2 edit-recipe" data-id="">Edit Recipe</a></span>
+        </div>
+        <table class="striped centered responsive-table col s12">
             <thead>
             <tr>
                 <th>Produce ID</th>
